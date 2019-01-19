@@ -20,3 +20,5 @@ Route::get('/', function () {
 Route::get('/accueil', 'HomeController@index')->name('home');
 
 Route::get('/liste-des-membres', 'UserController@index')->name('users');
+
+Route::get('/dictionnaire', 'WordController@index')->name('words');
