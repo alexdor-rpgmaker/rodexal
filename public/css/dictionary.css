@@ -1,0 +1,17 @@
+#dictionary .btn {
+  margin-top: 10px;
+}
+
+#dictionary nav.letters {
+  margin-top: 25px;
+  margin-bottom: 30px;
+}
+
+#dictionary .card {
+  margin-bottom: 30px;
+}
+
+#dictionary .card .quick-link i {
+  color: #aaa;
+}
+

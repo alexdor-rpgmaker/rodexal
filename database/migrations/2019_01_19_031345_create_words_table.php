@@ -15,7 +15,7 @@ class CreateWordsTable extends Migration
     {
         Schema::create('words', function (Blueprint $table) {
             $table->increments('id')->nullable(false);
-            $table->string('word')->nullable(false)->unique();
+            $table->string('label')->nullable(false)->unique();
             $table->text('description')->nullable(false);
             $table->unsignedInteger('user_id')->nullable(false);
             $table->timestamps();

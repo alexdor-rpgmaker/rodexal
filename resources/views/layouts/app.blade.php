@@ -36,6 +36,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @stack('stylesheets')
 </head>
 <body>
     <div id="app">
@@ -51,11 +52,11 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" href="{{ route('users') }}">{{ __('menu.users') }}</a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('words') }}">{{ __('menu.dictionary') }}</a>
+                            <a class="nav-link" href="{{ route('dictionnaire.index') }}">{{ __('menu.dictionary') }}</a>
                         </li>
                     </ul>
 
@@ -66,11 +67,14 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('auth.login') }}</a>
                             </li>
+                            {{-- <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('auth.login') }}</a>
+                            </li>
                             @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('auth.register') }}</a>
                                 </li>
-                            @endif
+                            @endif --}}
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
