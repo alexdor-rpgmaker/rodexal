@@ -11,7 +11,7 @@ class WordsTableSeeder extends Seeder
 
         $array = array();
         for ($i=0; $i < 30; $i++) {
-            $name = $faker->unique()->colorName;
+            $name = preg_replace('/([a-z]+)([A-Z])/', '$1 $2', $faker->unique()->colorName);
             $array []= [
                 'label' => $name,
                 'slug' => str_slug($name, '-'),

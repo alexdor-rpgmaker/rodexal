@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Word;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -24,6 +25,14 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         Route::pattern('id', '[0-9]+');
+
+        Route::bind('dictionnaire', function ($value) {
+            if (is_numeric($value)) {
+                return Word::where('word_id', $value)
+                    ->firstOrFail();
+            }
+            return Word::findBySlugOrFail($value);
+        });
 
         parent::boot();
     }

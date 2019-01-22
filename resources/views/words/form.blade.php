@@ -5,20 +5,20 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Ajouter un mot au dictionnaire</div>
+                    <div class="card-header">{{ $title }}</div>
     
                     <div class="card-body">
                         @include('common.errors')
 
-                        <form method="POST" action="{{ url('dictionnaire') }}">
-                            {{-- @method('PUT') --}}
+                        <form method="POST" action="{{ $form_url }}">
+                            @method($form_method)
                             @csrf
     
                             <div class="form-group row">
                                 <label for="word-label" class="col-md-4 col-form-label text-md-right">Mot</label>
     
                                 <div class="col-md-6">
-                                    <input id="word-label" class="form-control{{ $errors->has('label') ? ' is-invalid' : '' }}" name="label" value="{{ old('label') }}" autofocus>
+                                    <input id="word-label" class="form-control{{ $errors->has('label') ? ' is-invalid' : '' }}" name="label" value="{{ old('label', $word->label) }}" autofocus>
                                 </div>
                             </div>
     
@@ -26,7 +26,7 @@
                                 <label for="word-description" class="col-md-4 col-form-description text-md-right">Description</label>
     
                                 <div class="col-md-6">
-                                    <textarea class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" id="word-description" name="description" rows="3">{{ old('description') }}</textarea>
+                                    <textarea class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" id="word-description" name="description" rows="3">{{ old('description', $word->description) }}</textarea>
                                 </div>
                             </div>
     

@@ -65,7 +65,13 @@
                             <div class="card" id="{{ $word->slug }}">
                                 <div class="card-header">
                                     {{ $word->label }}
-                                    <a href="#{{ $word->slug }}" class="quick-link float-right"><i class="fas fa-link"></i></a>
+
+                                    <div class="card-options float-right">
+                                        @can('update', $word)
+                                            <a href="{{ route('dictionnaire.edit', $word) }}" class="quick-link"><i class="fas fa-edit"></i></a>
+                                        @endcan
+                                        <a href="#{{ $word->slug }}" class="quick-link"><i class="fas fa-link"></i></a>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     {!! nl2br(e($word->description)) !!}
