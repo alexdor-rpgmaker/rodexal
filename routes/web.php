@@ -22,5 +22,5 @@ Route::get('/accueil', 'HomeController@index')->name('home');
 Route::get('/liste-des-membres', 'UserController@index')->name('users');
 
 Route::resource('dictionnaire', 'WordController')->except([
-    'show', 'destroy'
+    'show'
 ]);

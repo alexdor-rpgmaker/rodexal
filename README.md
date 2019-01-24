@@ -46,4 +46,10 @@ npm run watch
 
 ## Lancement des tests
 
-A venir...
+```bash
+# Lancer les tests
+composer test
+
+# Lancer les tests en continu
+composer test:watch
+```

@@ -11,11 +11,6 @@ class Word extends Model
 {
     use Sluggable, SluggableScopeHelpers;
 
-    public function getRouteKey()
-    {
-        return $this->slug;
-    }
-
     public function getRouteKeyName()
     {
         return 'slug';

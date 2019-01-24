@@ -26,7 +26,7 @@
                                 <label for="word-description" class="col-md-4 col-form-description text-md-right">Description</label>
     
                                 <div class="col-md-6">
-                                    <textarea class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" id="word-description" name="description" rows="3">{{ old('description', $word->description) }}</textarea>
+                                    <textarea class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" id="word-description" name="description" rows="9">{{ old('description', $word->description) }}</textarea>
                                 </div>
                             </div>
     

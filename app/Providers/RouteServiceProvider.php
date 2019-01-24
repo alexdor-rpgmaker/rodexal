@@ -26,6 +26,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::pattern('id', '[0-9]+');
 
+        // TODO: Remove this when corrected?
         Route::bind('dictionnaire', function ($value) {
             if (is_numeric($value)) {
                 return Word::where('word_id', $value)

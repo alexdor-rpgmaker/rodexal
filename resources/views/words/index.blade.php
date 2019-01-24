@@ -67,6 +67,13 @@
                                     {{ $word->label }}
 
                                     <div class="card-options float-right">
+                                        @can('delete', $word)
+                                            <form action="{{ route('dictionnaire.destroy', $word) }}" method="POST"  style="display: inline;">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button style="border: none; background-color: transparent; color: #aaa; padding: 1px 3px 2px; cursor: pointer;"><i class="fas fa-trash"></i></button>
+                                            </form>                                            
+                                        @endcan
                                         @can('update', $word)
                                             <a href="{{ route('dictionnaire.edit', $word) }}" class="quick-link"><i class="fas fa-edit"></i></a>
                                         @endcan

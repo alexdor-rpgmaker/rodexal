@@ -13,7 +13,7 @@ class WordController extends Controller
     public function __construct()
     {
         $this->authorizeResource(Word::class, 'word', [
-            'except' => ['edit', 'update']
+            'except' => ['edit', 'update', 'destroy']
         ]); // Except is temporary (no idea why this is not working)
     }
 
@@ -45,7 +45,7 @@ class WordController extends Controller
     public function create()
 	{
 		return view('words.form', [
-            'word' => null,
+            'word' => new Word,
             'title' => 'Ajouter un mot au dictionnaire',
             'form_method' => 'POST',
             'form_url' => route('dictionnaire.store')
@@ -91,8 +91,10 @@ class WordController extends Controller
 		return redirect('/dictionnaire');
     }
 
-    // public function destroy(Word $word)
-    // {
-    //     //
-    // }
+    public function destroy(Word $word)
+    {
+        $this->authorize('delete', $word);  // Except is temporary (no idea why this is not working)
+        $word->delete();
+        return redirect('/dictionnaire');
+    }
 }
