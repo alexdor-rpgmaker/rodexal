@@ -1,14 +1,19 @@
-// Fonts
-@import url("https://fonts.googleapis.com/css?family=Staatliches");
-@import url("https://fonts.googleapis.com/css?family=Open+Sans%7CStaatliches");
-
 // Variables
 @import "variables";
 
 // Bootstrap
 @import "~bootstrap/scss/bootstrap";
 
+main.py-4 {
+    width: 100%;
+    padding-top: 0 !important;
+}
+
 .navbar-laravel {
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+a.bouton:hover {
+    text-decoration: none;
 }

@@ -1,16 +1,71 @@
 #dictionary {
+    #titre_corps {
+        margin-bottom: 30px;
+    }
+
     .btn {
         margin-top: 10px;
     }
+
     nav.letters {
         margin-top: 25px;
         margin-bottom: 30px;
+
+        ul.pagination-custom {
+            list-style: none;
+            padding-inline-start: 0;
+
+            li {
+                display: inline;
+
+                .page-link:hover {
+                    border: 1px solid #9d6b39;
+                    color: #cc6600;
+                }
+            }
+        }
     }
+
     .card {
+        background-color: #fff6ef;
+        border: 1px solid black;
+        border-radius: 0;
         margin-bottom: 30px;
 
-        .quick-link i {
-            color: #aaa;
+        .card-header {
+            border-bottom: 1px solid black;
+            background-color: #fff1b7;
+            padding: 0.5rem 1rem;
+
+            .quick-link i {
+                color: #dabba1;
+            }
+
+            .card-options button {
+                margin: 0;
+                color: #d39501;
+                border: none;
+                background-color: transparent;
+                padding: 1px 1px 2px;
+                cursor: pointer;
+                font-weight: normal;
+            }
+
+            a {
+                color: #d39501;
+
+                &:hover {
+                    color: #f8ad01;
+                }
+            }
+        }
+
+        .card-body {
+            background-color: #f9e9d9;
+
+            .form-group {
+                margin-bottom: 10px;
+            }
         }
     }
 }

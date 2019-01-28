@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Staatliches);@import url(https://fonts.googleapis.com/css?family=Open+Sans%7CStaatliches);@charset "UTF-8";
+@charset "UTF-8";
 
 /*!
  * Bootstrap v4.2.1 (https://getbootstrap.com/)
@@ -10491,8 +10491,17 @@ a.text-dark:focus {
   }
 }
 
+main.py-4 {
+  width: 100%;
+  padding-top: 0 !important;
+}
+
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+a.bouton:hover {
+  text-decoration: none;
 }
 

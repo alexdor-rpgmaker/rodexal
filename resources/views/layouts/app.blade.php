@@ -29,7 +29,7 @@
       media="screen"
       type="text/css"
       title="global"
-      href="archives/news/vieilles_news.css"
+      href="{{ env('FORMER_APP_URL') }}/archives/news/vieilles_news.css"
     />
 
     <link
@@ -310,12 +310,8 @@
 
             @if (session('status'))
                 <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-md-8">
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        </div>
+                    <div class="message_info">
+                        {{ session('status') }}
                     </div>
                 </div>
             @endif

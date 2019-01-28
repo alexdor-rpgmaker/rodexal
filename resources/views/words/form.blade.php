@@ -1,9 +1,13 @@
 @extends('layouts.app')
 
+@push('stylesheets')
+    <link href="{{ asset('css/dictionary.css') }}" rel="stylesheet">
+@endpush
+
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div id="dictionary" class="col-md-8">
                 <div class="card">
                     <div class="card-header">{{ $title }}</div>
     
@@ -32,7 +36,7 @@
     
                             <div class="form-group row mb-0">
                                 <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="bouton">
                                         Ajouter
                                     </button>
                                 </div>

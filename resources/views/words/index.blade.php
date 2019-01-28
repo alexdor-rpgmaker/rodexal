@@ -8,11 +8,11 @@
     <div class="container">
         <div class="row justify-content-center">
             <div id="dictionary" class="col-md-8">
-                <h1>Dictionnaire</h1>
+                <div id="titre_corps">Dictionnaire</div>
 
                 @can('create', App\Word::class)
                     <p>
-                        <a href="{{ route('dictionnaire.create') }}" class="btn btn-primary">
+                        <a href="{{ route('dictionnaire.create') }}" class="bouton">
                             <i class="fa fa-plus"></i> Ajouter un mot au dictionnaire
                         </a>
                     </p>
@@ -20,17 +20,17 @@
 
                 @if($words->isNotEmpty())
                     <nav class="letters" aria-label="Navigation du dictionnaire">
-                        <ul class="pagination">
+                        <ul class="pagination-custom">
                             @if(!isset($page_letter))
                                 <li class="page-item active">
-                                    <span class="page-link">
+                                    <span>
                                         Toutes les lettres
                                         <span class="sr-only">(actuelle)</span>
                                     </span>
                                 </li>
                             @else
                                 <li class="page-item">
-                                    <a class="page-link" href="?">Toutes les lettres</a>
+                                    <a class="bouton" href="{{ route('dictionnaire.index') }}?">Toutes les lettres</a>
                                 </li>
                             @endif
 
@@ -42,14 +42,14 @@
                                 @endphp
                                     @if($uppercased_letter == $page_letter)
                                         <li class="page-item active">
-                                            <span class="page-link">
+                                            <span>
                                                 {{ $uppercased_letter }}
                                                 <span class="sr-only">(actuelle)</span>
                                             </span>
                                         </li>
                                     @else
                                         <li class="page-item">
-                                            <a class="page-link" href="?lettre={{$uppercased_letter}}">{{ $uppercased_letter }}</a>
+                                            <a class="page-link bouton" href="{{ route('dictionnaire.index', ['lettre' => $uppercased_letter]) }}">{{ $uppercased_letter }}</a>
                                         </li>
                                     @endif
                             @endforeach
@@ -71,13 +71,15 @@
                                             <form action="{{ route('dictionnaire.destroy', $word) }}" method="POST"  style="display: inline;">
                                                 @method('DELETE')
                                                 @csrf
-                                                <button style="border: none; background-color: transparent; color: #aaa; padding: 1px 3px 2px; cursor: pointer;"><i class="fas fa-trash"></i></button>
-                                            </form>                                            
+                                                <button>
+                                                    Supprimer
+                                                </button>
+                                            </form> -
                                         @endcan
                                         @can('update', $word)
-                                            <a href="{{ route('dictionnaire.edit', $word) }}" class="quick-link"><i class="fas fa-edit"></i></a>
+                                            <a href="{{ route('dictionnaire.edit', $word) }}" class="quick-link">Modifier</a> - 
                                         @endcan
-                                        <a href="#{{ $word->slug }}" class="quick-link"><i class="fas fa-link"></i></a>
+                                        <a href="{{ route('dictionnaire.index') }}#{{ $word->slug }}" class="quick-link">Lien</a>
                                     </div>
                                 </div>
                                 <div class="card-body">
