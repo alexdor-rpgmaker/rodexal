@@ -31,15 +31,5 @@ Vue.component(
  */
 
 new Vue({
-    el: "#wrap",
-    async created() {
-        if (!userIsAuthenticated) {
-            const response = await axios.get(
-                formerAppUrl + formerAppIsConnectedEndpoint
-            );
-            if (response.data.connected) {
-                console.log("ok");
-            }
-        }
-    }
+    el: "#wrap"
 });
