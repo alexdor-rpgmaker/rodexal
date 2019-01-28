@@ -1,29 +1,16 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+  <!--<![endif]-->
+  <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', "Alex d'or") }}</title>
 
-    <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link
-      href="https://fonts.googleapis.com/css?family=Staatliches"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans%7CStaatliches"
-      rel="stylesheet"
-      type="text/css"
-    />
 
     <!-- Font Awesome -->
     <!-- TODO : Import with npm? -->
@@ -33,74 +20,294 @@
       integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
       crossorigin="anonymous"
     />
-
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @stack('stylesheets')
-</head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', "Alex d'or") }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('menu.toggle_navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-                        {{-- <li class="nav-item">
-                            <a class="nav-link" href="{{ route('users') }}">{{ __('menu.users') }}</a>
-                        </li> --}}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('dictionnaire.index') }}">{{ __('menu.dictionary') }}</a>
+    <link
+      rel="stylesheet"
+      media="screen"
+      type="text/css"
+      title="global"
+      href="archives/news/vieilles_news.css"
+    />
+
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Derni&egrave;rs Jeux"
+      href="{{ env('FORMER_APP_URL') }}/flux/jeux.xml"
+    />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Derni&egrave;res News"
+      href="{{ env('FORMER_APP_URL') }}/flux/news.xml"
+    />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Blog"
+      href="{{ env('FORMER_APP_URL') }}/flux/blog.xml"
+    />
+
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="{{ env('FORMER_APP_URL') }}/design/divers/alexdor-ico.png"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/icones/stylesheets/general_foundicons.css"
+    />
+
+    <!--[if lt IE 8]>
+      <link
+        rel="stylesheet"
+        href="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/icones/stylesheets/general_foundicons_ie7.css"
+      />
+    <![endif]-->
+
+    <link
+      type="text/css"
+      href="{{ env('FORMER_APP_URL') }}/design/divers/jqueryUI/css/ui-lightness/jquery-ui-1.8.18.custom.css"
+      rel="Stylesheet"
+    />
+
+    <base href="{{ config('app.url') }}" />
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="google-site-verification"
+      content="eQkiRs05no4-CMDllsNRWKg3dWOqgI54OVE_49sAvWE"
+    />
+
+    <meta property="og:site_name" content="Alex d'or" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@AlexDorRM" />
+    <meta name="twitter:domain" content="alexdor.info" />
+
+    <script type="text/javascript">
+      <!-- Google Analytics -->
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-36145862-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+    <link
+      rel="stylesheet"
+      href="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/css/normalize.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/css/foundation.css"
+    />
+    <link rel="stylesheet" href="{{ env('FORMER_APP_URL') }}/design/newdefaut/interface.css" />
+    <link rel="stylesheet" href="{{ env('FORMER_APP_URL') }}/design/newdefaut/elements.css" />
+
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/vendor/custom.modernizr.js"></script>
+  </head>
+  <body>
+    <div id="wrap">
+      <nav class="top-bar">
+        <ul class="title-area">
+          <!-- Title Area -->
+          <li class="name">
+            <a href="{{ env('FORMER_APP_URL') }}/">
+              <img
+                src="{{ env('FORMER_APP_URL') }}/design/newdefaut/interface/ban.png"
+                width="266"
+                height="44"
+              />
+            </a>
+          </li>
+          <li class="toggle-topbar menu-icon">
+            <a href="#"><span>menu</span></a>
+          </li>
+        </ul>
+
+        <section class="top-bar-section">
+          <!-- Right Nav Section -->
+          <ul class="left">
+            <li class="has-dropdown">
+              <a href="#">Actualités</a>
+              <ul class="dropdown">
+                <!-- <li><a href="{{ env('FORMER_APP_URL') }}/">Accueil</a></li> -->
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=news">News</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=blog">Blog</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="#">Session 2019</a>
+              <ul class="dropdown">
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=reglement">Règlement</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=liste-jeux">Jeux en lice</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=inscjeu">Inscrire un jeu</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="#">Archives</a>
+              <ul class="dropdown">
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=archives">Toutes les archives</a></li>
+                <li class="divider"></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=archives-vainqueurs">Jeux vainqueurs</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=liste-jeux&amp;session=0">Tous les jeux</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=series-jeux">Séries de jeux</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=jeu">Un jeu au hasard</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="#">Forum</a>
+              <ul class="dropdown">
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=forum-categories">Index du forum</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=sujets&amp;nouveau">Nouveaux messages</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="#">Communauté</a>
+              <ul class="dropdown">
+                <li>
+                  <a href="{{ env('FORMER_APP_URL') }}?p=derniers-commentaires">Derniers commentaires</a>
+                </li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=liste-membres">Liste des membres</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="#">Admin</a>
+              <ul class="dropdown">
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-super-general">Super Général</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-general">Général</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-news">News</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-blog">Blog</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-images">Images</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-carrousel">Carrousel</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-categories">Forum</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-membres">Membres</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=mail-membres">Envoi Mails</a></li>
+                <li class="divider"></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-sessions">Sessions</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-jeux">Jeux</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-jurys">Jury</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-series">Tests</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-notes">Notes</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-deliberations">Délibérations</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-awards">Awards</a></li>
+              </ul>
+            </li>
+
+            <li class="name" id="header-recherche">
+              <form action="?p=recherche" method="post">
+                <input
+                  type="text"
+                  name="recherche_champ"
+                  style="width:140px;"
+                  placeholder="Rechercher"
+                />
+                <input type="hidden" name="recherche_type" value="tous" />
+              </form>
+            </li>
+          </ul>
+
+          <ul class="right">
+            @php
+                function rang($argument)
+                {
+                    $rang = array (
+                        "Webmaster" => 7,
+                        "Admin" => 6,
+                        "Modérateur" => 5,
+                        "Juré" => 4,
+                        "Ambassadeur" => 3,
+                        "Concurrent" => 2,
+                        "Membre" => 1,
+                        "Invité" => 0);
+                        
+                    if(!is_numeric($argument))
+                    {
+                        return (array_key_exists($argument, $rang)) ? $rang[$argument] : false;
+                    }
+                    else
+                    {
+                        return array_search($argument, $rang);
+                    }
+                }   
+            @endphp
+
+            @auth
+
+                <li>
+                    <a href="?p=mp-messagerie" onFocus="this.blur();" title="Messagerie privée">
+                    <img src="{{ env('FORMER_APP_URL') }}/design/newdefaut/interface/mp-transp.png" width="26" height="20" alt="Messagerie privée"/></a>
+                </li>
+
+                <li class="has-dropdown">
+                    <a class="couleur_{{ rang(Auth::user()->rank) }}" href="{{ env('FORMER_APP_URL') }}?p=profil&amp;membre={{ Auth::id() }}">
+                        @if (session('resource-owner')['avatar_url'])
+                            <img class="header-avatar" src="{{ session('resource-owner')['avatar_url'] }}" alt="avatar">
+                        @endif
+                        {{ Auth::user()->name }}
+                    </a>
+                    <ul class="dropdown">
+                        <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-membre">Mon Profil</a></li>
+                        <li><a href="{{ env('FORMER_APP_URL') }}?p=mes-jeux">Mes Jeux</a></li>
+                        <li><a href="{{ env('FORMER_APP_URL') }}?p=mes-tests">Mes Tests</a></li>
+                        <li><a href="{{ env('FORMER_APP_URL') }}?p=mon-classement">Mon Classement</a></li>
+                        <li><a href="{{ env('FORMER_APP_URL') }}?p=mes-videos">Mes Vidéos</a></li>
+                        <li class="has-dropdown">
+                            <a href="#" class="">Mon Design</a>
+                            <ul class="dropdown">
+                                <li><a href="{{ env('FORMER_APP_URL') }}?changement-design=5">Nouveau (2013)</a></li>
+                                <li><a href="{{ env('FORMER_APP_URL') }}?changement-design=0">Lifaen</a></li>
+                                <li><a href="{{ env('FORMER_APP_URL') }}?changement-design=1">Walina &amp; Khoryl</a></li>
+                                <li><a href="{{ env('FORMER_APP_URL') }}?changement-design=2">Papillon</a></li>
+                            </ul>
                         </li>
+                        <li><a href="{{ env('FORMER_APP_URL') }}?p=deconnexion">Déconnexion</a></li>
                     </ul>
+                </li>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <li  class="nav-item ">
-                        @guest
-                            <a href="{{ url('/oauth/callback') }}" class="nav-link">Se connecter</a></li>
-                            {{-- <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('auth.login') }}</a>
-                            </li> --}}
-                            {{-- <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('auth.login') }}</a>
-                            </li>
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('auth.register') }}</a>
-                                </li>
-                            @endif --}}
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
+            @else
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('auth.logout') }}
-                                    </a>
+                <li>
+                    {{-- <a href="?p=connexion">Se connecter</a> --}}
+                    <a href="{{ url('/oauth/callback') }}">Se connecter</a></li>
+                </li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=inscription">S'inscrire</a></li>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
+            @endauth
+          </ul>
+        </section>
+      </nav>
+      <!-- Fil d'Ariane -->
 
+      <div id="navigateur">
+        <a href="{{ env('FORMER_APP_URL') }}">Alex d'or</a>
+      </div>
+
+      <div>
+            <a class="bouton" href="/dictionnaire">Dictionnaire</a>
+            <a class="bouton" href="{{ route('logout') }}"
+                onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                {{ __('auth.logout') }}
+            </a>
+      </div>
+
+      <div class="row" id="mainrow">
         <main class="py-4">
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+
             @if (session('status'))
                 <div class="container">
                     <div class="row justify-content-center">
@@ -115,6 +322,78 @@
 
             @yield('content')
         </main>
+      </div>
     </div>
-</body>
+
+    <!-- Footer -->
+
+    <div id="footer">
+      <div id="footer-part1">
+        <div class="large-12 columns">
+          <div class="row">
+            <div class="large-12 columns">
+                @php
+                    $connected_users = mt_rand(1, 5);
+                    $unconnected_visitors = mt_rand(3, 10);
+                    $all_visitors = $connected_users + $unconnected_visitors;
+                @endphp
+                {{ $all_visitors }} visiteurs connectés ({{ $connected_users }} membres et {{ $unconnected_visitors }} anonymes)
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="footer-part2">
+        <div class="large-12 columns">
+          <div class="row">
+            <div class="large-6 columns">
+              Hébergé par
+              <a href="http://www.alexzone.net">AlexZone.net</a>.<br />
+              La page a été calculée en 0,124025 secondes. <br />15 requêtes
+              effectuées.
+            </div>
+
+            <div class="large-6 small-12 columns">
+              <ul class="inline-list right">
+                <li><a href="#">Concours</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=liste-jeux">Jeux</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=forum-categories">Forum</a></li>
+                <li><a href="#">Communauté</a></li>
+                <li>
+                  <a
+                    onclick="window.open('jkbx.php', 'alexdor_jkbx', 'toolbar=no, status=no, scrollbars=no, resizable=no, width=370, height=450');return(false)%22"
+                    title="Clique ici pour écouter !"
+                    href="#"
+                    >Jukebox</a
+                  >
+                </li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=contact">Contacter l'équipe</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Included JS Files (Uncompressed) -->
+
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/vendor/zepto.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.clearing.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.orbit.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.section.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.topbar.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.dropdown.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.cookie.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.alerts.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.forms.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.magellan.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.placeholder.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.reveal.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.tooltips.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.joyride.js"></script>
+
+    <script>
+      $(document).foundation();
+    </script>
+  </body>
 </html>

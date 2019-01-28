@@ -44,6 +44,7 @@ class UserController extends Controller
 
                 $resourceOwner = $provider->getResourceOwner($accessToken);
                 $resourceOwnerArray = $resourceOwner->toArray();
+                session(['resource-owner' => $resourceOwnerArray]);
 
                 $user = User::where('id', $resourceOwnerArray['id'])->first();
                 if ($user === null) {
