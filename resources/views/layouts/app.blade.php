@@ -62,11 +62,12 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
+                        <li  class="nav-item ">
                         @guest
-                            <li class="nav-item">
+                            <a href="{{ url('/oauth/callback') }}" class="nav-link">Se connecter</a></li>
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('auth.login') }}</a>
-                            </li>
+                            </li> --}}
                             {{-- <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('auth.login') }}</a>
                             </li>
