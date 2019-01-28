@@ -63,7 +63,7 @@ class WordController extends Controller
 		$word->label = $request->label;
 		$word->description = $request->description;
         $word->save();
-		return redirect('/dictionnaire');
+		return redirect('/dictionnaire')->with('status', 'Mot bien ajouté au dictionnaire !');
     }
 
     public function edit(Word $word)
@@ -88,13 +88,13 @@ class WordController extends Controller
 		$word->label = $request->label;
 		$word->description = $request->description;
 		$word->save();
-		return redirect('/dictionnaire');
+		return redirect('/dictionnaire')->with('status', 'Mot du dictionnaire bien modifié !');
     }
 
     public function destroy(Word $word)
     {
         $this->authorize('delete', $word);  // Except is temporary (no idea why this is not working)
         $word->delete();
-        return redirect('/dictionnaire');
+        return redirect('/dictionnaire')->with('status', 'Mot bien supprimé...');
     }
 }

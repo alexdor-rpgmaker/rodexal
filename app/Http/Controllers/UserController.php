@@ -41,22 +41,25 @@ class UserController extends Controller
                 $accessToken = $provider->getAccessToken('authorization_code', [
                     'code' => $request->code
                 ]);
-        
+
                 $resourceOwner = $provider->getResourceOwner($accessToken);
                 $resourceOwnerArray = $resourceOwner->toArray();
 
-                $user = new User;
-                $user->id = $resourceOwnerArray['id'];
-                $user->name = $resourceOwnerArray['username'];
-                $user->email = $resourceOwnerArray['email'];
-                $user->rank = $resourceOwnerArray['rank'];
-                $user->password = bcrypt(str_random(10));
-                $user->save();
+                $user = User::where('id', $resourceOwnerArray['id'])->first();
+                if ($user === null) {
+                    $user = new User;
+                    $user->id = $resourceOwnerArray['id'];
+                    $user->name = $resourceOwnerArray['username'];
+                    $user->email = $resourceOwnerArray['email'];
+                    $user->rank = $resourceOwnerArray['rank'];
+                    $user->password = bcrypt(str_random(10));
+                    $user->save();
+                }
 
                 Auth::login($user);
 
-                return redirect('/dictionnaire');
-        
+                return redirect('/dictionnaire')->with('status', 'Bien connecté !');
+
             } catch (IdentityProviderException $e) {
                 exit($e->getMessage());
             }
