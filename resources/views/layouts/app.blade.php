@@ -174,10 +174,11 @@
             <li class="has-dropdown">
               <a href="#">Communauté</a>
               <ul class="dropdown">
+                <li><a href="{{ route('dictionnaire.index') }}">Dictionnaire</a></li>
+                <li><a href="{{ env('FORMER_APP_URL') }}?p=liste-membres">Liste des membres</a></li>
                 <li>
                   <a href="{{ env('FORMER_APP_URL') }}?p=derniers-commentaires">Derniers commentaires</a>
                 </li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=liste-membres">Liste des membres</a></li>
               </ul>
             </li>
 
@@ -291,15 +292,6 @@
 
       <div id="navigateur">
         <a href="{{ env('FORMER_APP_URL') }}">Alex d'or</a>
-      </div>
-
-      <div>
-            <a class="bouton" href="/dictionnaire">Dictionnaire</a>
-            <a class="bouton" href="{{ route('logout') }}"
-                onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();">
-                {{ __('auth.logout') }}
-            </a>
       </div>
 
       <div class="row" id="mainrow">
