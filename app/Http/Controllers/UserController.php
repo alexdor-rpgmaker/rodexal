@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use App\User;
 
 use Illuminate\Http\Request;
@@ -44,6 +45,7 @@ class UserController extends Controller
 
                 $resourceOwner = $provider->getResourceOwner($accessToken);
                 $resourceOwnerArray = $resourceOwner->toArray();
+                
                 session(['resource-owner' => $resourceOwnerArray]);
 
                 $user = User::where('id', $resourceOwnerArray['id'])->first();
@@ -60,9 +62,12 @@ class UserController extends Controller
                 Auth::login($user);
 
                 return redirect('/dictionnaire')->with('status', 'Bien connecté !');
-
             } catch (IdentityProviderException $e) {
-                exit($e->getMessage());
+                Log::emergency($e);
+                return redirect('/dictionnaire')->with('status', 'Erreur dans la connexion...');
+            } catch (\UnexpectedValueException $e) {
+                Log::emergency($e);
+                return redirect('/dictionnaire')->with('status', 'Erreur dans la connexion...');
             }
         }
     }
