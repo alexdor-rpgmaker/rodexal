@@ -20,6 +20,10 @@ class AppServiceProvider extends ServiceProvider
             'edit' => 'editer'
         ]);
 
+        if(config('app.env') === 'production') {
+            \URL::forceScheme('https');
+        }
+
         /* Blade::directive('datetime', function ($expression) {
             return "<?php echo ($expression)->format('m/d/Y H:i'); ?>";
         }); */
