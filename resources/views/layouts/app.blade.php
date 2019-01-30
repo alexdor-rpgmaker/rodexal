@@ -185,7 +185,6 @@
             <li class="has-dropdown">
               <a href="#">Admin</a>
               <ul class="dropdown">
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-super-general">Super Général</a></li>
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-general">Général</a></li>
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-news">News</a></li>
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-blog">Blog</a></li>
