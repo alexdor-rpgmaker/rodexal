@@ -59,7 +59,7 @@ class UserController extends Controller
                     $user->save();
                 }
 
-                Auth::login($user);
+                Auth::login($user, true); // true = "Remember"
 
                 return redirect('/dictionnaire')->with('status', 'Bien connecté !');
             } catch (IdentityProviderException $e) {
