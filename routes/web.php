@@ -27,3 +27,7 @@ Route::get('/oauth/callback', 'UserController@callback');
 Route::resource('dictionnaire', 'WordController')->except([
     'show'
 ]);
+
+Route::resource('qcm', 'PreTestController')->only([
+    'create'
+]);
