@@ -12,9 +12,7 @@ class WordController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(Word::class, 'word', [
-            'except' => ['edit', 'update', 'destroy']
-        ]); // Except is temporary (no idea why this is not working)
+        $this->authorizeResource(Word::class, 'word');
     }
 
 	public function index(Request $request)
@@ -68,7 +66,6 @@ class WordController extends Controller
 
     public function edit(Word $word)
     {
-        $this->authorize('update', $word);  // Except is temporary (no idea why this is not working)
 		return view('words.form', [
             'word' => $word,
             'title' => 'Modifier un mot du dictionnaire',
@@ -79,7 +76,6 @@ class WordController extends Controller
 
     public function update(Request $request, Word $word)
     {
-        $this->authorize('update', $word);  // Except is temporary (no idea why this is not working)
         // Log::emergency('controller->update');
 		$validator = $request->validate([
 			'label' => 'required|max:255|regex:/^[0-9A-Z]/',
@@ -93,7 +89,6 @@ class WordController extends Controller
 
     public function destroy(Word $word)
     {
-        $this->authorize('delete', $word);  // Except is temporary (no idea why this is not working)
         $word->delete();
         return redirect('/dictionnaire')->with('status', 'Mot bien supprimé...');
     }
