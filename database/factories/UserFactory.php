@@ -12,6 +12,10 @@ $factory->define(App\User::class, function (Faker $faker) {
     ];
 });
 
+$factory->state(App\User::class, 'jury', [
+    'rank' => 4,
+]);
+
 $factory->state(App\User::class, 'admin', [
     'rank' => 6,
 ]);

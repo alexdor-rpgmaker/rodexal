@@ -203,7 +203,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_FormMixin__WEBPACK_IMPORTED_MODULE_0__["default"]],
   data: function data() {
-    var fields = {};
+    var gameId = 5;
     var questions = [{
       id: 'notAutonomous',
       label: "Le jeu n'est pas autonome"
@@ -232,12 +232,20 @@ __webpack_require__.r(__webpack_exports__);
       label: "Impossible d'apprécier seul la majeure partie du jeu",
       fieldDescription: 'Le multijoueur est nécessaire'
     }];
+    var questionnaire = {};
     questions.forEach(function (question) {
-      fields[question.id] = false;
-      fields[question.id + 'Explanation'] = '';
+      questionnaire[question.id] = {
+        activated: false,
+        explanation: null
+      };
     });
+    var fields = {
+      gameId: gameId,
+      questionnaire: questionnaire,
+      finalThought: null
+    };
     return {
-      action: '/submit',
+      action: '/qcm',
       questions: questions,
       fields: fields
     };
@@ -932,8 +940,8 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.fields[question.id],
-                      expression: "fields[question.id]"
+                      value: _vm.fields.questionnaire[question.id].activated,
+                      expression: "fields.questionnaire[question.id].activated"
                     }
                   ],
                   staticClass: "form-check-input",
@@ -943,13 +951,18 @@ var render = function() {
                     id: question.id
                   },
                   domProps: {
-                    checked: Array.isArray(_vm.fields[question.id])
-                      ? _vm._i(_vm.fields[question.id], null) > -1
-                      : _vm.fields[question.id]
+                    checked: Array.isArray(
+                      _vm.fields.questionnaire[question.id].activated
+                    )
+                      ? _vm._i(
+                          _vm.fields.questionnaire[question.id].activated,
+                          null
+                        ) > -1
+                      : _vm.fields.questionnaire[question.id].activated
                   },
                   on: {
                     change: function($event) {
-                      var $$a = _vm.fields[question.id],
+                      var $$a = _vm.fields.questionnaire[question.id].activated,
                         $$el = $event.target,
                         $$c = $$el.checked ? true : false
                       if (Array.isArray($$a)) {
@@ -957,17 +970,25 @@ var render = function() {
                           $$i = _vm._i($$a, $$v)
                         if ($$el.checked) {
                           $$i < 0 &&
-                            _vm.$set(_vm.fields, question.id, $$a.concat([$$v]))
+                            _vm.$set(
+                              _vm.fields.questionnaire[question.id],
+                              "activated",
+                              $$a.concat([$$v])
+                            )
                         } else {
                           $$i > -1 &&
                             _vm.$set(
-                              _vm.fields,
-                              question.id,
+                              _vm.fields.questionnaire[question.id],
+                              "activated",
                               $$a.slice(0, $$i).concat($$a.slice($$i + 1))
                             )
                         }
                       } else {
-                        _vm.$set(_vm.fields, question.id, $$c)
+                        _vm.$set(
+                          _vm.fields.questionnaire[question.id],
+                          "activated",
+                          $$c
+                        )
                       }
                     }
                   }
@@ -1000,7 +1021,7 @@ var render = function() {
                   : _vm._e()
               ]),
               _vm._v(" "),
-              _vm.fields[question.id]
+              _vm.fields.questionnaire[question.id].activated
                 ? _c("div", { staticClass: "checkbox-precision" }, [
                     _c(
                       "label",
@@ -1013,8 +1034,10 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.fields[question.id + "Explanation"],
-                          expression: "fields[question.id + 'Explanation']"
+                          value:
+                            _vm.fields.questionnaire[question.id].explanation,
+                          expression:
+                            "fields.questionnaire[question.id].explanation"
                         }
                       ],
                       staticStyle: { width: "100%" },
@@ -1024,7 +1047,7 @@ var render = function() {
                         id: "explanation-" + question.id
                       },
                       domProps: {
-                        value: _vm.fields[question.id + "Explanation"]
+                        value: _vm.fields.questionnaire[question.id].explanation
                       },
                       on: {
                         input: function($event) {
@@ -1032,8 +1055,8 @@ var render = function() {
                             return
                           }
                           _vm.$set(
-                            _vm.fields,
-                            question.id + "Explanation",
+                            _vm.fields.questionnaire[question.id],
+                            "explanation",
                             $event.target.value
                           )
                         }
@@ -1072,13 +1095,15 @@ var render = function() {
               attrs: {
                 type: "radio",
                 name: "finalThought",
-                id: "finalThought-ok",
-                value: "true"
+                id: "finalThought-ok"
               },
-              domProps: { checked: _vm._q(_vm.fields.finalThought, "true") },
+              domProps: {
+                value: true,
+                checked: _vm._q(_vm.fields.finalThought, true)
+              },
               on: {
                 change: function($event) {
-                  _vm.$set(_vm.fields, "finalThought", "true")
+                  _vm.$set(_vm.fields, "finalThought", true)
                 }
               }
             }),
@@ -1107,13 +1132,15 @@ var render = function() {
               attrs: {
                 type: "radio",
                 name: "finalThought",
-                id: "finalThought-not-ok",
-                value: "false"
+                id: "finalThought-not-ok"
               },
-              domProps: { checked: _vm._q(_vm.fields.finalThought, "false") },
+              domProps: {
+                value: false,
+                checked: _vm._q(_vm.fields.finalThought, false)
+              },
               on: {
                 change: function($event) {
-                  _vm.$set(_vm.fields, "finalThought", "false")
+                  _vm.$set(_vm.fields, "finalThought", false)
                 }
               }
             }),
@@ -1336,14 +1363,12 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this = this;
 
-      console.log('hey', this.fields);
-
       if (this.loaded) {
         this.loaded = false;
         this.success = false;
         this.errors = {};
         axios.post(this.action, this.fields).then(function (_) {
-          _this.fields = {};
+          // this.fields = {}
           _this.loaded = true;
           _this.success = true;
         }).catch(function (error) {
@@ -1474,7 +1499,7 @@ new Vue({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/arnauddoucerain/Workspace/_perso/rodexal/resources/js/pre-tests.js */"./resources/js/pre-tests.js");
+module.exports = __webpack_require__(/*! /Users/arnaud.doucerain/Workspace/_perso/rodexal/resources/js/pre-tests.js */"./resources/js/pre-tests.js");
 
 
 /***/ })

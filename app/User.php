@@ -10,6 +10,10 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    public function isJury() {
+        return $this->rank >= 4;
+    }
+
     public function isAdmin() {
         return $this->rank >= 6;
     }

@@ -19,7 +19,7 @@ value="{{ old('label') }}"
             type="checkbox"
             name="question.id"
             :id="question.id"
-            v-model="fields[question.id]"
+            v-model="fields.questionnaire[question.id].activated"
           >
           <label class="form-check-label" :for="question.id">
             {{question.label}}
@@ -33,13 +33,13 @@ value="{{ old('label') }}"
             class="text-danger"
           >{{ errors[question.label][0] }}</div>
         </div>
-        <div class="checkbox-precision" v-if="fields[question.id]">
+        <div class="checkbox-precision" v-if="fields.questionnaire[question.id].activated">
           <label :for="'explanation-' + question.id">Précisions</label>
           <input
             type="text"
             :name="'explanation-' + question.id"
             :id="'explanation-' + question.id"
-            v-model="fields[question.id + 'Explanation']"
+            v-model="fields.questionnaire[question.id].explanation"
             style="width: 100%"
           >
           <div
@@ -59,8 +59,8 @@ value="{{ old('label') }}"
             type="radio"
             name="finalThought"
             id="finalThought-ok"
-            value="true"
             v-model="fields.finalThought"
+            v-bind:value="true"
           >
           <label class="form-check-label" for="finalThought-ok">Conforme</label>
         </div>
@@ -70,8 +70,8 @@ value="{{ old('label') }}"
             type="radio"
             name="finalThought"
             id="finalThought-not-ok"
-            value="false"
             v-model="fields.finalThought"
+            v-bind:value="false"
           >
           <label class="form-check-label" for="finalThought-not-ok">Non conforme</label>
         </div>
@@ -107,7 +107,7 @@ import FormMixin from '../FormMixin'
 export default {
   mixins: [FormMixin],
   data() {
-    const fields = {}
+    const gameId = 5
     const questions = [
       {
         id: 'notAutonomous',
@@ -147,12 +147,20 @@ export default {
         fieldDescription: 'Le multijoueur est nécessaire'
       }
     ]
+    const questionnaire = {}
     questions.forEach(question => {
-      fields[question.id] = false
-      fields[question.id + 'Explanation'] = ''
+      questionnaire[question.id] = {
+        activated: false,
+        explanation: null
+      }
     })
+    const fields = {
+      gameId,
+      questionnaire,
+      finalThought: null
+    }
     return {
-      action: '/submit',
+      action: '/qcm',
       questions,
       fields
     }

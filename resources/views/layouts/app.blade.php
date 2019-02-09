@@ -270,7 +270,7 @@
         <a href="{{ env('FORMER_APP_URL') }}">Alex d'or</a>
       </div>
 
-      <p><a class="bouton" href="{{ route('qcm.create') }}">Pré-tests</a></p>
+      <p><a class="bouton" href="{{ route('qcm.index') }}">QCM</a></p>
       <div class="row" id="mainrow">
         <main class="py-4">
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
