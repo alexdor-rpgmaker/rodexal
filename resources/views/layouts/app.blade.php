@@ -219,30 +219,6 @@
           </ul>
 
           <ul class="right">
-            @php
-                function rang($argument)
-                {
-                    $rang = array (
-                        "Webmaster" => 7,
-                        "Admin" => 6,
-                        "Modérateur" => 5,
-                        "Juré" => 4,
-                        "Ambassadeur" => 3,
-                        "Concurrent" => 2,
-                        "Membre" => 1,
-                        "Invité" => 0);
-                        
-                    if(!is_numeric($argument))
-                    {
-                        return (array_key_exists($argument, $rang)) ? $rang[$argument] : false;
-                    }
-                    else
-                    {
-                        return array_search($argument, $rang);
-                    }
-                }   
-            @endphp
-
             @auth
 
                 <li>
@@ -251,7 +227,7 @@
                 </li>
 
                 <li class="has-dropdown">
-                    <a class="couleur_{{ rang(Auth::user()->rank) }}" href="{{ env('FORMER_APP_URL') }}?p=profil&amp;membre={{ Auth::id() }}">
+                    <a class="couleur_{{ Auth::user()->rankName() }}" href="{{ env('FORMER_APP_URL') }}?p=profil&amp;membre={{ Auth::id() }}">
                         @if (session('resource-owner')['avatar_url'])
                             <img class="header-avatar" src="{{ session('resource-owner')['avatar_url'] }}" alt="avatar">
                         @endif

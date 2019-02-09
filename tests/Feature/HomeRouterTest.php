@@ -12,13 +12,12 @@ class HomeRouterTest extends TestCase
     // Index
 
     /**
-     * @testdox On peut accéder à la page d'accueil du site
+     * @testdox On est redirigés quand on se rend sur la page d'accueil du site
      */
     public function testAccueilDuSite()
     {
         $response = $this->get('/');
 
-        $response->assertOk();
+        $response->assertRedirect();
     }
-
 }
