@@ -13,7 +13,7 @@ class PreTestPolicy
 
     public function before(User $user, $ability)
     {
-        if ($user->isJury()) {
+        if ($user->isAdmin()) {
             return true;
         }
     }
@@ -25,12 +25,12 @@ class PreTestPolicy
 
     public function create(User $user)
     {
-        return false;
+        return $user->isJury();
     }
 
-    public function update(User $user)
+    public function update(User $user, PreTest $preTest)
     {
-        return false;
+        return $user->isJury() && $preTest->user_id == $user->id;
     }
 
     public function delete(User $user, PreTest $preTest)

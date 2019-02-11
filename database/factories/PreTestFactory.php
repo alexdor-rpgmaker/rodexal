@@ -6,7 +6,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\PreTest::class, function (Faker $faker) {
     return [
-        'user_id' => User::inRandomOrder()->first()->id,
+        'user_id' => factory(User::class)->create()->id,
         'game_id' => $faker->numberBetween(5, 25),
         'questionnaire' => [
             'blockingBug' => [

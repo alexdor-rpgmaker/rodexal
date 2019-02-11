@@ -30,8 +30,8 @@ Route::resource('dictionnaire', 'WordController')->except([
     'dictionnaire' => 'word'
 ]);
 
-Route::resource('qcm', 'PreTestController')->only([
-    'index', 'show', 'create', 'store'
+Route::resource('qcm', 'PreTestController')->except([
+    'index', 'destroy'
 ])->parameters([
     'qcm' => 'pre_test'
 ]);

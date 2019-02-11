@@ -5,12 +5,12 @@ export default {
       errors: {},
       success: false,
       loaded: true,
-      action: ''
+      action: '',
+      redirection: ''
     }
   },
   methods: {
     submit() {
-      console.log('hey', this.fields)
       if (this.loaded) {
         this.loaded = false
         this.success = false
@@ -21,6 +21,9 @@ export default {
             this.fields = {}
             this.loaded = true
             this.success = true
+            if (this.redirection !== '') {
+              window.location.replace(this.redirection)
+            }
           })
           .catch(error => {
             this.loaded = true

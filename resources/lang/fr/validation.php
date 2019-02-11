@@ -144,6 +144,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'finalThought' => 'Verdict',
+    ],
 
 ];

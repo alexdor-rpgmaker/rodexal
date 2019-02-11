@@ -76,19 +76,19 @@ value="{{ old('label') }}"
           <label class="form-check-label" for="finalThought-not-ok">Non conforme</label>
         </div>
         <div v-if="errors && errors.finalThought" class="text-danger">{{ errors.finalThought[0] }}</div>
-        <div class="final-thought-precision" v-if="fields.finalThought === 'false'">
+        <div class="final-thought-precision" v-if="fields.finalThought === false">
           <label for="finalThoughtPrecision">Précisions</label>
           
           <textarea
             class="form-control"
             name="finalThoughtPrecision"
             id="finalThoughtPrecision"
-            v-model="fields.finalThoughtPrecision"
+            v-model="fields.finalThoughtExplanation"
           ></textarea>
           <div
-            v-if="errors && errors.finalThoughtPrecision"
+            v-if="errors && errors.finalThoughtExplanation"
             class="text-danger"
-          >{{ errors.finalThoughtPrecision[0] }}</div>
+          >{{ errors.finalThoughtExplanation[0] }}</div>
         </div>
       </div>
     </div>
@@ -107,46 +107,7 @@ import FormMixin from '../FormMixin'
 export default {
   mixins: [FormMixin],
   data() {
-    const gameId = 5
-    const questions = [
-      {
-        id: 'notAutonomous',
-        label: "Le jeu n'est pas autonome"
-      },
-      {
-        id: 'notLaunchable',
-        label: 'Impossible de lancer le jeu'
-      },
-      {
-        id: 'blockingBug',
-        label: 'Bug bloquant inévitable'
-      },
-      {
-        id: 'severalBugs',
-        label: 'Présence abusive de bugs non bloquants'
-      },
-      {
-        id: 'spellingMistakes',
-        label: "Nombre abusif de fautes d'orthographe"
-      },
-      {
-        id: 'tooHard',
-        label: 'Difficulté abusive/mal calibrée',
-        fieldDescription:
-          'Nombre de game over injuste par heure de jeu, mauvaise maniabilité, explications manquantes...'
-      },
-      {
-        id: 'tooShort',
-        label: 'Jeu trop court',
-        fieldDescription:
-          'La totalité du jeu est observable en moins de 30 minutes'
-      },
-      {
-        id: 'unplayableAlone',
-        label: "Impossible d'apprécier seul la majeure partie du jeu",
-        fieldDescription: 'Le multijoueur est nécessaire'
-      }
-    ]
+    const gameId = game.id
     const questionnaire = {}
     questions.forEach(question => {
       questionnaire[question.id] = {
@@ -161,6 +122,7 @@ export default {
     }
     return {
       action: '/qcm',
+      redirection: redirectionUrl,
       questions,
       fields
     }

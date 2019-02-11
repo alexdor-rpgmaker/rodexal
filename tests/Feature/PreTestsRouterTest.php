@@ -7,24 +7,18 @@ use App\PreTest;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Handler\MockHandler;
+
 /**
  * @testdox PreTestsRouter
  */
 class PreTestsRouterTest extends TestCase
 {
     use RefreshDatabase;
-
-    // Index
-
-    /**
-     * @testdox On peut accéder à la liste des QCMs
-     */
-    public function testListeDesQcm()
-    {
-        $response = $this->get('/qcm');
-
-        $response->assertOk();
-    }
 
     // Create
 
@@ -42,10 +36,11 @@ class PreTestsRouterTest extends TestCase
     }
 
     /**
-     * @testdox On peut pas accéder au formulaire d'ajout de QCM si on est pas juré
+     * @testdox On peut accéder au formulaire d'ajout de QCM si on est juré
      */
     public function testFormulaireNouveauQcmSiJury()
     {
+        self::mockHttpClient();
         $user = factory(User::class)->states('jury')->create();
 
         $response = $this->actingAs($user)
@@ -57,7 +52,7 @@ class PreTestsRouterTest extends TestCase
     // Store
 
     /**
-     * @testdox On ne peut pas valider un QCM si on n'est pas jury
+     * @testdox On ne peut pas valider un QCM si on n'est pas juré
      */
     public function testNouveauQcmSiNonJury()
     {
@@ -70,7 +65,7 @@ class PreTestsRouterTest extends TestCase
     }
 
     /**
-     * @testdox On est redirigés quand il manque des paramètres pour ajouter un QCM, si on est jury
+     * @testdox On est redirigés quand il manque des paramètres pour ajouter un QCM, si on est juré
      */
     public function testRedirectionSiChampsManquantsSiJury()
     {
@@ -90,7 +85,7 @@ class PreTestsRouterTest extends TestCase
     }
 
     /**
-     * @testdox On peut créer un QCM si on est jury
+     * @testdox On peut créer un QCM si on est juré
      */
     public function testNouveauQcmSiJury()
     {
@@ -113,127 +108,164 @@ class PreTestsRouterTest extends TestCase
         ]);
     }
 
-    // // Edit
+    // Edit
 
-    // /**
-    //  * @testdox On ne peut pas éditer un mot du dictionnaire si on n'est pas admin
-    //  */
-    // public function testModifierMotDuDictionnaireSiNonAdmin()
-    // {
-    //     $user = factory(User::class)->create();
-    //     $preTest = factory(PreTest::class)->create();
+    /**
+     * @testdox On ne peut pas éditer un QCM si on est un membre régulier, non créateur du QCM
+     */
+    public function testInterditDeModifierQcmSiMembreNormal()
+    {
+        $user = factory(User::class)->create();
+        $preTest = factory(PreTest::class)->create();
 
-    //     $response = $this->actingAs($user)
-    //                      ->get("/qcm/{$preTest->slug}/editer");
+        $response = $this->actingAs($user)
+                         ->get("/qcm/{$preTest->id}/editer");
 
-    //     $response->assertForbidden();
-    // }
+        $response->assertForbidden();
+    }
 
-    // /**
-    //  * @testdox On peut éditer un mot du dictionnaire si on est admin
-    //  */
-    // public function testModifierMotDuDictionnaireSiAdmin()
-    // {
-    //     $user = factory(User::class)->states('admin')->create();
-    //     $preTest = factory(PreTest::class)->create();
+    /**
+     * @testdox On ne peut pas éditer un QCM si on est un membre régulier, créateur du QCM
+     */
+    public function testInterditDeModifierQcmSiMembreNormalEtCreateur()
+    {
+        $user = factory(User::class)->create();
+        $preTest = factory(PreTest::class)->create([
+            'user_id' => $user->id
+        ]);
 
-    //     $response = $this->actingAs($user)
-    //                      ->get("/qcm/{$preTest->slug}/editer");
+        $response = $this->actingAs($user)
+                         ->get("/qcm/{$preTest->id}/editer");
 
-    //     $response->assertOk();
-    // }
+        $response->assertForbidden();
+    }
 
-    // // Update
+    /**
+     * @testdox On ne peut pas éditer un QCM si on est un juré, non créateur du QCM
+     */
+    public function testInterditDeModifierQcmSiJuryNonCreateur()
+    {
+        $user = factory(User::class)->states('jury')->create();
+        $preTest = factory(PreTest::class)->create();
 
-    // /**
-    //  * @testdox On ne peut pas mettre à jour un mot dans le dictionnaire si on n'est pas admin
-    //  */
-    // public function testModificationMotDuDictionnaireSiNonAdmin()
-    // {
-    //     $user = factory(User::class)->create();
-    //     $preTest = factory(PreTest::class)->create();
+        $response = $this->actingAs($user)
+                         ->get("/qcm/{$preTest->id}/editer");
 
-    //     $response = $this->actingAs($user)
-    //                      ->put("/qcm/{$preTest->slug}");
+        $response->assertForbidden();
+    }
 
-    //     $response->assertForbidden();
-    // }
+    /**
+     * @testdox On peut éditer un QCM si on est le créateur du QCM
+     */
+    public function testModifierQcmSiJuryEtCreateur()
+    {
+        self::mockHttpClient();
+        $user = factory(User::class)->states('jury')->create();
+        $preTest = factory(PreTest::class)->create([
+            'user_id' => $user->id
+        ]);
 
-    // /**
-    //  * @testdox On est redirigés quand il manque des paramètres pour mettre un mot à jour, si on est admin
-    //  */
-    // public function testRedirectionSiChampsManquantsModificationSiAdmin()
-    // {
-    //     $user = factory(User::class)->states('admin')->create();
-    //     $preTest = factory(PreTest::class)->create();
-    //     $unsavedPreTest = factory(PreTest::class)->make();
+        $response = $this->actingAs($user)
+                         ->get("/qcm/{$preTest->id}/editer");
 
-    //     $response = $this->actingAs($user)
-    //                      ->put("/qcm/{$preTest->slug}", [
-    //                         'label' => $unsavedPreTest->label
-    //                      ]);
+        $response->assertOk();
+    }
 
-    //     $response->assertRedirect();
-    //     $this->assertDatabaseHas('preTests', [
-    //         'label' => $preTest->label
-    //     ]);
-    //     $this->assertDatabaseMissing('preTests', [
-    //         'label' => $unsavedPreTest->label
-    //     ]);
-    // }
+    /**
+     * @testdox On peut éditer un QCM si on est admin et non créateur
+     */
+    public function testModifierQcmSiAdmin()
+    {
+        self::mockHttpClient();
+        $user = factory(User::class)->states('admin')->create();
+        $preTest = factory(PreTest::class)->create();
 
-    // /**
-    //  * @testdox On peut mettre à jour un mot dans le dictionnaire si on est admin
-    //  */
-    // public function testModificationMotDuDictionnaireSiAdmin()
-    // {
-    //     $user = factory(User::class)->states('admin')->create();
-    //     $preTest = factory(PreTest::class)->create();
-    //     $newPreTest = factory(PreTest::class)->make();
+        $response = $this->actingAs($user)
+                         ->get("/qcm/{$preTest->id}/editer");
 
-    //     $response = $this->actingAs($user)
-    //                      ->put("/qcm/{$preTest->slug}", [
-    //                         'label' => $newPreTest->label,
-    //                         'description' => $newPreTest->description
-    //                      ]);
+        $response->assertOk();
+    }
 
-    //     $response->assertRedirect();
-    //     $this->assertDatabaseHas('preTests', [
-    //         'label' => $newPreTest->label,
-    //         'description' => $newPreTest->description
-    //     ]);
-    // }
+    // Update
 
-    // // Destroy
+    /**
+     * @testdox On ne peut pas mettre à jour un QCM si on n'est pas juré ni créateur
+     */
+    public function testModificationQcmSiMembreNormalNonCreateur()
+    {
+        $user = factory(User::class)->create();
+        $preTest = factory(PreTest::class)->create();
 
-    // /**
-    //  * @testdox On ne peut pas supprimer un mot dans le dictionnaire si on n'est pas admin
-    //  */
-    // public function testSuppressionMotDuDictionnaireSiNonAdmin()
-    // {
-    //     $user = factory(User::class)->create();
-    //     $preTest = factory(PreTest::class)->create();
+        $response = $this->actingAs($user)
+                         ->put("/qcm/{$preTest->id}");
 
-    //     $response = $this->actingAs($user)
-    //                      ->delete("/qcm/{$preTest->slug}");
+        $response->assertForbidden();
+    }
 
-    //     $response->assertForbidden();
-    // }
+    /**
+     * @testdox On est redirigés quand il manque des paramètres pour mettre un QCM à jour, si on est admin
+     */
+    public function testRedirectionSiChampsManquantsModificationSiAdmin()
+    {
+        $user = factory(User::class)->states('admin')->create();
+        $preTest = factory(PreTest::class)->create();
+        $unsavedPreTest = factory(PreTest::class)->make();
 
-    // /**
-    //  * @testdox On peut supprimer un mot du dictionnaire si on est admin
-    //  */
-    // public function testSuppressionMotDuDictionnaireSiAdmin()
-    // {
-    //     $user = factory(User::class)->states('admin')->create();
-    //     $preTest = factory(PreTest::class)->create();
+        $response = $this->actingAs($user)
+                         ->put("/qcm/{$preTest->id}", [
+                            'finalThoughtExplanation' => $unsavedPreTest->final_thought_explanation
+                         ]);
 
-    //     $response = $this->actingAs($user)
-    //                      ->delete("/qcm/{$preTest->slug}");
+        $response->assertRedirect();
+        $this->assertDatabaseHas('pre_tests', [
+            'final_thought_explanation' => $preTest->final_thought_explanation
+        ]);
+        $this->assertDatabaseMissing('pre_tests', [
+            'final_thought_explanation' => $unsavedPreTest->final_thought_explanation
+        ]);
+    }
 
-    //     $response->assertRedirect();
-    //     $this->assertDatabaseMissing('preTests', [
-    //         'label' => $preTest->label
-    //     ]);
-    // }
+    /**
+     * @testdox On peut mettre à jour un QCM si on est juré et créateur
+     */
+    public function testModificationQcmSiJuryEtCreateur()
+    {
+        $user = factory(User::class)->states('jury')->create();
+        $preTest = factory(PreTest::class)->create([
+            'user_id' => $user->id
+        ]);
+        $newPreTest = factory(PreTest::class)->make([
+            'user_id' => $user->id
+        ]);
+
+        $response = $this->actingAs($user)
+                         ->put("/qcm/{$preTest->id}", [
+                            'gameId' => $newPreTest->game_id,
+                            'finalThought' => true,
+                            'finalThoughtExplanation' => $newPreTest->final_thought_explanation,
+                            'questionnaire' => $newPreTest->questionnaire
+                         ]);
+
+        $response->assertOk();
+        $this->assertDatabaseHas('pre_tests', [
+            'user_id' => $user->id,
+            'game_id' => $preTest->game_id,
+            'final_thought' => true,
+            'final_thought_explanation' => $newPreTest->final_thought_explanation
+        ]);
+    }
+
+    // Helper
+
+    private function mockHttpClient($responseCode = 200) {
+        $mock = new MockHandler([
+            new Response($responseCode, [], json_encode([
+                'id' => 3,
+                'title' => 'Legend of Lemidora'
+            ]))
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
+        $this->app->instance(GuzzleClient::class, $client);
+    }
 }
