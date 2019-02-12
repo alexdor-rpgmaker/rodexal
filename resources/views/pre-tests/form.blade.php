@@ -3,9 +3,12 @@
 @push('scripts')
     <script src="{{ asset('js/pre-tests.js') }}" defer></script>
     <script>
-        const game = @json($game);
-        const questions = @json(App\PreTest::FIELDS);
-        const redirectionUrl = @json(env('FORMER_APP_URL').'/?p=mes-tests');
+        const initQuestions = @json(App\PreTest::FIELDS);
+        const initMethod = @json($form_method);
+        const initAction = @json($form_url);
+        const initGameId = @json($game_id);
+        const initPreTest = @json($pre_test);
+        const initRedirection = @json(env('FORMER_APP_URL').'/?p=mes-tests');
     </script>
 @endpush
 
@@ -14,7 +17,7 @@
         <div id="pre-tests-form" class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">QCM du jeu {{ $game['title'] }}</div>
+                    <div class="card-header">{{ $title }}</div>
 
                     <div class="card-body">
                         @include('common.errors')

@@ -17,7 +17,7 @@ value="{{ old('label') }}"
           <input
             class="form-check-input"
             type="checkbox"
-            name="question.id"
+            :name="question.id"
             :id="question.id"
             v-model="fields.questionnaire[question.id].activated"
           >
@@ -95,7 +95,7 @@ value="{{ old('label') }}"
 
     <div class="form-group row submit-wrapper">
       <div class="col-md-12 text-center">
-        <button type="submit" class="btn btn-primary mb-0">Envoyer</button>
+        <button type="submit" class="submit btn btn-primary mb-0">Envoyer</button>
       </div>
     </div>
   </form>
@@ -107,24 +107,32 @@ import FormMixin from '../FormMixin'
 export default {
   mixins: [FormMixin],
   data() {
-    const gameId = game.id
-    const questionnaire = {}
-    questions.forEach(question => {
-      questionnaire[question.id] = {
-        activated: false,
-        explanation: null
-      }
-    })
-    const fields = {
-      gameId,
-      questionnaire,
-      finalThought: null
-    }
     return {
-      action: '/qcm',
-      redirection: redirectionUrl,
-      questions,
-      fields
+      method: initMethod,
+      action: initAction,
+      questions: initQuestions,
+      fields: this.fillFields(),
+      redirection: initRedirection
+    }
+  },
+  methods: {
+    fillFields() {
+      const questionnaire = {}
+      initQuestions.forEach(question => {
+        questionnaire[question.id] = {
+          activated: false,
+          explanation: null
+        }
+      })
+      const fields =
+        initMethod === 'PUT'
+          ? initPreTest
+          : {
+              questionnaire,
+              gameId: initGameId,
+              finalThought: null
+            }
+      return fields
     }
   }
 }

@@ -5,6 +5,7 @@ export default {
       errors: {},
       success: false,
       loaded: true,
+      method: 'POST',
       action: '',
       redirection: ''
     }
@@ -15,10 +16,13 @@ export default {
         this.loaded = false
         this.success = false
         this.errors = {}
-        axios
-          .post(this.action, this.fields)
+        axios({
+          method: this.method,
+          url: this.action,
+          data: this.fields
+        })
           .then(_ => {
-            this.fields = {}
+            this.fields = this.fillFields()
             this.loaded = true
             this.success = true
             if (this.redirection !== '') {

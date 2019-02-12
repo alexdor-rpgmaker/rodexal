@@ -31,8 +31,8 @@ php artisan db:seed
 
 ## Lancement du serveur
 
--   Sur Windows, il est conseillé d'utiliser [Wamp](http://www.wampserver.com).
--   Sur Mac, il est conseillé d'utiliser [Valet](https://laravel.com/docs/5.7/valet).
+- Sur Windows, il est conseillé d'utiliser [Wamp](http://www.wampserver.com).
+- Sur Mac, il est conseillé d'utiliser [Valet](https://laravel.com/docs/5.7/valet).
 
 ## Compilation des assets
 
@@ -44,7 +44,7 @@ npm run dev
 npm run watch
 ```
 
-## Lancement des tests
+## Lancement des tests unitaires
 
 ```bash
 # Lancer les tests
@@ -52,4 +52,13 @@ composer test
 
 # Lancer les tests en continu
 composer test:watch
+```
+
+## Lancement des tests de navigateur
+
+Il faut créer un fichier .env.dusk en précisant une base de données différente (DB_DATABASE) pour éviter la suppression de données en local.
+
+```bash
+# Lancer les tests
+composer test:e2e
 ```

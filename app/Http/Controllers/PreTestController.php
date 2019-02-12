@@ -54,11 +54,8 @@ class PreTestController extends Controller
         $game = self::fetchGame($request->query('game_id'), $this->client);
 		return view('pre-tests.form', [
             'pre_test' => new PreTest,
-            'title' => 'Ajouter un QCM',
-            'game' => [
-                'id' => $game->id,
-                'title' => $game->title
-            ],
+            'title' => "Remplir un QCM pour le jeu $game->title",
+            'game_id' => $game->id,
             'form_method' => 'POST',
             'form_url' => route('qcm.store')
         ]);
@@ -91,13 +88,12 @@ class PreTestController extends Controller
     public function edit(PreTest $preTest)
     {
         $game = self::fetchGame($preTest->game_id, $this->client);
+        $preTest->finalThought = $preTest->final_thought == 1;
+        $preTest->finalThoughtExplanation = $preTest->final_thought_explanation;
 		return view('pre-tests.form', [
             'pre_test' => $preTest,
-            'title' => 'Modifier un QCM',
-            'game' => [
-                'id' => $game->id,
-                'title' => $game->title
-            ],
+            'title' => "Modifier le QCM du jeu $game->title",
+            'game_id' => $game->id,
             'form_method' => 'PUT',
             'form_url' => route('qcm.update', $preTest->id)
         ]);
