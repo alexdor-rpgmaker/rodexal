@@ -51,7 +51,10 @@ class PreTestController extends Controller
 
     public function create(Request $request)
     {
-        $game = self::fetchGame($request->query('game_id'), $this->client);
+        $gameId = $request->query('game_id');
+        self::checkGameIsInUserAssignments($gameId, Auth::id(), $this->client);
+
+        $game = self::fetchGame($gameId, $this->client);
 		return view('pre-tests.form', [
             'pre_test' => new PreTest,
             'title' => "Remplir un QCM pour le jeu $game->title",
@@ -62,6 +65,8 @@ class PreTestController extends Controller
     }
 
     public function store(Request $request) {
+        self::checkGameIsInUserAssignments($request->gameId, Auth::id(), $this->client);
+
         $validator_array = [
             'gameId' => 'required',
             'finalThought' => 'required|boolean',
@@ -88,6 +93,7 @@ class PreTestController extends Controller
     public function edit(PreTest $preTest)
     {
         $game = self::fetchGame($preTest->game_id, $this->client);
+
         $preTest->finalThought = $preTest->final_thought == 1;
         $preTest->finalThoughtExplanation = $preTest->final_thought_explanation;
 		return view('pre-tests.form', [
@@ -121,6 +127,34 @@ class PreTestController extends Controller
     }
 
     // Helper
+
+    private static function checkGameIsInUserAssignments($gameId, $userId, $client)
+    {
+        if (env('DUSK', false)) {
+            return true;
+        }
+        $assignments = self::fetchUserAssignments($userId, $client);
+        $gameInAssignment = current(array_filter($assignments, function($assignment) use($gameId) {
+            return $assignment->game_id == $gameId;
+        }));
+        abort_unless($gameInAssignment, 403, "Ce jeu ne vous est pas attribué !");
+    }
+
+    private static function fetchUserAssignments($userId, $client)
+    {
+        try {
+            $response = $client->request('GET', '/api/v0/attributions.php', [
+                'base_uri' => env('FORMER_APP_URL'),
+                'query' => [
+                    'id_membre' => intval($userId),
+                    'id_session' => 19 // TODO: Make this variable
+                ]
+            ]);
+        } catch (RequestException $e) {
+            abort($e->getResponse()->getStatusCode());
+        }
+        return json_decode($response->getBody());
+    }
 
     private static function fetchGame($id, $client)
     {

@@ -56,7 +56,7 @@ composer test:watch
 
 ## Lancement des tests de navigateur
 
-Il faut créer un fichier .env.dusk en précisant une base de données différente (DB_DATABASE) pour éviter la suppression de données en local.
+Il faut créer un fichier .env.dusk en précisant une base de données différente (DB_DATABASE) pour éviter la suppression de données en local. Il faut aussi ajouter DUSK=true.
 
 ```bash
 # Lancer les tests

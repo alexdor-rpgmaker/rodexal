@@ -20,6 +20,34 @@ class PreTestsRouterTest extends TestCase
 {
     use RefreshDatabase;
 
+    // Index API
+
+    /**
+     * @testdox On peut accéder à la liste des QCM remplis
+     */
+    public function testQcmIndexApi()
+    {
+        $preTest = factory(PreTest::class, 3)->create();
+
+        $response = $this->get('/api/qcm');
+
+        $response->assertOk();
+    }
+
+    // Show
+
+    /**
+     * @testdox On peut voir un QCM rempli
+     */
+    public function testAffichageQcm()
+    {
+        $preTest = factory(PreTest::class)->create();
+
+        $response = $this->get("/qcm/$preTest->id");
+
+        $response->assertOk();
+    }
+
     // Create
 
     /**
@@ -36,15 +64,29 @@ class PreTestsRouterTest extends TestCase
     }
 
     /**
+     * @testdox On ne peut pas accéder au formulaire d'ajout de QCM si le jeu ne nous est pas attribué
+     */
+    public function testFormulaireQcmPourJeuNonAttribue()
+    {
+        self::mockHttpClientCreate();
+        $user = factory(User::class)->states('jury')->create();
+
+        $response = $this->actingAs($user)
+                         ->get('/qcm/creer?game_id=5');
+
+        $response->assertForbidden();
+    }
+
+    /**
      * @testdox On peut accéder au formulaire d'ajout de QCM si on est juré
      */
     public function testFormulaireNouveauQcmSiJury()
     {
-        self::mockHttpClient();
+        self::mockHttpClientCreate();
         $user = factory(User::class)->states('jury')->create();
 
         $response = $this->actingAs($user)
-                         ->get('/qcm/creer');
+                         ->get('/qcm/creer?game_id=3');
 
         $response->assertOk();
     }
@@ -65,22 +107,42 @@ class PreTestsRouterTest extends TestCase
     }
 
     /**
-     * @testdox On est redirigés quand il manque des paramètres pour ajouter un QCM, si on est juré
+     * @testdox On ne peut pas écrire un QCM pour un jeu qui ne nous est pas attribué
      */
-    public function testRedirectionSiChampsManquantsSiJury()
+    public function testRedirectionSiEnregistrementAvecTestNonAttribue()
     {
+        self::mockHttpClientCreate();
         $user = factory(User::class)->states('jury')->create();
 
         $response = $this->actingAs($user)
                          ->post('/qcm', [
-                             'user_id' => 2,
-                             'game_id' => 8
+                             'gameId' => 8
+                         ]);
+
+        $response->assertForbidden();
+        $this->assertDatabaseMissing('pre_tests', [
+            'user_id' => $user->id,
+            'game_id' => 8
+        ]);
+    }
+
+    /**
+     * @testdox On est redirigés quand il manque des paramètres pour ajouter un QCM, si on est juré
+     */
+    public function testRedirectionSiChampsManquantsSiJury()
+    {
+        self::mockHttpClientCreate();
+        $user = factory(User::class)->states('jury')->create();
+
+        $response = $this->actingAs($user)
+                         ->post('/qcm', [
+                             'gameId' => 3
                          ]);
 
         $response->assertRedirect();
         $this->assertDatabaseMissing('pre_tests', [
-            'user_id' => 2,
-            'game_id' => 8
+            'user_id' => $user->id,
+            'game_id' => 3
         ]);
     }
 
@@ -89,8 +151,12 @@ class PreTestsRouterTest extends TestCase
      */
     public function testNouveauQcmSiJury()
     {
+        self::mockHttpClientCreate();
         $user = factory(User::class)->states('jury')->create();
-        $unsavedPreTest = factory(PreTest::class)->make();
+        $unsavedPreTest = factory(PreTest::class)->make([
+            'game_id' => 3
+        ]);
+
         $response = $this->actingAs($user)
                          ->post('/qcm', [
             'gameId' => $unsavedPreTest->game_id,
@@ -159,7 +225,7 @@ class PreTestsRouterTest extends TestCase
      */
     public function testModifierQcmSiJuryEtCreateur()
     {
-        self::mockHttpClient();
+        self::mockHttpClientEdit();
         $user = factory(User::class)->states('jury')->create();
         $preTest = factory(PreTest::class)->create([
             'user_id' => $user->id
@@ -176,7 +242,7 @@ class PreTestsRouterTest extends TestCase
      */
     public function testModifierQcmSiAdmin()
     {
-        self::mockHttpClient();
+        self::mockHttpClientEdit();
         $user = factory(User::class)->states('admin')->create();
         $preTest = factory(PreTest::class)->create();
 
@@ -257,7 +323,27 @@ class PreTestsRouterTest extends TestCase
 
     // Helper
 
-    private function mockHttpClient($responseCode = 200) {
+    private function mockHttpClientCreate($responseCode = 200) {
+        $mock = new MockHandler([
+            new Response($responseCode, [], json_encode([
+                [
+                    'game_id' => 3,
+                    'pre_test' => true,
+                    'serie_locked' => false,
+                    'assignment_locked' => false
+                ]
+            ])),
+            new Response($responseCode, [], json_encode([
+                'id' => 3,
+                'title' => 'Legend of Lemidora'
+            ]))
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
+        $this->app->instance(GuzzleClient::class, $client);
+    }
+
+    private function mockHttpClientEdit($responseCode = 200) {
         $mock = new MockHandler([
             new Response($responseCode, [], json_encode([
                 'id' => 3,
