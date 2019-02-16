@@ -44,8 +44,10 @@ class PreTestController extends Controller
 
     public function show(PreTest $preTest)
     {
+        $game = self::fetchGame($preTest->game_id, $this->client);
 		return view('pre-tests.show', [
-            'pre_test' => $preTest
+            'pre_test' => $preTest,
+            'game' => $game
         ]);
     }
 

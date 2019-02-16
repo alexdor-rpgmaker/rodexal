@@ -1,30 +1,56 @@
 @extends('layouts.app')
 
-{{-- @push('stylesheets')
+@push('stylesheets')
     <link href="{{ asset('css/pre_tests.css') }}" rel="stylesheet">
-@endpush --}}
+@endpush
 
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div id="qcm" class="col-md-12">
-                <a href="{{ route('qcm.edit', ['game_id' => $pre_test->id]) }}" class="bouton">Modifier</a>
-                <div id="titre_corps">QCM #{{ $pre_test->id }}</div>
-                <div id="final_thought">Conforme : {{ $pre_test->final_thought ? 'Oui' : 'Non' }}</div>
-                @if ($pre_test->final_thought_explanation)
-                    <div id="final_thought_explanation">Plus d'infos : {{ $pre_test->final_thought_explanation }}</div>
-                @endif
-                <p>Table</p>
-                <table>
-                    @foreach (App\PreTest::FIELDS as $field)
-                        @if ($pre_test->questionnaire[$field['id']]['activated'])
-                            <tr>
-                                <td>{{ $field['label'] }}</td>
-                                <td>{{ $pre_test->questionnaire[$field['id']]['explanation'] }}</td>
-                            </tr>
-                        @endif
-                    @endforeach
-                </table>
+            <div id="qcm" class="col-md-8">
+                <div id="titre_corps">QCM : {{ $game->title }}</div>
+                <div id="sous_titre_corps">Par <a href="{{ env('FORMER_APP_URL') }}?p=profil&membre={{ $pre_test->user_id }}">{{ $pre_test->user->name }}</a></div>
+                <div class="barre_boutons">
+                    <span class="bordure_boutons">
+                        <a class="bouton" href="{{ env('FORMER_APP_URL') }}?p=jeu&id={{ $game->id }}">Voir la fiche du jeu</a>
+                        <a class="bouton" href="{{ route('qcm.edit', ['game_id' => $pre_test->id]) }}" class="bouton">Modifier</a>
+                    </span>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        @foreach (App\PreTest::FIELDS as $field)
+                            @if ($pre_test->questionnaire[$field['id']]['activated'])
+                                <div class="questionnaire-group">    
+                                    <p><strong>{{ $field['label'] }}</strong></p>
+                                    <div class="explanation">{{ $pre_test->questionnaire[$field['id']]['explanation'] }}</div>
+                                </div>
+                            @endif
+                        @endforeach
+
+                        @php
+                            $questionnaire_flattened = data_get($pre_test->questionnaire, '*.activated');
+                            $some_elements_activated = array_first($questionnaire_flattened, function ($value) {
+                                return !empty($value);
+                            });
+                        @endphp
+
+                        @if($some_elements_activated)
+                            <hr />
+                        @endunless
+
+                        <div id="final-thought">
+                            <p>
+                                Verdict :
+                                <span class="{{ $pre_test->final_thought ? 'ok' : 'not-ok' }}">
+                                    {{ $pre_test->final_thought ? 'Conforme' : 'Non conforme' }}
+                                </span>
+                            </p>
+                            @if ($pre_test->final_thought_explanation)
+                                <div class="explanation">{{ $pre_test->final_thought_explanation }}</div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

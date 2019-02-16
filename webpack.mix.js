@@ -16,3 +16,4 @@ mix
   .js('resources/js/pre-tests.js', 'public/js')
   .sass('resources/sass/app.scss', 'public/css')
   .sass('resources/sass/dictionary.scss', 'public/css')
+  .sass('resources/sass/pre_tests.scss', 'public/css')

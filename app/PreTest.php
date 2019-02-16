@@ -51,4 +51,9 @@ class PreTest extends Model
             'fieldDescription' => 'Le multijoueur est nécessaire'
         ]
     ];
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }
