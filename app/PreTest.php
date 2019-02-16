@@ -56,4 +56,12 @@ class PreTest extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    public function questionnaireHasActivatedFields()
+    {
+        $questionnaire_flattened = data_get($this->questionnaire, '*.activated');
+        return array_first($questionnaire_flattened, function ($value) {
+            return !empty($value);
+        });
+    }
 }

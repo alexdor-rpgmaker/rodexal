@@ -27,14 +27,7 @@
                             @endif
                         @endforeach
 
-                        @php
-                            $questionnaire_flattened = data_get($pre_test->questionnaire, '*.activated');
-                            $some_elements_activated = array_first($questionnaire_flattened, function ($value) {
-                                return !empty($value);
-                            });
-                        @endphp
-
-                        @if($some_elements_activated)
+                        @if($pre_test->questionnaireHasActivatedFields())
                             <hr />
                         @endunless
 

@@ -8,7 +8,7 @@
         const initAction = @json($form_url);
         const initGameId = @json($game_id);
         const initPreTest = @json($pre_test);
-        const initRedirection = @json(env('FORMER_APP_URL').'/?p=mes-tests');
+        const initRedirection = @json(env('FORMER_APP_URL').'/?p=mes-tests&message=Enregistrement effectué !');
     </script>
 @endpush
 
