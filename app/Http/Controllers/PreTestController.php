@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use App\PreTest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -89,6 +90,10 @@ class PreTestController extends Controller
 		$preTest->questionnaire = $request->questionnaire;
         $preTest->save();
 
+        if ($request->finalThought) {
+            self::assignTestToUser($request->gameId, Auth::id(), $this->client);
+        }
+
         return response()->json($preTest, 200);
     }
 
@@ -120,7 +125,6 @@ class PreTestController extends Controller
         }
         $this->validate($request, $validator_array);
 
-		$preTest->final_thought = $request->finalThought;
 		$preTest->final_thought_explanation = $request->finalThoughtExplanation;
 		$preTest->questionnaire = $request->questionnaire;
 		$preTest->save();
@@ -153,6 +157,7 @@ class PreTestController extends Controller
                 ]
             ]);
         } catch (RequestException $e) {
+            Log::warning($e);
             abort($e->getResponse()->getStatusCode());
         }
         return json_decode($response->getBody());
@@ -166,8 +171,29 @@ class PreTestController extends Controller
                 'query' => ['id' => intval($id)]
             ]);
         } catch (RequestException $e) {
+            Log::warning($e);
             abort($e->getResponse()->getStatusCode());
         }
         return json_decode($response->getBody());
+    }
+
+    private static function assignTestToUser($game_id, $user_id, $client)
+    {
+        if (env('DUSK', false)) {
+            return null;
+        }
+        try {
+            $client->request('POST', '/api/v0/attribution.php', [
+                'base_uri' => env('FORMER_APP_URL'),
+                'json' => [
+                    'id_jeu' => $game_id,
+                    'id_membre' => $user_id
+                ],
+                'headers' => ['X-Api-Key' => env('FORMER_APP_API_KEY')],
+            ]);
+        } catch (RequestException $e) {
+            // On logue et on ignore
+            Log::warning($e);
+        }
     }
 }

@@ -199,6 +199,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_FormMixin__WEBPACK_IMPORTED_MODULE_0__["default"]],
@@ -212,6 +219,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    editing: function editing() {
+      return this.method === 'PUT';
+    },
     fillFields: function fillFields() {
       var questionnaire = {};
       initQuestions.forEach(function (question) {
@@ -1058,130 +1068,168 @@ var render = function() {
       _c("h2", [_vm._v("Verdict")]),
       _vm._v(" "),
       _c("div", { staticClass: "form-group row" }, [
-        _c("div", { staticClass: "col-sm-12" }, [
-          _c("div", { staticClass: "form-check form-check-inline" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.fields.finalThought,
-                  expression: "fields.finalThought"
-                }
-              ],
-              staticClass: "form-check-input",
-              attrs: {
-                type: "radio",
-                name: "finalThought",
-                id: "finalThought-ok"
-              },
-              domProps: {
-                value: true,
-                checked: _vm._q(_vm.fields.finalThought, true)
-              },
-              on: {
-                change: function($event) {
-                  _vm.$set(_vm.fields, "finalThought", true)
-                }
-              }
-            }),
-            _vm._v(" "),
-            _c(
-              "label",
-              {
-                staticClass: "form-check-label",
-                attrs: { for: "finalThought-ok" }
-              },
-              [_vm._v("Conforme")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-check form-check-inline" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.fields.finalThought,
-                  expression: "fields.finalThought"
-                }
-              ],
-              staticClass: "form-check-input",
-              attrs: {
-                type: "radio",
-                name: "finalThought",
-                id: "finalThought-not-ok"
-              },
-              domProps: {
-                value: false,
-                checked: _vm._q(_vm.fields.finalThought, false)
-              },
-              on: {
-                change: function($event) {
-                  _vm.$set(_vm.fields, "finalThought", false)
-                }
-              }
-            }),
-            _vm._v(" "),
-            _c(
-              "label",
-              {
-                staticClass: "form-check-label",
-                attrs: { for: "finalThought-not-ok" }
-              },
-              [_vm._v("Non conforme")]
-            )
-          ]),
-          _vm._v(" "),
-          _vm.errors && _vm.errors.finalThought
-            ? _c("div", { staticClass: "text-danger" }, [
-                _vm._v(_vm._s(_vm.errors.finalThought[0]))
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.fields.finalThought === false
-            ? _c("div", { staticClass: "final-thought-precision" }, [
-                _c("label", { attrs: { for: "finalThoughtPrecision" } }, [
-                  _vm._v("Précisions")
-                ]),
-                _vm._v(" "),
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.fields.finalThoughtExplanation,
-                      expression: "fields.finalThoughtExplanation"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: {
-                    name: "finalThoughtPrecision",
-                    id: "finalThoughtPrecision"
-                  },
-                  domProps: { value: _vm.fields.finalThoughtExplanation },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+        _c(
+          "div",
+          { staticClass: "col-sm-12" },
+          [
+            _vm.editing()
+              ? [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.fields.finalThought,
+                        expression: "fields.finalThought"
                       }
-                      _vm.$set(
-                        _vm.fields,
-                        "finalThoughtExplanation",
-                        $event.target.value
-                      )
+                    ],
+                    attrs: { type: "hidden", name: "finalThought" },
+                    domProps: { value: _vm.fields.finalThought },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.fields,
+                          "finalThought",
+                          $event.target.value
+                        )
+                      }
                     }
-                  }
-                }),
-                _vm._v(" "),
-                _vm.errors && _vm.errors.finalThoughtExplanation
-                  ? _c("div", { staticClass: "text-danger" }, [
-                      _vm._v(_vm._s(_vm.errors.finalThoughtExplanation[0]))
-                    ])
-                  : _vm._e()
-              ])
-            : _vm._e()
-        ])
+                  }),
+                  _vm._v(" "),
+                  _vm.fields.finalThought
+                    ? _c("span", [_vm._v("Conforme")])
+                    : _c("span", [_vm._v("Non conforme")])
+                ]
+              : [
+                  _c("div", { staticClass: "form-check form-check-inline" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.fields.finalThought,
+                          expression: "fields.finalThought"
+                        }
+                      ],
+                      staticClass: "form-check-input",
+                      attrs: {
+                        type: "radio",
+                        name: "finalThought",
+                        id: "finalThought-ok"
+                      },
+                      domProps: {
+                        value: true,
+                        checked: _vm._q(_vm.fields.finalThought, true)
+                      },
+                      on: {
+                        change: function($event) {
+                          _vm.$set(_vm.fields, "finalThought", true)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "label",
+                      {
+                        staticClass: "form-check-label",
+                        attrs: { for: "finalThought-ok" }
+                      },
+                      [_vm._v("Conforme")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-check form-check-inline" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.fields.finalThought,
+                          expression: "fields.finalThought"
+                        }
+                      ],
+                      staticClass: "form-check-input",
+                      attrs: {
+                        type: "radio",
+                        name: "finalThought",
+                        id: "finalThought-not-ok"
+                      },
+                      domProps: {
+                        value: false,
+                        checked: _vm._q(_vm.fields.finalThought, false)
+                      },
+                      on: {
+                        change: function($event) {
+                          _vm.$set(_vm.fields, "finalThought", false)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "label",
+                      {
+                        staticClass: "form-check-label",
+                        attrs: { for: "finalThought-not-ok" }
+                      },
+                      [_vm._v("Non conforme")]
+                    )
+                  ])
+                ],
+            _vm._v(" "),
+            _vm.errors && _vm.errors.finalThought
+              ? _c("div", { staticClass: "text-danger" }, [
+                  _vm._v(_vm._s(_vm.errors.finalThought[0]))
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.fields.finalThought === false
+              ? _c("div", { staticClass: "final-thought-precision" }, [
+                  _c("label", { attrs: { for: "finalThoughtPrecision" } }, [
+                    _vm._v("Précisions")
+                  ]),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.fields.finalThoughtExplanation,
+                        expression: "fields.finalThoughtExplanation"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      name: "finalThoughtPrecision",
+                      id: "finalThoughtPrecision"
+                    },
+                    domProps: { value: _vm.fields.finalThoughtExplanation },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.fields,
+                          "finalThoughtExplanation",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.errors && _vm.errors.finalThoughtExplanation
+                    ? _c("div", { staticClass: "text-danger" }, [
+                        _vm._v(_vm._s(_vm.errors.finalThoughtExplanation[0]))
+                      ])
+                    : _vm._e()
+                ])
+              : _vm._e()
+          ],
+          2
+        )
       ]),
       _vm._v(" "),
       _vm._m(0)

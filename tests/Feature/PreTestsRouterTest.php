@@ -41,6 +41,7 @@ class PreTestsRouterTest extends TestCase
      */
     public function testAffichageQcm()
     {
+        self::mockHttpClientShow();
         $preTest = factory(PreTest::class)->create();
 
         $response = $this->get("/qcm/$preTest->id");
@@ -225,7 +226,7 @@ class PreTestsRouterTest extends TestCase
      */
     public function testModifierQcmSiJuryEtCreateur()
     {
-        self::mockHttpClientEdit();
+        self::mockHttpClientShow();
         $user = factory(User::class)->states('jury')->create();
         $preTest = factory(PreTest::class)->create([
             'user_id' => $user->id
@@ -242,7 +243,7 @@ class PreTestsRouterTest extends TestCase
      */
     public function testModifierQcmSiAdmin()
     {
-        self::mockHttpClientEdit();
+        self::mockHttpClientShow();
         $user = factory(User::class)->states('admin')->create();
         $preTest = factory(PreTest::class)->create();
 
@@ -298,7 +299,8 @@ class PreTestsRouterTest extends TestCase
     {
         $user = factory(User::class)->states('jury')->create();
         $preTest = factory(PreTest::class)->create([
-            'user_id' => $user->id
+            'user_id' => $user->id,
+            'final_thought' => true
         ]);
         $newPreTest = factory(PreTest::class)->make([
             'user_id' => $user->id
@@ -307,7 +309,7 @@ class PreTestsRouterTest extends TestCase
         $response = $this->actingAs($user)
                          ->put("/qcm/{$preTest->id}", [
                             'gameId' => $newPreTest->game_id,
-                            'finalThought' => true,
+                            'finalThought' => false,
                             'finalThoughtExplanation' => $newPreTest->final_thought_explanation,
                             'questionnaire' => $newPreTest->questionnaire
                          ]);
@@ -323,32 +325,52 @@ class PreTestsRouterTest extends TestCase
 
     // Helper
 
-    private function mockHttpClientCreate($responseCode = 200) {
+    private function gameResponse() {
+        return new Response(200, [], json_encode([
+            'id' => 3,
+            'title' => 'Legend of Lemidora'
+        ]));
+    }
+
+    private function assignmentsResponse() {
+        return new Response(200, [], json_encode([
+            [
+                'game_id' => 3,
+                'pre_test' => true,
+                'serie_locked' => false,
+                'assignment_locked' => false
+            ]
+        ]));
+    }
+
+    private function newAssignmentResponse() {
+        return new Response(200, [], $new_id);
+    }
+
+    private function mockHttpClientShow() {
         $mock = new MockHandler([
-            new Response($responseCode, [], json_encode([
-                [
-                    'game_id' => 3,
-                    'pre_test' => true,
-                    'serie_locked' => false,
-                    'assignment_locked' => false
-                ]
-            ])),
-            new Response($responseCode, [], json_encode([
-                'id' => 3,
-                'title' => 'Legend of Lemidora'
-            ]))
+            self::gameResponse()
         ]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
         $this->app->instance(GuzzleClient::class, $client);
     }
 
-    private function mockHttpClientEdit($responseCode = 200) {
+    private function mockHttpClientCreate() {
         $mock = new MockHandler([
-            new Response($responseCode, [], json_encode([
-                'id' => 3,
-                'title' => 'Legend of Lemidora'
-            ]))
+            self::assignmentsResponse(),
+            self::gameResponse()
+        ]);
+        $handler = HandlerStack::create($mock);
+        $client = new GuzzleClient(['handler' => $handler]);
+        $this->app->instance(GuzzleClient::class, $client);
+    }
+
+    private function mockHttpClientStore() {
+        $new_id = 14;
+        $mock = new MockHandler([
+            self::assignmentsResponse(),
+            self::newAssignmentResponse()
         ]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);

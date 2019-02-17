@@ -53,28 +53,35 @@ value="{{ old('label') }}"
     <h2>Verdict</h2>
     <div class="form-group row">
       <div class="col-sm-12">
-        <div class="form-check form-check-inline">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="finalThought"
-            id="finalThought-ok"
-            v-model="fields.finalThought"
-            v-bind:value="true"
-          >
-          <label class="form-check-label" for="finalThought-ok">Conforme</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input
-            class="form-check-input"
-            type="radio"
-            name="finalThought"
-            id="finalThought-not-ok"
-            v-model="fields.finalThought"
-            v-bind:value="false"
-          >
-          <label class="form-check-label" for="finalThought-not-ok">Non conforme</label>
-        </div>
+        <template v-if="editing()">
+          <input type="hidden" name="finalThought" v-model="fields.finalThought">
+          <span v-if="fields.finalThought">Conforme</span>
+          <span v-else>Non conforme</span>
+        </template>
+        <template v-else>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="finalThought"
+              id="finalThought-ok"
+              v-model="fields.finalThought"
+              :value="true"
+            >
+            <label class="form-check-label" for="finalThought-ok">Conforme</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="finalThought"
+              id="finalThought-not-ok"
+              v-model="fields.finalThought"
+              :value="false"
+            >
+            <label class="form-check-label" for="finalThought-not-ok">Non conforme</label>
+          </div>
+        </template>
         <div v-if="errors && errors.finalThought" class="text-danger">{{ errors.finalThought[0] }}</div>
         <div class="final-thought-precision" v-if="fields.finalThought === false">
           <label for="finalThoughtPrecision">Précisions</label>
@@ -116,6 +123,9 @@ export default {
     }
   },
   methods: {
+    editing() {
+      return this.method === 'PUT'
+    },
     fillFields() {
       const questionnaire = {}
       initQuestions.forEach(question => {

@@ -71,7 +71,6 @@ class QcmTest extends DuskTestCase
             $browser->waitFor('#notLaunchable')
                 ->assertInputValue('#explanation-notLaunchable', 'Ce jeu ne se lance pas')
                 ->type('#explanation-notLaunchable', 'Ce jeu se lance finalemnet')
-                ->radio('finalThought', 'false')
                 ->click('button.submit')
                 ->waitUntilMissing('#pre-tests-form')
                 ->assertUrlIs(env('FORMER_APP_URL').'/')

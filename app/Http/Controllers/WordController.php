@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Log;
 use Transliterator;
 use App\Word;
 use Illuminate\Http\Request;
@@ -76,7 +75,6 @@ class WordController extends Controller
 
     public function update(Request $request, Word $word)
     {
-        // Log::emergency('controller->update');
 		$validator = $request->validate([
 			'label' => 'required|max:255|regex:/^[0-9A-Z]/',
 			'description' => 'required'
