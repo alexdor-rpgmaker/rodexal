@@ -56,6 +56,8 @@ class PreTestController extends Controller
     {
         $gameId = $request->query('game_id');
         self::checkGameIsInUserAssignments($gameId, Auth::id(), $this->client);
+        $alreadyFilledPreTest = PreTest::where('game_id', $gameId)->where('user_id', Auth::id())->first();
+        abort_if($alreadyFilledPreTest, 400, "Un QCM a déjà été remplir pour ce jeu");
 
         $game = self::fetchGame($gameId, $this->client);
 		return view('pre-tests.form', [
