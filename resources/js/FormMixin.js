@@ -22,12 +22,12 @@ export default {
           data: this.fields
         })
           .then(_ => {
-            this.fields = this.fillFields()
-            this.loaded = true
-            this.success = true
             if (this.redirection !== '') {
               window.location.replace(this.redirection)
             }
+            this.fields = this.fillFields()
+            this.success = true
+            this.loaded = true
           })
           .catch(error => {
             this.loaded = true
