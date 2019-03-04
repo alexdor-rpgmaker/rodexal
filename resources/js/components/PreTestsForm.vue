@@ -15,13 +15,15 @@
               :id="question.id"
               v-model="fields.questionnaire[question.id].activated"
             >
-            <label class="form-check-label" :for="question.id">
-              {{question.label}}
-              <span
-                class="field-description"
-                v-if="question.fieldDescription"
-              >({{ question.fieldDescription }})</span>
-            </label>
+            <label class="form-check-label" :for="question.id">{{question.label}}</label>
+            <div
+              class="field-description"
+              v-if="question.fieldDescription"
+            >{{ question.fieldDescription }}</div>
+            <div class="field-description" v-if="question.word">
+              => Définition de
+              <a :href="'/dictionnaire#' + question.word">{{ question.word }}</a>
+            </div>
             <div
               v-if="errors && errors[question.id]"
               class="text-danger"
