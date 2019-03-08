@@ -39,7 +39,9 @@
                                 </span>
                             </p>
                             @if ($pre_test->final_thought_explanation)
-                                <div class="explanation">{{ $pre_test->final_thought_explanation }}</div>
+                                <div class="explanation">
+                                    {!! nl2br(e($pre_test->final_thought_explanation)) !!}
+                                </div>
                             @endif
                         </div>
                     </div>
