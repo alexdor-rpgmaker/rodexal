@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use Auth;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -46,6 +48,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if (!Auth::check() && $exception instanceof AuthorizationException) {
+            return redirect(route('oauth'));
+        }
+
         return parent::render($request, $exception);
     }
 }

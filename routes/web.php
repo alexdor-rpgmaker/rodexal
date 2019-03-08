@@ -20,7 +20,7 @@ Route::get('/', function () {
 
 Route::get('/accueil', 'HomeController@index')->name('home');
 
-Route::get('/oauth/callback', 'UserController@callback');
+Route::get('/oauth/callback', 'UserController@callback')->name('oauth');
 
 // Route::get('/liste-des-membres', 'UserController@index')->name('users');
 
