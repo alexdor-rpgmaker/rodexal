@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
 
 class PreTest extends Model
@@ -69,7 +70,7 @@ class PreTest extends Model
     public function questionnaireHasActivatedFields()
     {
         $questionnaire_flattened = data_get($this->questionnaire, '*.activated');
-        return array_first($questionnaire_flattened, function ($value) {
+        return Arr::first($questionnaire_flattened, function ($value) {
             return !empty($value);
         });
     }

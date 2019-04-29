@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class UsersTableSeeder extends Seeder
@@ -13,8 +14,8 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('1234abcd5678'),
             'rank' => 6
         ], [
-            'name' => str_random(10),
-            'email' => str_random(10).'@gmail.com',
+            'name' => Str::random(10),
+            'email' => Str::random(10).'@gmail.com',
             'password' => bcrypt('secret'),
             'rank' => 1
         ]);

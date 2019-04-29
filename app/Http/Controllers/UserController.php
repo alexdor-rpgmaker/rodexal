@@ -6,6 +6,7 @@ use Log;
 use App\User;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
 use League\OAuth2\Client\Provider\GenericProvider as GenericOAuth2Provider;
@@ -55,7 +56,7 @@ class UserController extends Controller
                     $user->name = $resourceOwnerArray['username'];
                     $user->email = $resourceOwnerArray['email'];
                     $user->rank = $resourceOwnerArray['rank'];
-                    $user->password = bcrypt(str_random(10));
+                    $user->password = bcrypt(Str::random(10));
                     $user->save();
                 }
 

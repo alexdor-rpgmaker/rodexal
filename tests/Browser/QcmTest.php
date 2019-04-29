@@ -14,13 +14,14 @@ class QcmTest extends DuskTestCase
     use DatabaseMigrations;
 
     /**
-     * @testdox On ne peut pas accéder à la page de création de QCM si on n'est pas connecté
+     * @testdox On est redirigés sur l'ancien site si on essaye de créer un QCM en n'étant pas connecté
      */
-    public function testErreurSiCreerQcmNonConnecte()
+    public function testRedirectionSiCreerQcmNonConnecte()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/qcm/creer?game_id=937')
-                    ->assertSee('403');
+                    ->assertUrlIs(env('FORMER_APP_URL').'/')
+                    ->assertSee('Pour voir cette page, vous devez être inscrit !');
         });
     }
 

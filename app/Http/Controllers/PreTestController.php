@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Log;
 use App\PreTest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 use GuzzleHttp\Client as GuzzleClient;
@@ -31,12 +32,12 @@ class PreTestController extends Controller
             'updated_at'
         )->get()->toArray();
 
-        $fields = array_pluck(PreTest::FIELDS, 'id');
+        $fields = Arr::pluck(PreTest::FIELDS, 'id');
 		$preTests = array_map(function ($preTest) use ($fields) {
             foreach($fields as $field) {
-                $preTest[snake_case($field)] = array_get($preTest, "questionnaire.$field.activated");
+                $preTest[snake_case($field)] = Arr::get($preTest, "questionnaire.$field.activated");
             }
-            array_forget($preTest, 'questionnaire');
+            Arr::forget($preTest, 'questionnaire');
             return $preTest;
         }, $preTests);
 
@@ -77,7 +78,7 @@ class PreTestController extends Controller
             'finalThought' => 'required|boolean',
             'finalThoughtExplanation' => 'nullable|string'
         ];
-        $fields = array_pluck(PreTest::FIELDS, 'id');
+        $fields = Arr::pluck(PreTest::FIELDS, 'id');
         foreach($fields as $field) {
             $validator_array["questionnaire.$field.activated"] = 'required|boolean';
             $validator_array["questionnaire.$field.explanation"] = 'nullable|string';
@@ -120,7 +121,7 @@ class PreTestController extends Controller
             'finalThought' => 'required|boolean',
             'finalThoughtExplanation' => 'nullable|string'
         ];
-        $fields = array_pluck(PreTest::FIELDS, 'id');
+        $fields = Arr::pluck(PreTest::FIELDS, 'id');
         foreach($fields as $field) {
             $validator_array["questionnaire.$field.activated"] = 'required|boolean';
             $validator_array["questionnaire.$field.explanation"] = 'nullable|string';
