@@ -7,6 +7,7 @@ use App\Word;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+
 /**
  * @testdox WordsRouter
  */
@@ -36,7 +37,7 @@ class WordsRouterTest extends TestCase
         $user = factory(User::class)->create();
 
         $response = $this->actingAs($user)
-                         ->get('/dictionnaire/creer');
+            ->get('/dictionnaire/creer');
 
         $response->assertForbidden();
     }
@@ -49,7 +50,7 @@ class WordsRouterTest extends TestCase
         $user = factory(User::class)->states('admin')->create();
 
         $response = $this->actingAs($user)
-                         ->get('/dictionnaire/creer');
+            ->get('/dictionnaire/creer');
 
         $response->assertOk();
     }
@@ -64,7 +65,7 @@ class WordsRouterTest extends TestCase
         $user = factory(User::class)->create();
 
         $response = $this->actingAs($user)
-                         ->post('/dictionnaire');
+            ->post('/dictionnaire');
 
         $response->assertForbidden();
     }
@@ -78,9 +79,9 @@ class WordsRouterTest extends TestCase
         $unsavedWord = factory(Word::class)->make();
 
         $response = $this->actingAs($user)
-                         ->post('/dictionnaire', [
-                            'label' => $unsavedWord->label
-                         ]);
+            ->post('/dictionnaire', [
+                'label' => $unsavedWord->label
+            ]);
 
         $response->assertRedirect();
         $this->assertDatabaseMissing('words', [
@@ -97,10 +98,10 @@ class WordsRouterTest extends TestCase
         $unsavedWord = factory(Word::class)->make();
 
         $response = $this->actingAs($user)
-                         ->post('/dictionnaire', [
-                            'label' => $unsavedWord->label,
-                            'description' => $unsavedWord->description
-                         ]);
+            ->post('/dictionnaire', [
+                'label' => $unsavedWord->label,
+                'description' => $unsavedWord->description
+            ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('words', [
@@ -120,7 +121,7 @@ class WordsRouterTest extends TestCase
         $word = factory(Word::class)->create();
 
         $response = $this->actingAs($user)
-                         ->get("/dictionnaire/{$word->slug}/editer");
+            ->get("/dictionnaire/{$word->slug}/editer");
 
         $response->assertForbidden();
     }
@@ -134,7 +135,7 @@ class WordsRouterTest extends TestCase
         $word = factory(Word::class)->create();
 
         $response = $this->actingAs($user)
-                         ->get("/dictionnaire/{$word->slug}/editer");
+            ->get("/dictionnaire/{$word->slug}/editer");
 
         $response->assertOk();
     }
@@ -150,7 +151,7 @@ class WordsRouterTest extends TestCase
         $word = factory(Word::class)->create();
 
         $response = $this->actingAs($user)
-                         ->put("/dictionnaire/{$word->slug}");
+            ->put("/dictionnaire/{$word->slug}");
 
         $response->assertForbidden();
     }
@@ -165,9 +166,9 @@ class WordsRouterTest extends TestCase
         $unsavedWord = factory(Word::class)->make();
 
         $response = $this->actingAs($user)
-                         ->put("/dictionnaire/{$word->slug}", [
-                            'label' => $unsavedWord->label
-                         ]);
+            ->put("/dictionnaire/{$word->slug}", [
+                'label' => $unsavedWord->label
+            ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('words', [
@@ -188,10 +189,10 @@ class WordsRouterTest extends TestCase
         $newWord = factory(Word::class)->make();
 
         $response = $this->actingAs($user)
-                         ->put("/dictionnaire/{$word->slug}", [
-                            'label' => $newWord->label,
-                            'description' => $newWord->description
-                         ]);
+            ->put("/dictionnaire/{$word->slug}", [
+                'label' => $newWord->label,
+                'description' => $newWord->description
+            ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('words', [
@@ -211,7 +212,7 @@ class WordsRouterTest extends TestCase
         $word = factory(Word::class)->create();
 
         $response = $this->actingAs($user)
-                         ->delete("/dictionnaire/{$word->slug}");
+            ->delete("/dictionnaire/{$word->slug}");
 
         $response->assertForbidden();
     }
@@ -225,7 +226,7 @@ class WordsRouterTest extends TestCase
         $word = factory(Word::class)->create();
 
         $response = $this->actingAs($user)
-                         ->delete("/dictionnaire/{$word->slug}");
+            ->delete("/dictionnaire/{$word->slug}");
 
         $response->assertRedirect();
         $this->assertDatabaseMissing('words', [

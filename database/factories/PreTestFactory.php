@@ -4,7 +4,7 @@ use App\User;
 use App\PreTest;
 use Faker\Generator as Faker;
 
-$factory->define(App\PreTest::class, function (Faker $faker) {
+$factory->define(PreTest::class, function (Faker $faker) {
     return [
         'user_id' => factory(User::class)->create()->id,
         'game_id' => $faker->numberBetween(5, 25),

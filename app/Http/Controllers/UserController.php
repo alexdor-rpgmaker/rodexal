@@ -24,10 +24,10 @@ class UserController extends Controller
         $provider = new GenericOAuth2Provider([
             'clientId'                => env('FORMER_APP_CLIENT_ID'),
             'clientSecret'            => env('FORMER_APP_CLIENT_SECRET'),
-            'redirectUri'             => env('APP_URL').env('APP_OAUTH_URL'),
-            'urlAuthorize'            => env('FORMER_APP_URL').env('FORMER_APP_AUTHORIZATION_URL_SUFFIX'),
-            'urlAccessToken'          => env('FORMER_APP_URL').env('FORMER_APP_TOKEN_URL_SUFFIX'),
-            'urlResourceOwnerDetails' => env('FORMER_APP_URL').env('FORMER_APP_RESOURCE_OWNER_URL_SUFFIX')
+            'redirectUri'             => env('APP_URL') . env('APP_OAUTH_URL'),
+            'urlAuthorize'            => env('FORMER_APP_URL') . env('FORMER_APP_AUTHORIZATION_URL_SUFFIX'),
+            'urlAccessToken'          => env('FORMER_APP_URL') . env('FORMER_APP_TOKEN_URL_SUFFIX'),
+            'urlResourceOwnerDetails' => env('FORMER_APP_URL') . env('FORMER_APP_RESOURCE_OWNER_URL_SUFFIX')
         ]);
 
         if (!isset($request->code)) {
@@ -46,7 +46,7 @@ class UserController extends Controller
 
                 $resourceOwner = $provider->getResourceOwner($accessToken);
                 $resourceOwnerArray = $resourceOwner->toArray();
-                
+
                 session(['resource-owner' => $resourceOwnerArray]);
 
                 $user = User::where('id', $resourceOwnerArray['id'])->first();

@@ -20,8 +20,8 @@ class QcmTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/qcm/creer?game_id=937')
-                    ->assertUrlIs(env('FORMER_APP_URL').'/')
-                    ->assertSee('Pour voir cette page, vous devez être inscrit !');
+                ->assertUrlIs(env('FORMER_APP_URL') . '/')
+                ->assertSee('Pour voir cette page, vous devez être inscrit !');
         });
     }
 
@@ -63,9 +63,9 @@ class QcmTest extends DuskTestCase
                 ->radio('finalThought', 'true')
                 ->click('button.submit')
                 ->waitUntilMissing('#pre-tests-form')
-                ->assertUrlIs(env('FORMER_APP_URL').'/')
+                ->assertUrlIs(env('FORMER_APP_URL') . '/')
                 ->assertQueryStringHas('p', 'mes-tests');
-                
+
             $browser->visit('/qcm/1/editer')
                 ->assertSee('Modifier le QCM du jeu');
 
@@ -74,7 +74,7 @@ class QcmTest extends DuskTestCase
                 ->type('#explanation-notLaunchable', 'Ce jeu se lance finalemnet')
                 ->click('button.submit')
                 ->waitUntilMissing('#pre-tests-form')
-                ->assertUrlIs(env('FORMER_APP_URL').'/')
+                ->assertUrlIs(env('FORMER_APP_URL') . '/')
                 ->assertQueryStringHas('p', 'mes-tests');
         });
     }

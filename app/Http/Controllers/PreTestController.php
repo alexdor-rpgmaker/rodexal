@@ -33,8 +33,8 @@ class PreTestController extends Controller
         )->get()->toArray();
 
         $fields = Arr::pluck(PreTest::FIELDS, 'id');
-		$preTests = array_map(function ($preTest) use ($fields) {
-            foreach($fields as $field) {
+        $preTests = array_map(function ($preTest) use ($fields) {
+            foreach ($fields as $field) {
                 $preTest[snake_case($field)] = Arr::get($preTest, "questionnaire.$field.activated");
             }
             Arr::forget($preTest, 'questionnaire');
@@ -47,7 +47,7 @@ class PreTestController extends Controller
     public function show(PreTest $preTest)
     {
         $game = self::fetchGame($preTest->game_id, $this->client);
-		return view('pre-tests.show', [
+        return view('pre-tests.show', [
             'pre_test' => $preTest,
             'game' => $game
         ]);
@@ -61,7 +61,7 @@ class PreTestController extends Controller
         abort_if($alreadyFilledPreTest, 400, "Un QCM a déjà été remplir pour ce jeu");
 
         $game = self::fetchGame($gameId, $this->client);
-		return view('pre-tests.form', [
+        return view('pre-tests.form', [
             'pre_test' => new PreTest,
             'title' => "Remplir un QCM pour le jeu $game->title",
             'game_id' => $game->id,
@@ -70,7 +70,8 @@ class PreTestController extends Controller
         ]);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         self::checkGameIsInUserAssignments($request->gameId, Auth::id(), $this->client);
 
         $validator_array = [
@@ -79,18 +80,18 @@ class PreTestController extends Controller
             'finalThoughtExplanation' => 'nullable|string'
         ];
         $fields = Arr::pluck(PreTest::FIELDS, 'id');
-        foreach($fields as $field) {
+        foreach ($fields as $field) {
             $validator_array["questionnaire.$field.activated"] = 'required|boolean';
             $validator_array["questionnaire.$field.explanation"] = 'nullable|string';
         }
         $this->validate($request, $validator_array);
 
-		$preTest = new PreTest;
-		$preTest->user_id = Auth::id();
-		$preTest->game_id = $request->gameId;
-		$preTest->final_thought = $request->finalThought;
-		$preTest->final_thought_explanation = $request->finalThoughtExplanation;
-		$preTest->questionnaire = $request->questionnaire;
+        $preTest = new PreTest;
+        $preTest->user_id = Auth::id();
+        $preTest->game_id = $request->gameId;
+        $preTest->final_thought = $request->finalThought;
+        $preTest->final_thought_explanation = $request->finalThoughtExplanation;
+        $preTest->questionnaire = $request->questionnaire;
         $preTest->save();
 
         if ($request->finalThought) {
@@ -106,7 +107,7 @@ class PreTestController extends Controller
 
         $preTest->finalThought = $preTest->final_thought == 1;
         $preTest->finalThoughtExplanation = $preTest->final_thought_explanation;
-		return view('pre-tests.form', [
+        return view('pre-tests.form', [
             'pre_test' => $preTest,
             'title' => "Modifier le QCM du jeu $game->title",
             'game_id' => $game->id,
@@ -122,15 +123,15 @@ class PreTestController extends Controller
             'finalThoughtExplanation' => 'nullable|string'
         ];
         $fields = Arr::pluck(PreTest::FIELDS, 'id');
-        foreach($fields as $field) {
+        foreach ($fields as $field) {
             $validator_array["questionnaire.$field.activated"] = 'required|boolean';
             $validator_array["questionnaire.$field.explanation"] = 'nullable|string';
         }
         $this->validate($request, $validator_array);
 
-		$preTest->final_thought_explanation = $request->finalThoughtExplanation;
-		$preTest->questionnaire = $request->questionnaire;
-		$preTest->save();
+        $preTest->final_thought_explanation = $request->finalThoughtExplanation;
+        $preTest->questionnaire = $request->questionnaire;
+        $preTest->save();
 
         return response()->json($preTest, 200);
     }
@@ -143,7 +144,7 @@ class PreTestController extends Controller
             return true;
         }
         $assignments = self::fetchUserAssignments($userId, $client);
-        $gameInAssignment = current(array_filter($assignments, function($assignment) use($gameId) {
+        $gameInAssignment = current(array_filter($assignments, function ($assignment) use ($gameId) {
             return $assignment->game_id == $gameId;
         }));
         abort_unless($gameInAssignment, 403, "Ce jeu ne vous est pas attribué !");

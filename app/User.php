@@ -3,22 +3,25 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use Notifiable;
 
-    public function isJury() {
+    public function isJury()
+    {
         return $this->rank >= 4;
     }
 
-    public function isAdmin() {
+
+    public function isAdmin()
+    {
         return $this->rank >= 6;
     }
 
-    public function rankName() {
+    public function rankName()
+    {
         $ranks = ["Invité", "Membre", "Concurrent", "Ambassadeur", "Juré", "Modérateur", "Admin", "Webmaster"];
         return $ranks[$this->rank];
     }

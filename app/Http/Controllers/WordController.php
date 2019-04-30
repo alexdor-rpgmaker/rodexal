@@ -14,8 +14,8 @@ class WordController extends Controller
         $this->authorizeResource(Word::class, 'word');
     }
 
-	public function index(Request $request)
-	{
+    public function index(Request $request)
+    {
         $letters = Word::selectRaw('UPPER(LEFT(label, 1)) AS letter')
             ->groupBy('letter')
             ->orderBy('letter')
@@ -28,20 +28,20 @@ class WordController extends Controller
         $page_letter = strtoupper($request->query('lettre'));
         $page_letter = in_array($page_letter, $letters->toArray()) ? $page_letter : null;
 
-        $words = $page_letter 
+        $words = $page_letter
             ? Word::whereRaw('UPPER(LEFT(label, 1)) = ?', $page_letter)->orderBy('label')->get()
             : Word::orderBy('label')->get();
 
-		return view('words.index', [
+        return view('words.index', [
             'page_letter' => $page_letter,
             'letters' => $letters,
             'words' => $words
         ]);
     }
-    
+
     public function create()
-	{
-		return view('words.form', [
+    {
+        return view('words.form', [
             'word' => new Word,
             'title' => 'Ajouter un mot au dictionnaire',
             'form_method' => 'POST',
@@ -51,21 +51,21 @@ class WordController extends Controller
 
     public function store(Request $request)
     {
-		$validator = $request->validate([
-			'label' => 'required|max:255|regex:/^[0-9A-Z]/',
-			'description' => 'required'
-		]);
-		$word = new Word;
-		$word->user_id = Auth::id();
-		$word->label = $request->label;
-		$word->description = $request->description;
+        $validator = $request->validate([
+            'label' => 'required|max:255|regex:/^[0-9A-Z]/',
+            'description' => 'required'
+        ]);
+        $word = new Word;
+        $word->user_id = Auth::id();
+        $word->label = $request->label;
+        $word->description = $request->description;
         $word->save();
-		return redirect('/dictionnaire')->with('status', 'Mot bien ajouté au dictionnaire !');
+        return redirect('/dictionnaire')->with('status', 'Mot bien ajouté au dictionnaire !');
     }
 
     public function edit(Word $word)
     {
-		return view('words.form', [
+        return view('words.form', [
             'word' => $word,
             'title' => 'Modifier un mot du dictionnaire',
             'form_method' => 'PUT',
@@ -75,14 +75,14 @@ class WordController extends Controller
 
     public function update(Request $request, Word $word)
     {
-		$validator = $request->validate([
-			'label' => 'required|max:255|regex:/^[0-9A-Z]/',
-			'description' => 'required'
-		]);
-		$word->label = $request->label;
-		$word->description = $request->description;
-		$word->save();
-		return redirect('/dictionnaire')->with('status', 'Mot du dictionnaire bien modifié !');
+        $validator = $request->validate([
+            'label' => 'required|max:255|regex:/^[0-9A-Z]/',
+            'description' => 'required'
+        ]);
+        $word->label = $request->label;
+        $word->description = $request->description;
+        $word->save();
+        return redirect('/dictionnaire')->with('status', 'Mot du dictionnaire bien modifié !');
     }
 
     public function destroy(Word $word)

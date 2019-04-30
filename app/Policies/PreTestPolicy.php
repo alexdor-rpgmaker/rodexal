@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use Log;
 use App\User;
 use App\PreTest;
 use Illuminate\Auth\Access\HandlesAuthorization;
