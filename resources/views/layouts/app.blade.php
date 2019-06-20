@@ -183,27 +183,29 @@
               </ul>
             </li>
 
-            <li class="has-dropdown">
-              <a href="{{ "http://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Admin</a>
-              <ul class="dropdown">
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-general">Général</a></li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-news">News</a></li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-blog">Blog</a></li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-images">Images</a></li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-carrousel">Carrousel</a></li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-categories">Forum</a></li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-membres">Membres</a></li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=mail-membres">Envoi Mails</a></li>
-                <li class="divider"></li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-sessions">Sessions</a></li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-jeux">Jeux</a></li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-jurys">Jury</a></li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-series">Tests</a></li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-notes">Notes</a></li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-deliberations">Délibérations</a></li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-awards">Awards</a></li>
-              </ul>
-            </li>
+            @if (Auth::user() && Auth::user()->isAdmin())
+              <li class="has-dropdown">
+                <a href="{{ "http://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Admin</a>
+                <ul class="dropdown">
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-general">Général</a></li>
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-news">News</a></li>
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-blog">Blog</a></li>
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-images">Images</a></li>
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-carrousel">Carrousel</a></li>
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-categories">Forum</a></li>
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-membres">Membres</a></li>
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=mail-membres">Envoi Mails</a></li>
+                  <li class="divider"></li>
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-sessions">Sessions</a></li>
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-jeux">Jeux</a></li>
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-jurys">Jury</a></li>
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-series">Tests</a></li>
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-notes">Notes</a></li>
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-deliberations">Délibérations</a></li>
+                  <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-awards">Awards</a></li>
+                </ul>
+              </li>
+            @endif
 
             <li class="name" id="header-recherche">
               <form action="?p=recherche" method="post">
