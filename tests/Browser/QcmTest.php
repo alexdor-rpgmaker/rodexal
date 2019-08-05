@@ -35,7 +35,6 @@ class QcmTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
                 ->visit('/qcm/creer?game_id=937')
-                ->storeConsoleLog('yooo')
                 ->assertDontSee('Ce jeu ne vous est pas attribué !')
                 ->assertSee('Remplir un QCM pour le jeu');
 

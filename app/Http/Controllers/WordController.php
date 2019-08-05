@@ -6,6 +6,7 @@ use Transliterator;
 use App\Word;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Genert\BBCode\BBCode;
 
 class WordController extends Controller
 {
@@ -32,6 +33,13 @@ class WordController extends Controller
             ? Word::whereRaw('UPPER(LEFT(label, 1)) = ?', $page_letter)->orderBy('label')->get()
             : Word::orderBy('label')->get();
 
+        $bbCode = new BBCode();
+        $words->map(function ($word) use ($bbCode) {
+            $descriptionWithEntites = e($word->description);
+            $descriptionWithBbCode = $bbCode->convertToHtml($descriptionWithEntites);
+            $word->description = nl2br($descriptionWithBbCode);
+        });
+
         return view('words.index', [
             'page_letter' => $page_letter,
             'letters' => $letters,
@@ -51,7 +59,7 @@ class WordController extends Controller
 
     public function store(Request $request)
     {
-        $validator = $request->validate([
+        $request->validate([
             'label' => 'required|max:255|regex:/^[0-9A-Z]/',
             'description' => 'required'
         ]);
@@ -75,7 +83,7 @@ class WordController extends Controller
 
     public function update(Request $request, Word $word)
     {
-        $validator = $request->validate([
+        $request->validate([
             'label' => 'required|max:255|regex:/^[0-9A-Z]/',
             'description' => 'required'
         ]);

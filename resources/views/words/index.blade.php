@@ -71,19 +71,19 @@
                                             <form action="{{ route('dictionnaire.destroy', $word) }}" method="POST"  style="display: inline;">
                                                 @method('DELETE')
                                                 @csrf
-                                                <button>
+                                                <button class="delete">
                                                     Supprimer
                                                 </button>
                                             </form> -
                                         @endcan
                                         @can('update', $word)
-                                            <a href="{{ route('dictionnaire.edit', $word) }}" class="quick-link">Modifier</a> - 
+                                            <a href="{{ route('dictionnaire.edit', $word) }}" class="edit">Modifier</a> - 
                                         @endcan
                                         <a href="{{ route('dictionnaire.index') }}#{{ $word->slug }}" class="quick-link">Lien</a>
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    {!! nl2br(e($word->description)) !!}
+                                    {!! $word->description !!}
                                 </div>
                             </div>
                         @endforeach
