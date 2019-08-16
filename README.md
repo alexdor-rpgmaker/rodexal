@@ -62,3 +62,9 @@ Il faut créer un fichier .env.dusk en précisant une base de données différen
 # Lancer les tests
 composer test:e2e
 ```
+
+S'il y a une erreur de type `session not created: Chrome version must be between 70 and 73`, lancer cette commande :
+
+```bash
+php artisan dusk:chrome-driver
+```
