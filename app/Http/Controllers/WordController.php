@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Transliterator;
+use BBCode;
 use App\Word;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Genert\BBCode\BBCode;
 
 class WordController extends Controller
 {
@@ -33,7 +33,7 @@ class WordController extends Controller
             ? Word::whereRaw('UPPER(LEFT(label, 1)) = ?', $page_letter)->orderBy('label')->get()
             : Word::orderBy('label')->get();
 
-        $bbCode = new BBCode();
+        $bbCode = BBCode::construireParserBBCode();
         $words->map(function ($word) use ($bbCode) {
             $descriptionWithEntites = e($word->description);
             $descriptionWithBbCode = $bbCode->convertToHtml($descriptionWithEntites);

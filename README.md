@@ -50,6 +50,9 @@ npm run watch
 # Lancer les tests
 composer test
 
+# Lancer les tests juste pour la classe BBCode (par exemple)
+composer test -- --filter BBCode
+
 # Lancer les tests en continu
 composer test:watch
 ```

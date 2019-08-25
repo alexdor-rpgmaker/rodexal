@@ -39,23 +39,23 @@ class DictionaryTest extends DuskTestCase
                 ->assertSee('Ajouter un mot au dictionnaire');
 
             $browser->type('#word-label', 'Gameplay')
-                ->type('#word-description', 'Un jeu sans <gameplay> c\'est un jeu [b]sans saveur[/b].')
+                ->type('#word-description', 'Un jeu sans <gameplay> c\'est [u]un jeu[/u] [b]sans [i]vraie saveur[/i][/b].')
                 ->click('button.submit')
                 ->assertUrlIs(env('APP_URL') . '/dictionnaire')
                 ->assertSee('Mot bien ajouté au dictionnaire !')
-                ->assertSeeIn('#gameplay .card-body', 'Un jeu sans <gameplay> c\'est un jeu sans saveur.')
-                ->assertSourceHas('un jeu <b>sans saveur</b>.');
+                ->assertSeeIn('#gameplay .card-body', 'Un jeu sans <gameplay> c\'est un jeu sans vraie saveur.')
+                ->assertSourceHas('<u>un jeu</u> <strong>sans <em>vraie saveur</em></strong>.');
 
             $browser->click('#gameplay .edit')
                 ->assertInputValue('#word-label', 'Gameplay')
-                ->assertInputValue('#word-description', 'Un jeu sans <gameplay> c\'est un jeu [b]sans saveur[/b].')
+                ->assertInputValue('#word-description', 'Un jeu sans <gameplay> c\'est [u]un jeu[/u] [b]sans [i]vraie saveur[/i][/b].')
                 ->type('#word-label', 'Roleplay')
                 ->type('#word-description', 'Un jeu sans <roleplay> c\'est un jeu [b]sans bonheur[/b].')
                 ->click('button.submit')
                 ->assertUrlIs(env('APP_URL') . '/dictionnaire')
                 ->assertSee('Mot du dictionnaire bien modifié !')
                 ->assertSeeIn('#gameplay .card-body', 'Un jeu sans <roleplay> c\'est un jeu sans bonheur.')
-                ->assertSourceHas('un jeu <b>sans bonheur</b>.');
+                ->assertSourceHas('un jeu <strong>sans bonheur</strong>.');
 
             $browser->click('#gameplay button.delete')
                 ->assertUrlIs(env('APP_URL') . '/dictionnaire')
