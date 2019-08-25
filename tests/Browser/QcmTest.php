@@ -59,13 +59,16 @@ class QcmTest extends DuskTestCase
                 ->type('#explanation-tooShort', 'Même pas 5 min de jeu ?!')
                 ->check('unplayableAlone')
                 ->type('#explanation-unplayableAlone', "J'ai eu besoin de mes 3 soeurs pour y jouer...")
-                ->radio('finalThought', 'true')
+                ->radio('finalThought', 'false')
+                ->type('#finalThoughtPrecision', "Ce jeu était vraiment [u]nul[/u]. Mais bon courage pour la suite ! :)")
                 ->click('button.submit')
                 ->waitUntilMissing('#pre-tests-form')
                 ->assertUrlIs(env('FORMER_APP_URL') . '/')
                 ->assertQueryStringHas('p', 'mes-tests');
 
-            $browser->visit('/qcm/1/editer')
+            $browser->visit('/qcm/1')
+                ->assertSourceHas('Ce jeu était vraiment <u>nul</u>. Mais bon courage pour la suite ! :)')
+                ->click('a.modifier-pre-test')
                 ->assertSee('Modifier le QCM du jeu');
 
             $browser->waitFor('#notLaunchable')

@@ -12,8 +12,8 @@
                 <div id="sous_titre_corps">Par <a href="{{ env('FORMER_APP_URL') }}?p=profil&membre={{ $pre_test->user_id }}">{{ $pre_test->user->name }}</a></div>
                 <div class="barre_boutons">
                     <span class="bordure_boutons">
-                        <a class="bouton" href="{{ env('FORMER_APP_URL') }}?p=jeu&id={{ $game->id }}">Voir la fiche du jeu</a>
-                        <a class="bouton" href="{{ route('qcm.edit', ['game_id' => $pre_test->id]) }}" class="bouton">Modifier</a>
+                        <a class="bouton voir-jeu" href="{{ env('FORMER_APP_URL') }}?p=jeu&id={{ $game->id }}">Voir la fiche du jeu</a>
+                        <a class="bouton modifier-pre-test" href="{{ route('qcm.edit', ['game_id' => $pre_test->id]) }}" class="bouton">Modifier</a>
                     </span>
                 </div>
                 <div class="card">
@@ -40,7 +40,7 @@
                             </p>
                             @if ($pre_test->final_thought_explanation)
                                 <div class="explanation">
-                                    {!! nl2br(e($pre_test->final_thought_explanation)) !!}
+                                    {!! $pre_test->final_thought_explanation !!}
                                 </div>
                             @endif
                         </div>

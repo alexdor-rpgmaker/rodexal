@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Log;
+use BBCode;
 use App\PreTest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -47,6 +48,12 @@ class PreTestController extends Controller
     public function show(PreTest $preTest)
     {
         $game = self::fetchGame($preTest->game_id, $this->client);
+
+        $bbCode = BBCode::construireParserBBCode();
+        $descriptionWithEntites = e($preTest->final_thought_explanation);
+        $descriptionWithBbCode = $bbCode->convertToHtml($descriptionWithEntites);
+        $preTest->final_thought_explanation = nl2br($descriptionWithBbCode);
+
         return view('pre-tests.show', [
             'pre_test' => $preTest,
             'game' => $game
