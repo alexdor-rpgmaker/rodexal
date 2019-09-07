@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @push('scripts')
-    <script src="{{ asset('js/pre-tests.js') }}" defer></script>
-    <script>
+    <script type="text/javascript" src="{{ asset('js/pre-tests.js') }}" defer></script>
+    <script type="text/javascript">
         const initQuestions = @json(App\PreTest::FIELDS);
         const initMethod = @json($form_method);
         const initAction = @json($form_url);

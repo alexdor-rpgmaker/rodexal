@@ -24,6 +24,12 @@ Route::get('/oauth/callback', 'UserController@callback')->name('oauth');
 
 // Route::get('/liste-des-membres', 'UserController@index')->name('users');
 
+Route::resource('jukebox', 'MusicController')->only([
+    'index'
+])->parameters([
+    'jukebox' => 'music'
+]);
+
 Route::resource('dictionnaire', 'WordController')->except([
     'show'
 ])->parameters([
