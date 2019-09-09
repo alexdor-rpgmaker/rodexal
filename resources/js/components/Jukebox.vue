@@ -1,11 +1,11 @@
 <template>
   <div id="jukebox" v-if="scriptLoaded">
-    <select @change="changeMusicFromSelector" ref="musicSelector">
+    <select @change="changeMusicFromSelector" class="music-selector" ref="musicSelector">
       <option selected="selected" :value="selectorHeading">--- Choix de la musique ---</option>
       <option v-for="(music, index) in musics" :key="index" :value="index">{{ music.title }}</option>
     </select>
     <div class="current-music-player">
-      <div>
+      <div class="song-slider">
         <span class="amplitude-current-time"></span>
 
         <input
@@ -19,42 +19,47 @@
         <span v-else>00:00</span>
       </div>
 
-      <div>
-        <a
-          class="commands repeat"
-          title="Répéter"
-          :class="{ active: repeat }"
-          @click="toggleRepeat"
-        >
-          <i class="fas fa-redo-alt"></i>
-        </a>
-        <a
-          class="commands shuffle"
-          title="Aléatoire"
-          :class="{ active: shuffle }"
-          @click="toggleShuffle"
-        >
-          <i class="fas fa-random"></i>
-        </a>
+      <div class="commands">
+        <div class="repeat-shuffle">
+          <a
+            class="command repeat"
+            title="Répéter"
+            :class="{ active: repeat }"
+            @click="toggleRepeat"
+          >
+            <i class="fas fa-redo-alt"></i>
+          </a>
+          <a
+            class="command shuffle"
+            title="Aléatoire"
+            :class="{ active: shuffle }"
+            @click="toggleShuffle"
+          >
+            <i class="fas fa-random"></i>
+          </a>
+        </div>
 
-        <a class="commands prev" title="Précédent" @click="previous">
-          <i class="fas fa-step-backward"></i>
-        </a>
-        <a
-          class="commands play"
-          :title="[playing ? 'Mettre en pause' : 'Lecture']"
-          :class="{ active: playing }"
-          @click="playPause"
-        >
-          <i class="fas" :class="[playing ? 'fa-pause' : 'fa-play']"></i>
-        </a>
-        <a class="commands next" title="Suivant" @click="next">
-          <i class="fas fa-step-forward"></i>
-        </a>
-        <span class="volume">
+        <div class="main-commands">
+          <a class="command prev" title="Précédent" @click="previous">
+            <i class="fas fa-step-backward"></i>
+          </a>
+          <a
+            class="command play"
+            :title="[playing ? 'Mettre en pause' : 'Lecture']"
+            :class="{ active: playing }"
+            @click="playPause"
+          >
+            <i class="fas" :class="[playing ? 'fa-pause' : 'fa-play']"></i>
+          </a>
+          <a class="command next" title="Suivant" @click="next">
+            <i class="fas fa-step-forward"></i>
+          </a>
+        </div>
+
+        <div class="volume">
           <i class="fas fa-volume-down"></i>
           <input type="range" class="slider amplitude-volume-slider" @input="changeVolume" />
-        </span>
+        </div>
       </div>
     </div>
 
@@ -221,12 +226,12 @@ $link-color: #d39501;
 #jukebox {
   text-align: center;
 
+  .music-selector {
+    max-width: 100%;
+  }
+
   .current-music-player {
     margin: 40px 0;
-
-    div:first-child {
-      margin-bottom: 18px;
-    }
 
     .slider {
       -webkit-appearance: none;
@@ -281,66 +286,84 @@ $link-color: #d39501;
       }
     }
 
-    a.commands {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      color: #fffcea;
-      background: #f3be43;
-      display: inline-block;
-      cursor: pointer;
-
-      &.play {
-        font-size: 20px;
-        width: 50px;
-        height: 50px;
-        line-height: 50px;
-        margin-left: -10px;
-        margin-right: -10px;
-      }
-
-      &.prev,
-      &.next {
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-      }
-
-      &.prev {
-        margin-left: 22px;
-      }
-
-      &.next {
-        margin-right: 26px;
-      }
-
-      &.repeat,
-      &.shuffle {
-        color: #3f3f3f;
-        background: none;
-      }
-
-      &.active {
-        color: $link-color;
-        background-position: bottom;
-      }
-
-      &:active {
-        background-position: bottom;
-      }
-
-      &:hover,
-      &:focus {
-        color: $link-color;
-      }
+    .song-slider {
+      margin-bottom: 18px;
     }
 
-    .volume {
-      display: inline-flex;
-      align-items: center;
+    .commands {
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
 
-      input {
-        margin-left: 5px;
+      a.command {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        color: #fffcea;
+        background: #f3be43;
+        display: inline-block;
+        cursor: pointer;
+
+        &.play {
+          font-size: 20px;
+          width: 50px;
+          height: 50px;
+          line-height: 50px;
+          margin-left: -10px;
+          margin-right: -10px;
+        }
+
+        &.prev,
+        &.next {
+          width: 40px;
+          height: 40px;
+          line-height: 40px;
+        }
+
+        &.prev {
+          margin-left: 22px;
+        }
+
+        &.next {
+          margin-right: 26px;
+        }
+
+        &.repeat,
+        &.shuffle {
+          color: #3f3f3f;
+          background: none;
+        }
+
+        &.active {
+          color: $link-color;
+          background-position: bottom;
+        }
+
+        &:active {
+          background-position: bottom;
+        }
+
+        &:hover,
+        &:focus {
+          color: $link-color;
+        }
+      }
+
+      .repeat-shuffle {
+        display: inline-block;
+      }
+
+      .main-commands {
+        display: inline-block;
+      }
+
+      .volume {
+        display: inline-flex;
+        align-items: center;
+
+        input {
+          margin-left: 5px;
+        }
       }
     }
   }
@@ -353,6 +376,40 @@ $link-color: #d39501;
 
       p:last-child {
         margin-bottom: 0;
+      }
+    }
+  }
+
+  @media (max-width: 460px) {
+    .current-music-player {
+      .slider {
+        &.amplitude-song-slider {
+          width: 150px;
+        }
+
+        &.amplitude-volume-slider {
+          height: 5px;
+          width: 80px;
+        }
+      }
+
+      .commands {
+        flex-direction: column;
+        align-items: center;
+
+        a.command {
+          &.repeat,
+          &.shuffle {
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+          }
+        }
+
+        .main-commands {
+          margin-top: 20px;
+          margin-bottom: 30px;
+        }
       }
     }
   }
