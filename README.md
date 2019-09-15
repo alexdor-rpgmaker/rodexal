@@ -71,3 +71,5 @@ S'il y a une erreur de type `session not created: Chrome version must be between
 ```bash
 php artisan dusk:chrome-driver
 ```
+
+S'il y a une erreur de type `session not created: This version of ChromeDriver only supports Chrome version XX`, il faut mettre à jour votre Chrome à la version XX. :)

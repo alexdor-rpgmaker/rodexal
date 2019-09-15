@@ -383,6 +383,19 @@ class BBCodeTest extends TestCase
     }
 
     /**
+     * @testdox Le BBCode [twitch=clip] utilise la balise html iframe
+     */
+    public function testBBCodeClipTwitch()
+    {
+        $texteAvecBbcode = "[twitch=clip]IncredibleSpeedrunnerHavingItems[/twitch]";
+
+        $htmlReel = $this->bbCode->convertToHtml($texteAvecBbcode);
+
+        $htmlAttendu = "<iframe src=\"https://clips.twitch.tv/embed?autoplay=false&clip=IncredibleSpeedrunnerHavingItems\" frameborder=\"0\" allowfullscreen=\"true\" scrolling=\"no\" height=\"378\" width=\"620\"></iframe>";
+        $this->assertEquals($htmlAttendu, $htmlReel);
+    }
+
+    /**
      * @testdox Un lien sans BBCode utilise la balise a
      */
     public function testLienSansBBCodeUtiliseLaBaliseA()

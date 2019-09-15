@@ -162,6 +162,13 @@ class BBCode
       '$1'
     );
 
+    $bbCode->addParser(
+      'twitch-clip',
+      '/\[twitch=clip\](.+)\[\/twitch\]/s',
+      '<iframe src="https://clips.twitch.tv/embed?autoplay=false&clip=$1" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>',
+      '$1'
+    );
+
     // Plus vraiment un BBCode
 
     $bbCode->addParser(
