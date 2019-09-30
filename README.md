@@ -44,7 +44,17 @@ npm run dev
 npm run watch
 ```
 
-## Lancement des tests unitaires
+## Lancement des tests unitaires frontend
+
+```bash
+# Lancer les tests
+npm run test
+
+# Lancer les tests en continu
+npm run test:watch
+```
+
+## Lancement des tests unitaires backend
 
 ```bash
 # Lancer les tests

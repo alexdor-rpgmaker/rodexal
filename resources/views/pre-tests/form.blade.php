@@ -2,14 +2,6 @@
 
 @push('scripts')
     <script type="text/javascript" src="{{ asset('js/pre-tests.js') }}" defer></script>
-    <script type="text/javascript">
-        const initQuestions = @json(App\PreTest::FIELDS);
-        const initMethod = @json($form_method);
-        const initAction = @json($form_url);
-        const initGameId = @json($game_id);
-        const initPreTest = @json($pre_test);
-        const initRedirection = @json(env('FORMER_APP_URL').'/?p=mes-tests&message=Enregistrement effectué !');
-    </script>
 @endpush
 
 @section('content')
@@ -23,7 +15,14 @@
                         @include('common.errors')
 
                         <p>Après avoir joué 30 minutes au jeu, remplissez ce questionnaire avant d'aller plus loin.</p>
-                        <pre-tests-form></pre-tests-form>
+                        <pre-tests-form
+                            :questions='@json(App\PreTest::FIELDS)'
+                            :game-id=@json($game_id)
+                            :pre-test='@json($pre_test)'
+                            :init-method='@json($form_method)'
+                            :init-action='@json($form_url)'
+                            :init-redirection='@json(env('FORMER_APP_URL').'/?p=mes-tests&message=Enregistrement effectué !')'
+                        />
                     </div>
                 </div>
             </div>

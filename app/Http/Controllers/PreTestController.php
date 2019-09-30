@@ -69,7 +69,7 @@ class PreTestController extends Controller
 
         $game = self::fetchGame($gameId, $this->client);
         return view('pre-tests.form', [
-            'pre_test' => new PreTest,
+            'pre_test' => null,
             'title' => "Remplir un QCM pour le jeu $game->title",
             'game_id' => $game->id,
             'form_method' => 'POST',

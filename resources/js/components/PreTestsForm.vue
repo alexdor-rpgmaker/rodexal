@@ -49,7 +49,7 @@
       <h2>Verdict</h2>
       <div class="form-group row">
         <div class="col-sm-12">
-          <template v-if="editing()">
+          <template v-if="editing">
             <input type="hidden" name="finalThought" v-model="fields.finalThought">
             <span v-if="fields.finalThought">Conforme</span>
             <span v-else>Non conforme</span>
@@ -107,36 +107,45 @@
 
 <script>
 import FormMixin from '../FormMixin'
-
+      
 export default {
+  props: {
+    questions: Array,
+    gameId: Number,
+    preTest: Object,
+    initMethod: String,
+    initAction: String,
+    initRedirection: String
+  },
   mixins: [FormMixin],
   data() {
     return {
-      method: initMethod,
-      action: initAction,
-      questions: initQuestions,
       fields: this.fillFields(),
-      redirection: initRedirection
+      method: this.initMethod || 'POST',
+      action: this.initAction || '/',
+      redirection: this.initRedirection || ''
+    }
+  },
+  computed: {
+    editing() {
+      return this.method === 'PUT'
     }
   },
   methods: {
-    editing() {
-      return this.method === 'PUT'
-    },
     fillFields() {
       const questionnaire = {}
-      initQuestions.forEach(question => {
+      this.questions.forEach(question => {
         questionnaire[question.id] = {
           activated: false,
           explanation: null
         }
       })
       const fields =
-        initMethod === 'PUT'
-          ? initPreTest
+        this.initMethod === 'PUT'
+          ? this.preTest
           : {
               questionnaire,
-              gameId: initGameId,
+              gameId: this.gameId,
               finalThought: null
             }
       return fields

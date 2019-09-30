@@ -90,6 +90,10 @@
 import Amplitude from 'amplitudejs'
 
 export default {
+  props: {
+    debug: Boolean,
+    formerAppUrl: String
+  },
   data() {
     return {
       musics: [],
@@ -116,20 +120,20 @@ export default {
       return this.status !== 'stop'
     },
     currentMusicGameLink() {
-      return formerAppUrl + '?p=jeu&id=' + this.currentMusic.game.id
+      return this.formerAppUrl + '?p=jeu&id=' + this.currentMusic.game.id
     }
   },
   methods: {
     // Init and callbacks
     async fetchMusics() {
       const request = await axios({
-        url: formerAppUrl + '/api/v0/musics.php'
+        url: this.formerAppUrl + '/api/v0/musics.php'
       })
       this.musics = request.data.map(this.formatMusicForJukebox)
     },
     initializeAmplitude() {
       Amplitude.init({
-        debug,
+        debug: this.debug,
         shuffle_on: this.shuffle,
         callbacks: {
           play: this.playCallback,
