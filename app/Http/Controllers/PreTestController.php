@@ -164,7 +164,7 @@ class PreTestController extends Controller
                 'base_uri' => env('FORMER_APP_URL'),
                 'query' => [
                     'id_membre' => intval($userId),
-                    'id_session' => 19 // TODO: Make this variable
+                    'id_session' => 20 // TODO: Make this variable
                 ]
             ]);
         } catch (RequestException $e) {
