@@ -13,7 +13,7 @@
                 <div class="barre_boutons">
                     <span class="bordure_boutons">
                         <a class="bouton voir-jeu" href="{{ env('FORMER_APP_URL') }}?p=jeu&id={{ $game->id }}">Voir la fiche du jeu</a>
-                        <a class="bouton modifier-pre-test" href="{{ route('qcm.edit', ['game_id' => $pre_test->id]) }}" class="bouton">Modifier</a>
+                        <a class="bouton modifier-pre-test" href="{{ route('qcm.edit', ['pre_test' => $pre_test->id]) }}" class="bouton">Modifier</a>
                     </span>
                 </div>
                 <div class="card">

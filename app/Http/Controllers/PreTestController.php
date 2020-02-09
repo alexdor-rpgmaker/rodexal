@@ -7,6 +7,7 @@ use BBCode;
 use App\PreTest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
 use GuzzleHttp\Client as GuzzleClient;
@@ -36,7 +37,7 @@ class PreTestController extends Controller
         $fields = Arr::pluck(PreTest::FIELDS, 'id');
         $preTests = array_map(function ($preTest) use ($fields) {
             foreach ($fields as $field) {
-                $preTest[snake_case($field)] = Arr::get($preTest, "questionnaire.$field.activated");
+                $preTest[Str::snake($field)] = Arr::get($preTest, "questionnaire.$field.activated");
             }
             Arr::forget($preTest, 'questionnaire');
             return $preTest;

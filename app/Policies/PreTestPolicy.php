@@ -17,6 +17,11 @@ class PreTestPolicy
         }
     }
 
+    public function viewAny(?User $user)
+    {
+        return true;
+    }
+
     public function view(?User $user, PreTest $preTest)
     {
         return true;

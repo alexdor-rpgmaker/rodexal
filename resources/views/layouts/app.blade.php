@@ -230,7 +230,7 @@
 
                 <li class="has-dropdown">
                     <a class="couleur_{{ Auth::user()->rankName() }}" href="{{ env('FORMER_APP_URL') }}?p=profil&amp;membre={{ Auth::id() }}">
-                        @if (session('resource-owner')['avatar_url'])
+                        @if (session('resource-owner') && session('resource-owner')['avatar_url'])
                             <img class="header-avatar" src="{{ session('resource-owner')['avatar_url'] }}" alt="avatar">
                         @endif
                         {{ Auth::user()->name }}

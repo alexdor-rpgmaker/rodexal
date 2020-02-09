@@ -17,6 +17,11 @@ class WordPolicy
         }
     }
 
+    public function viewAny(?User $user)
+    {
+        return true;
+    }
+
     public function view(?User $user, Word $word)
     {
         return true;
