@@ -17,7 +17,9 @@ composer install
 npm install
 ```
 
-Il faut ensuite remplir le fichier `.env` sur la base du fichier `.env.example`, notamment les informations concernant la base de données.
+Il faut avoir une instance mysql active, et se créer deux bases de données : rodexal et rodexal_test. (Voir une documentation mysql si besoin.)
+
+Il faut ensuite créer et remplir le fichier `.env` sur la base du fichier `.env.example`, notamment les informations concernant la base de données (DB_DATABASE, DB_USERNAME, DB_PASSWORD, ...). Faire de même pour le fichier `.env.dusk` (utilisé par les tests de navigateur).
 
 ```bash
 # Lancer les migrations de base de données
@@ -69,7 +71,7 @@ composer test:watch
 
 ## Lancement des tests de navigateur
 
-Il faut créer un fichier .env.dusk en précisant une base de données différente (DB_DATABASE) pour éviter la suppression de données en local. Il faut aussi ajouter DUSK=true.
+Le paramétrage des tests de navigateur se fait dans le fichier `.env.dusk`, notamment le nom de la base de données (DB_DATABASE=rodexal_test) qui est différent, pour éviter la suppression de données en local. Il contient aussi DUSK=true.
 
 ```bash
 # Lancer les tests
