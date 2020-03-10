@@ -29,26 +29,32 @@ class PreTestPolicy
 
     public function create(User $user)
     {
-        return $user->isJury();
+        if ($user->isJury()) {
+            return true;
+        }
+        return $this->deny("Vous devez être un juré pour créer un QCM !");
     }
 
     public function update(User $user, PreTest $preTest)
     {
-        return $user->isJury() && $preTest->user_id == $user->id;
+        if ($user->isJury() && $preTest->user_id == $user->id) {
+            return true;
+        }
+        return $this->deny("Vous devez être un juré pour modifier un QCM !");
     }
 
     public function delete(User $user, PreTest $preTest)
     {
-        return false;
+        return $this->deny("Vous devez être un admin pour supprimer un QCM !");
     }
 
     public function restore(User $user, PreTest $preTest)
     {
-        return false;
+        return $this->deny("Vous devez être un admin pour restorer un QCM !");
     }
 
     public function forceDelete(User $user, PreTest $preTest)
     {
-        return false;
+        return $this->deny("Vous devez être un admin pour supprimer un QCM !");
     }
 }

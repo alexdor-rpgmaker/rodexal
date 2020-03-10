@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Policies\WordPolicy;
+use App\Policies\PreTestPolicy;
+use App\Word;
+use App\PreTest;
+
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -13,9 +18,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
-        'App\Word' => 'App\Policies\WordPolicy',
-        'App\PreTest' => 'App\Policies\PreTestPolicy'
+        Word::class => WordPolicy::class,
+        PreTest::class => PreTestPolicy::class
     ];
 
     /**

@@ -29,26 +29,26 @@ class WordPolicy
 
     public function create(User $user)
     {
-        return false;
+        return $this->deny("Vous devez être un admin pour ajouter un mot au dictionnaire !");
     }
 
     public function update(User $user)
     {
-        return false;
+        return $this->deny("Vous devez être un admin pour modifier un mot du dictionnaire !");
     }
 
     public function delete(User $user, Word $word)
     {
-        return false;
+        return $this->deny("Vous devez être un admin pour supprimer un mot du dictionnaire !");
     }
 
     public function restore(User $user, Word $word)
     {
-        return false;
+        return $this->deny("Vous devez être un admin pour récupérer un mot du dictionnaire !");
     }
 
     public function forceDelete(User $user, Word $word)
     {
-        return false;
+        return $this->deny("Vous devez être un admin pour supprimer un mot du dictionnaire !");
     }
 }
