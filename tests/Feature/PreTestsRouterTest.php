@@ -23,7 +23,7 @@ class PreTestsRouterTest extends TestCase
     // Index API
 
     /**
-     * @testdox On peut accéder à la liste des QCM remplis
+     * @testdox On peut accéder à la liste des QCM remplis via l'API
      */
     public function testQcmIndexApi()
     {
