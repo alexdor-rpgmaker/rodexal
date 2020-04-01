@@ -3,6 +3,7 @@
     "/css/app.css": "/css/app.css",
     "/css/dictionary.css": "/css/dictionary.css",
     "/css/pre_tests.css": "/css/pre_tests.css",
+    "/js/games.js": "/js/games.js",
     "/js/jukebox.js": "/js/jukebox.js",
     "/js/pre-tests.js": "/js/pre-tests.js"
 }

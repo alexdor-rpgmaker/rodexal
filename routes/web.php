@@ -30,6 +30,10 @@ Route::resource('jukebox', 'MusicController')->only([
     'jukebox' => 'music'
 ]);
 
+Route::resource('jeux', 'GameController')->only([
+    'index'
+]);
+
 Route::resource('dictionnaire', 'WordController')->except([
     'show'
 ])->parameters([
