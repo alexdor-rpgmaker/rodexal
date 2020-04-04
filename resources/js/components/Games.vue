@@ -5,13 +5,19 @@
         <div class="form-row">
           <div class="col-md-6 mb-2">
             <label for="query">Recherche</label>
-            <input name="query" class="form-control" type="text" v-model="query" />
+            <input
+              name="query"
+              class="form-control"
+              type="text"
+              v-model="query"
+              placeholder="Aventure, Humour, RuTiPa's Quest, ..."
+            />
           </div>
 
           <div class="col-md-6 mb-2">
             <label for="session">Session</label>
             <select name="session" class="custom-select" v-model="selectedSession">
-              <option :value="null"></option>
+              <option :value="null">(Toutes les sessions)</option>
               <option
                 :value="session"
                 v-for="session in sessions"
@@ -25,7 +31,7 @@
           <div class="col-md-6 mb-2">
             <label for="software">Logiciels</label>
             <select name="software" class="custom-select" v-model="selectedSoftware">
-              <option :value="null"></option>
+              <option :value="null">(Tous les logiciels)</option>
               <option :value="software" v-for="software in softwares" :key="software">{{ software }}</option>
             </select>
           </div>
@@ -33,7 +39,6 @@
           <div class="col-md-6 mb-2">
             <label for="session">Trier par</label>
             <select name="sort" class="custom-select" v-model="selectedSort">
-              <option :value="null"></option>
               <option :value="key" v-for="(name, key) in sortings" :key="key">{{ name }}</option>
             </select>
           </div>
@@ -56,13 +61,22 @@
       <game-row
         class="tr"
         :game="game"
-        :formerAppUrl="formerAppUrl"
         v-for="game in games"
         :key="game.id"
       />
     </table>
-    <button v-if="page > 1" @click="previousPage" class="previous">Résultats précédents</button>
-    <button v-if="notLastPage" @click="nextPage" class="next">Résultats suivants</button>
+    <button
+      v-if="page > 1"
+      @click="previousPage"
+      class="previous btn btn-primary mt-4"
+      type="button"
+    >Résultats précédents</button>
+    <button
+      v-if="notLastPage"
+      @click="nextPage"
+      class="next btn btn-primary mt-4"
+      type="button"
+    >Résultats suivants</button>
   </div>
 </template>
 
@@ -74,8 +88,7 @@ export default {
     GameRow
   },
   props: {
-    debug: Boolean,
-    formerAppUrl: String
+    session: String
   },
   data() {
     return {
@@ -86,8 +99,8 @@ export default {
       resultsCountOnThisPage: null,
       totalResultsCount: null,
       selectedSoftware: null,
-      selectedSesion: null,
-      selectedSort: null,
+      selectedSession: null,
+      selectedSort: 'session',
       sessions: [
         1,
         2,
@@ -110,7 +123,7 @@ export default {
       ],
       sortings: {
         title: 'Titre',
-        session_id: 'Session',
+        session: 'Session',
         software: 'Support',
         genre: 'Genre',
         created_at: "Date d'inscription",
@@ -144,6 +157,9 @@ export default {
     }
   },
   async mounted() {
+    if (this.session) {
+      this.selectedSession = this.session
+    }
     await this.fetchGames()
   },
   computed: {
@@ -180,7 +196,7 @@ export default {
         params['sort'] = `${this.selectedSort}:asc`
       }
       const request = await axios({
-        url: this.formerAppUrl + '/api/v0/jeux.php',
+        url: formerAppUrl + '/api/v0/jeux.php',
         params
       })
 
@@ -197,14 +213,14 @@ export default {
       await this.fetchGames()
     },
     async previousPage() {
+      window.scrollTo(0, 0)
       this.page -= 1
       await this.fetchGames()
-      window.scrollTo(0, 0)
     },
     async nextPage() {
+      window.scrollTo(0, 0)
       this.page += 1
       await this.fetchGames()
-      window.scrollTo(0, 0)
     },
     sessionName(id) {
       if (id === 3) return 'Session 2003-2004'

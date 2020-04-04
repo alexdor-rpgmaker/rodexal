@@ -28,8 +28,7 @@ describe('GameRow', () => {
         { url: 'my-game-mac.zip', platform: 'mac' },
         { url: 'my-game-windows.zip', platform: 'windows' }
       ]
-    },
-    formerAppUrl: 'https://former-app'
+    }
   }
 
   describe('With basic data', () => {

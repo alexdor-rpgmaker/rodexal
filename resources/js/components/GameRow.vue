@@ -36,8 +36,7 @@
 <script>
 export default {
   props: {
-    game: Object,
-    formerAppUrl: String
+    game: Object
   }
 }
 </script>

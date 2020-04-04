@@ -1,11 +1,8 @@
+// TODO
 // import Jukebox from '~/resources/js/components/Jukebox.vue'
 import { shallowMount } from '@vue/test-utils'
 
 describe('Jukebox', () => {
-  const propsData = {
-    debug: false,
-    formerAppUrl: '/'
-  }
   const methods = {
     fetchMusics: jest.fn(),
     initializeAmplitude: jest.fn(),
@@ -28,7 +25,6 @@ describe('Jukebox', () => {
   describe('When component is mounted', () => {
     it.skip('should do something', () => {
       const wrapper = shallowMount('Jukebox', {
-        propsData,
         methods
       })
 

@@ -10,8 +10,7 @@ window.scrollTo = windowScroll
 
 describe('Games', () => {
   const propsData = {
-    debug: false,
-    formerAppUrl: 'https://former-app'
+    session: null
   }
 
   beforeEach(() => {
@@ -160,10 +159,7 @@ describe('Games', () => {
           totalResultsCount: 150,
           resultsCountOnThisPage: 30
         },
-        data: [
-          { title: 'game-1' },
-          { title: 'game-2' }
-        ]
+        data: [{ title: 'game-1' }, { title: 'game-2' }]
       }
       axios.mockClear().mockResolvedValue({
         data: apiResponseBody
@@ -194,14 +190,37 @@ describe('Games', () => {
     })
 
     describe('without parameters', () => {
-      it('fetches games from API only with page parameters', async () => {
+      it('fetches games from API only with page and session sort parameters', async () => {
         const wrapper = createWrapperWithParams({ propsData })
 
         await wrapper.vm.fetchGames()
 
         expect(axios).toHaveBeenCalledTimes(1)
         expect(axios).toHaveBeenCalledWith({
-          params: { page: 1 },
+          params: {
+            page: 1,
+            sort: 'session:asc'
+          },
+          url: 'https://former-app/api/v0/jeux.php'
+        })
+      })
+    })
+
+    describe('with a session props', () => {
+      it('fetches games from API with page, session and session sort parameters', async () => {
+        const wrapper = createWrapperWithParams({
+          propsData: { ...propsData, session: '17' }
+        })
+
+        await wrapper.vm.fetchGames()
+
+        expect(axios).toHaveBeenCalledTimes(1)
+        expect(axios).toHaveBeenCalledWith({
+          params: {
+            page: 1,
+            session_id: '17',
+            sort: 'session:asc'
+          },
           url: 'https://former-app/api/v0/jeux.php'
         })
       })

@@ -9,8 +9,7 @@
         <div class="row justify-content-center">
             <div id="games-wrapper" class="col-md-10">
                 <games
-                    :debug='@json(env('APP_DEBUG'))'
-                    :former-app-url='@json(env('FORMER_APP_URL'))'
+                    {{-- :session='17' --}}
                 />
             </div>
         </div>
