@@ -2,16 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\User;
 use App\PreTest;
-
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-use GuzzleHttp\Psr7\Response;
+use App\User;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Psr7\Response;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 /**
  * @testdox PreTestsRouter
@@ -19,20 +17,6 @@ use GuzzleHttp\Handler\MockHandler;
 class PreTestsRouterTest extends TestCase
 {
     use RefreshDatabase;
-
-    // Index API
-
-    /**
-     * @testdox On peut accéder à la liste des QCM remplis via l'API
-     */
-    public function testQcmIndexApi()
-    {
-        $preTest = factory(PreTest::class, 3)->create();
-
-        $response = $this->get('/api/qcm');
-
-        $response->assertOk();
-    }
 
     // Show
 
@@ -117,13 +101,13 @@ class PreTestsRouterTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post('/qcm', [
-                'gameId' => 8
+                'gameId' => 8,
             ]);
 
         $response->assertForbidden();
         $this->assertDatabaseMissing('pre_tests', [
             'user_id' => $user->id,
-            'game_id' => 8
+            'game_id' => 8,
         ]);
     }
 
@@ -137,13 +121,13 @@ class PreTestsRouterTest extends TestCase
 
         $response = $this->actingAs($user)
             ->post('/qcm', [
-                'gameId' => 3
+                'gameId' => 3,
             ]);
 
         $response->assertRedirect();
         $this->assertDatabaseMissing('pre_tests', [
             'user_id' => $user->id,
-            'game_id' => 3
+            'game_id' => 3,
         ]);
     }
 
@@ -155,7 +139,7 @@ class PreTestsRouterTest extends TestCase
         self::mockHttpClientCreate();
         $user = factory(User::class)->states('jury')->create();
         $unsavedPreTest = factory(PreTest::class)->make([
-            'game_id' => 3
+            'game_id' => 3,
         ]);
 
         $response = $this->actingAs($user)
@@ -163,7 +147,7 @@ class PreTestsRouterTest extends TestCase
                 'gameId' => $unsavedPreTest->game_id,
                 'finalThought' => true,
                 'finalThoughtExplanation' => null,
-                'questionnaire' => $unsavedPreTest->questionnaire
+                'questionnaire' => $unsavedPreTest->questionnaire,
             ]);
 
         $response->assertOk();
@@ -171,7 +155,7 @@ class PreTestsRouterTest extends TestCase
             'user_id' => $user->id,
             'game_id' => $unsavedPreTest->game_id,
             'final_thought' => true,
-            'final_thought_explanation' => null
+            'final_thought_explanation' => null,
         ]);
     }
 
@@ -198,7 +182,7 @@ class PreTestsRouterTest extends TestCase
     {
         $user = factory(User::class)->create();
         $preTest = factory(PreTest::class)->create([
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
 
         $response = $this->actingAs($user)
@@ -229,7 +213,7 @@ class PreTestsRouterTest extends TestCase
         self::mockHttpClientShow();
         $user = factory(User::class)->states('jury')->create();
         $preTest = factory(PreTest::class)->create([
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
 
         $response = $this->actingAs($user)
@@ -280,15 +264,15 @@ class PreTestsRouterTest extends TestCase
 
         $response = $this->actingAs($user)
             ->put("/qcm/{$preTest->id}", [
-                'finalThoughtExplanation' => $unsavedPreTest->final_thought_explanation
+                'finalThoughtExplanation' => $unsavedPreTest->final_thought_explanation,
             ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('pre_tests', [
-            'final_thought_explanation' => $preTest->final_thought_explanation
+            'final_thought_explanation' => $preTest->final_thought_explanation,
         ]);
         $this->assertDatabaseMissing('pre_tests', [
-            'final_thought_explanation' => $unsavedPreTest->final_thought_explanation
+            'final_thought_explanation' => $unsavedPreTest->final_thought_explanation,
         ]);
     }
 
@@ -300,10 +284,10 @@ class PreTestsRouterTest extends TestCase
         $user = factory(User::class)->states('jury')->create();
         $preTest = factory(PreTest::class)->create([
             'user_id' => $user->id,
-            'final_thought' => true
+            'final_thought' => true,
         ]);
         $newPreTest = factory(PreTest::class)->make([
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
 
         $response = $this->actingAs($user)
@@ -311,7 +295,7 @@ class PreTestsRouterTest extends TestCase
                 'gameId' => $newPreTest->game_id,
                 'finalThought' => false,
                 'finalThoughtExplanation' => $newPreTest->final_thought_explanation,
-                'questionnaire' => $newPreTest->questionnaire
+                'questionnaire' => $newPreTest->questionnaire,
             ]);
 
         $response->assertOk();
@@ -319,7 +303,7 @@ class PreTestsRouterTest extends TestCase
             'user_id' => $user->id,
             'game_id' => $preTest->game_id,
             'final_thought' => true,
-            'final_thought_explanation' => $newPreTest->final_thought_explanation
+            'final_thought_explanation' => $newPreTest->final_thought_explanation,
         ]);
     }
 
@@ -329,7 +313,7 @@ class PreTestsRouterTest extends TestCase
     {
         return new Response(200, [], json_encode([
             'id' => 3,
-            'title' => 'Legend of Lemidora'
+            'title' => 'Legend of Lemidora',
         ]));
     }
 
@@ -340,8 +324,8 @@ class PreTestsRouterTest extends TestCase
                 'game_id' => 3,
                 'pre_test' => true,
                 'serie_locked' => false,
-                'assignment_locked' => false
-            ]
+                'assignment_locked' => false,
+            ],
         ]));
     }
 
@@ -353,7 +337,7 @@ class PreTestsRouterTest extends TestCase
     private function mockHttpClientShow()
     {
         $mock = new MockHandler([
-            self::gameResponse()
+            self::gameResponse(),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
@@ -364,7 +348,7 @@ class PreTestsRouterTest extends TestCase
     {
         $mock = new MockHandler([
             self::assignmentsResponse(),
-            self::gameResponse()
+            self::gameResponse(),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);
@@ -376,7 +360,7 @@ class PreTestsRouterTest extends TestCase
         $new_id = 14;
         $mock = new MockHandler([
             self::assignmentsResponse(),
-            self::newAssignmentResponse()
+            self::newAssignmentResponse(),
         ]);
         $handler = HandlerStack::create($mock);
         $client = new GuzzleClient(['handler' => $handler]);

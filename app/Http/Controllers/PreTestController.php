@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Log;
-use BBCode;
 use App\PreTest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-
+use BBCode;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Log;
 
 class PreTestController extends Controller
 {
@@ -20,30 +18,6 @@ class PreTestController extends Controller
     {
         $this->client = $client;
         $this->authorizeResource(PreTest::class, 'pre_test');
-    }
-
-    public function indexApi()
-    {
-        $preTests = PreTest::select(
-            'id',
-            'user_id',
-            'game_id',
-            'questionnaire',
-            'final_thought',
-            'created_at',
-            'updated_at'
-        )->get()->toArray();
-
-        $fields = Arr::pluck(PreTest::FIELDS, 'id');
-        $preTests = array_map(function ($preTest) use ($fields) {
-            foreach ($fields as $field) {
-                $preTest[Str::snake($field)] = Arr::get($preTest, "questionnaire.$field.activated");
-            }
-            Arr::forget($preTest, 'questionnaire');
-            return $preTest;
-        }, $preTests);
-
-        return response()->json($preTests, 200);
     }
 
     public function show(PreTest $preTest)
@@ -57,7 +31,7 @@ class PreTestController extends Controller
 
         return view('pre-tests.show', [
             'pre_test' => $preTest,
-            'game' => $game
+            'game' => $game,
         ]);
     }
 
@@ -74,7 +48,7 @@ class PreTestController extends Controller
             'title' => "Remplir un QCM pour le jeu $game->title",
             'game_id' => $game->id,
             'form_method' => 'POST',
-            'form_url' => route('qcm.store')
+            'form_url' => route('qcm.store'),
         ]);
     }
 
@@ -85,7 +59,7 @@ class PreTestController extends Controller
         $validator_array = [
             'gameId' => 'required',
             'finalThought' => 'required|boolean',
-            'finalThoughtExplanation' => 'nullable|string'
+            'finalThoughtExplanation' => 'nullable|string',
         ];
         $fields = Arr::pluck(PreTest::FIELDS, 'id');
         foreach ($fields as $field) {
@@ -120,7 +94,7 @@ class PreTestController extends Controller
             'title' => "Modifier le QCM du jeu $game->title",
             'game_id' => $game->id,
             'form_method' => 'PUT',
-            'form_url' => route('qcm.update', $preTest->id)
+            'form_url' => route('qcm.update', $preTest->id),
         ]);
     }
 
@@ -128,7 +102,7 @@ class PreTestController extends Controller
     {
         $validator_array = [
             'finalThought' => 'required|boolean',
-            'finalThoughtExplanation' => 'nullable|string'
+            'finalThoughtExplanation' => 'nullable|string',
         ];
         $fields = Arr::pluck(PreTest::FIELDS, 'id');
         foreach ($fields as $field) {
@@ -165,8 +139,8 @@ class PreTestController extends Controller
                 'base_uri' => env('FORMER_APP_URL'),
                 'query' => [
                     'id_membre' => intval($userId),
-                    'id_session' => 20 // TODO: Make this variable
-                ]
+                    'id_session' => 20, // TODO: Make this variable
+                ],
             ]);
         } catch (RequestException $e) {
             Log::warning($e);
@@ -180,7 +154,7 @@ class PreTestController extends Controller
         try {
             $response = $client->request('GET', '/api/v0/jeu.php', [
                 'base_uri' => env('FORMER_APP_URL'),
-                'query' => ['id' => intval($id)]
+                'query' => ['id' => intval($id)],
             ]);
         } catch (RequestException $e) {
             Log::warning($e);
@@ -199,7 +173,7 @@ class PreTestController extends Controller
                 'base_uri' => env('FORMER_APP_URL'),
                 'json' => [
                     'id_jeu' => $game_id,
-                    'id_membre' => $user_id
+                    'id_membre' => $user_id,
                 ],
                 'headers' => ['X-Api-Key' => env('FORMER_APP_API_KEY')],
             ]);
