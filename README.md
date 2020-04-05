@@ -44,6 +44,9 @@ npm run dev
 
 # Sinon pour que la compilation se fasse en continu
 npm run watch
+
+# Sinon pour compiler et minifier les assets avant mise en production
+npm run production
 ```
 
 ## Lancement des tests unitaires frontend
