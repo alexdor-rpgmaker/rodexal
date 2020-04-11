@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUndefinedClassInspection */
 
 use Illuminate\Http\Request;
 
@@ -21,4 +21,6 @@ Route::prefix('v0')
     ->namespace('Api\V0')
     ->group(function () {
         Route::get('/qcm', 'PreTestApiController@index');
+
+        Route::get('/games', 'GameApiController@index');
     });
