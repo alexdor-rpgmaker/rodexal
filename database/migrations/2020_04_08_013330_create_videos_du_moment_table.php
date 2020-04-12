@@ -29,6 +29,6 @@ class CreateVideosDuMomentTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('videos_du_moment');
+		Schema::connection('former_app_database')->dropIfExists('videos_du_moment');
 	}
 }

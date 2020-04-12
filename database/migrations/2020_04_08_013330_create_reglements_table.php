@@ -30,6 +30,6 @@ class CreateReglementsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('reglements');
+		Schema::connection('former_app_database')->dropIfExists('reglements');
 	}
 }

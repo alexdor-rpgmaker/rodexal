@@ -20,7 +20,7 @@ class CreateCarrouselTable extends Migration
 			$table->string('alt');
 			$table->string('description');
 			$table->boolean('is_active');
-			$table->tinyInteger('ordre');
+			$table->smallInteger('ordre');
 		});
 	}
 
@@ -31,6 +31,6 @@ class CreateCarrouselTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('carrousel');
+		Schema::connection('former_app_database')->dropIfExists('carrousel');
 	}
 }

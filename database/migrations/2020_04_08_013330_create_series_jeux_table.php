@@ -32,6 +32,6 @@ class CreateSeriesJeuxTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('series_jeux');
+		Schema::connection('former_app_database')->dropIfExists('series_jeux');
 	}
 }

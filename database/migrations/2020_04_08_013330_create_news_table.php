@@ -23,7 +23,7 @@ class CreateNewsTable extends Migration
 			$table->dateTime('date_creation_news');
 			$table->dateTime('date_validation_news');
 			$table->integer('nb_commentaires');
-			$table->tinyInteger('origine')->default(4);
+			$table->smallInteger('origine')->default(4);
 			$table->boolean('is_blog');
 		});
 	}
@@ -35,6 +35,6 @@ class CreateNewsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('news');
+		Schema::connection('former_app_database')->dropIfExists('news');
 	}
 }

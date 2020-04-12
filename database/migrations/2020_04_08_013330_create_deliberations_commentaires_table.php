@@ -30,6 +30,6 @@ class CreateDeliberationsCommentairesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('deliberations_commentaires');
+		Schema::connection('former_app_database')->dropIfExists('deliberations_commentaires');
 	}
 }

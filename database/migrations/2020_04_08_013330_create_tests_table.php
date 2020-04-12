@@ -21,7 +21,7 @@ class CreateTestsTable extends Migration
 			$table->integer('id_jury');
 			$table->text('contenu');
 			$table->boolean('is_apte');
-			$table->tinyInteger('statut_test')->comment('1: non-fait; 2: en-cours; 3: valide; 4: de-coté-par-léquipe');
+			$table->smallInteger('statut_test')->comment('1: non-fait; 2: en-cours; 3: valide; 4: de-coté-par-léquipe');
 			$table->dateTime('date_modification');
 			$table->boolean('is_video');
 			$table->string('youtube_token', 20);
@@ -37,6 +37,6 @@ class CreateTestsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('tests');
+		Schema::connection('former_app_database')->dropIfExists('tests');
 	}
 }

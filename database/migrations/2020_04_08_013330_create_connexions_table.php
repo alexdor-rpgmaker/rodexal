@@ -33,6 +33,6 @@ class CreateConnexionsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('connexions');
+		Schema::connection('former_app_database')->dropIfExists('connexions');
 	}
 }

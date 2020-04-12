@@ -20,9 +20,9 @@ class CreateDeliberationsNotesTable extends Migration
 			$table->mediumInteger('id_jury');
 			$table->mediumInteger('id_jeu');
 			$table->mediumInteger('id_categorie');
-			$table->tinyInteger('note');
+			$table->smallInteger('note');
 			$table->decimal('note_coef', 10);
-			$table->tinyInteger('position');
+			$table->smallInteger('position');
 		});
 	}
 
@@ -33,6 +33,6 @@ class CreateDeliberationsNotesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('deliberations_notes');
+		Schema::connection('former_app_database')->dropIfExists('deliberations_notes');
 	}
 }

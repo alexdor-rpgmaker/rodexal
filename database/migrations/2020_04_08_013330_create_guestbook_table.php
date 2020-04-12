@@ -27,8 +27,8 @@ class CreateGuestbookTable extends Migration
 			$table->string('ip', 30);
 			$table->string('pays', 100);
 			$table->string('region', 100);
-			$table->tinyInteger('statut_signature');
-			$table->tinyInteger('statut_signature_old');
+			$table->smallInteger('statut_signature');
+			$table->smallInteger('statut_signature_old');
 		});
 	}
 
@@ -39,6 +39,6 @@ class CreateGuestbookTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('guestbook');
+		Schema::connection('former_app_database')->dropIfExists('guestbook');
 	}
 }

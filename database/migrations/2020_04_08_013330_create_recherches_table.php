@@ -30,6 +30,6 @@ class CreateRecherchesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('recherches');
+		Schema::connection('former_app_database')->dropIfExists('recherches');
 	}
 }

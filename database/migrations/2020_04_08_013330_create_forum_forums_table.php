@@ -36,6 +36,6 @@ class CreateForumForumsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('forum_forums');
+		Schema::connection('former_app_database')->dropIfExists('forum_forums');
 	}
 }

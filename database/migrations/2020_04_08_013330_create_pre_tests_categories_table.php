@@ -19,7 +19,7 @@ class CreatePreTestsCategoriesTable extends Migration
 			$table->mediumInteger('id_jeu');
 			$table->mediumInteger('id_jury');
 			$table->mediumInteger('id_categorie');
-			$table->tinyInteger('statut_ptc');
+			$table->smallInteger('statut_ptc');
 			$table->primary(['id_serie','id_jeu','id_jury','id_categorie'], 'pre_tests_attributions_primary');
 		});
 	}
@@ -31,6 +31,6 @@ class CreatePreTestsCategoriesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('pre_tests_categories');
+		Schema::connection('former_app_database')->dropIfExists('pre_tests_categories');
 	}
 }

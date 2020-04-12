@@ -28,6 +28,6 @@ class CreateOauthJwtTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('oauth_jwt');
+		Schema::connection('former_app_database')->dropIfExists('oauth_jwt');
 	}
 }

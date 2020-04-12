@@ -32,6 +32,6 @@ class CreateRecrutementTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('recrutement');
+		Schema::connection('former_app_database')->dropIfExists('recrutement');
 	}
 }

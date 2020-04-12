@@ -28,6 +28,6 @@ class CreateAwardsCategoriesSeriesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('awards_categories_series');
+		Schema::connection('former_app_database')->dropIfExists('awards_categories_series');
 	}
 }

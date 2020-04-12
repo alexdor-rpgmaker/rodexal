@@ -22,10 +22,10 @@ class CreateAwardsCategoriesTable extends Migration
 			$table->boolean('niveau_categorie')->comment('1: meilleurjeu, 2: general, 3: specialisé, 4: coupdecoeur');
 			$table->mediumInteger('id_session');
 			$table->dateTime('date_ajout_categorie');
-			$table->tinyInteger('statut_categorie');
+			$table->smallInteger('statut_categorie');
 			$table->boolean('is_declinaison');
 			$table->boolean('is_after_tests');
-			$table->tinyInteger('ordre');
+			$table->smallInteger('ordre');
 		});
 	}
 
@@ -36,6 +36,6 @@ class CreateAwardsCategoriesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('awards_categories');
+		Schema::connection('former_app_database')->dropIfExists('awards_categories');
 	}
 }

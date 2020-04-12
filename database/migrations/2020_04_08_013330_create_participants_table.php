@@ -22,7 +22,7 @@ class CreateParticipantsTable extends Migration
 			$table->string('nom_membre');
 			$table->string('mail_membre');
 			$table->string('role');
-			$table->tinyInteger('ordre')->nullable();
+			$table->smallInteger('ordre')->nullable();
 			$table->boolean('peut_editer_jeu')->default(1);
 			$table->dateTime('date_participant')->nullable();
 		});
@@ -35,6 +35,6 @@ class CreateParticipantsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('participants');
+		Schema::connection('former_app_database')->dropIfExists('participants');
 	}
 }

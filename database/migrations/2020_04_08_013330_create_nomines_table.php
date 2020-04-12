@@ -29,6 +29,6 @@ class CreateNominesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('nomines');
+		Schema::connection('former_app_database')->dropIfExists('nomines');
 	}
 }

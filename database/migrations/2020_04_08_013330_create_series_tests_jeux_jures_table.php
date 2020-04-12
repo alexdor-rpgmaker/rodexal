@@ -18,7 +18,7 @@ class CreateSeriesTestsJeuxJuresTable extends Migration
 			$table->mediumInteger('id_serie');
 			$table->mediumInteger('id_jeu');
 			$table->mediumInteger('id_jury');
-			$table->tinyInteger('statut_jeu_jure')->comment('0: ???; 1: attribué a un moment ; 2: doit le faire maintenant');
+			$table->smallInteger('statut_jeu_jure')->comment('0: ???; 1: attribué a un moment ; 2: doit le faire maintenant');
 			$table->primary(['id_serie','id_jeu','id_jury']);
 		});
 	}
@@ -30,6 +30,6 @@ class CreateSeriesTestsJeuxJuresTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('series_tests_jeux_jures');
+		Schema::connection('former_app_database')->dropIfExists('series_tests_jeux_jures');
 	}
 }

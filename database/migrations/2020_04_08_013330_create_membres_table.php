@@ -27,7 +27,7 @@ class CreateMembresTable extends Migration
 			$table->dateTime('date_inscription');
 			$table->dateTime('date_visite');
 			$table->date('date_naissance');
-			$table->tinyInteger('sexe')->comment('0:n/a,1:h,2:f');
+			$table->smallInteger('sexe')->comment('0:n/a,1:h,2:f');
 			$table->string('ip_inscription', 20);
 			$table->string('citation');
 			$table->string('localisation');
@@ -45,7 +45,7 @@ class CreateMembresTable extends Migration
 			$table->text('signature');
 			$table->text('texte_perso');
 			$table->integer('mp_non_lus');
-			$table->tinyInteger('design')->default(5)->comment('0:lifaen,1:walinaEtKhoryl,2:papillon,3:booskaboo,4:rpgmaker2000,5:alexre');
+			$table->smallInteger('design')->default(5)->comment('0:lifaen,1:walinaEtKhoryl,2:papillon,3:booskaboo,4:rpgmaker2000,5:alexre');
 			$table->mediumInteger('nb_messages');
 			$table->string('preferences', 20)->default('1;0;');
 			$table->boolean('is_fake')->default(0);
@@ -62,6 +62,6 @@ class CreateMembresTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('membres');
+		Schema::connection('former_app_database')->dropIfExists('membres');
 	}
 }

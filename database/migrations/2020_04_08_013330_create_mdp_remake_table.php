@@ -30,6 +30,6 @@ class CreateMdpRemakeTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('mdp_remake');
+		Schema::connection('former_app_database')->dropIfExists('mdp_remake');
 	}
 }

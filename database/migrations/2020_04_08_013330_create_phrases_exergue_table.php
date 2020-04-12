@@ -29,6 +29,6 @@ class CreatePhrasesExergueTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('phrases_exergue');
+		Schema::connection('former_app_database')->dropIfExists('phrases_exergue');
 	}
 }

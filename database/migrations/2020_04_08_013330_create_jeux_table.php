@@ -16,7 +16,7 @@ class CreateJeuxTable extends Migration
 		Schema::connection('former_app_database')->create('jeux', function(Blueprint $table)
 		{
 			$table->integer('id_jeu', true);
-			$table->tinyInteger('id_serie_jeu');
+			$table->smallInteger('id_serie_jeu');
 			$table->integer('id_session');
 			$table->integer('avancement_jeu')->comment('0:demo; 1:termine');
 			$table->integer('statut_jeu')->comment('0:suppr, 1:inscrit, 2:qualifie, 3:nomine, 4:vainqueur');
@@ -54,6 +54,6 @@ class CreateJeuxTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('jeux');
+		Schema::connection('former_app_database')->dropIfExists('jeux');
 	}
 }

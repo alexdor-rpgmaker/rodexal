@@ -30,6 +30,6 @@ class CreateDeliberationsSuffisammentJoueTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('deliberations_suffisamment_joue');
+		Schema::connection('former_app_database')->dropIfExists('deliberations_suffisamment_joue');
 	}
 }

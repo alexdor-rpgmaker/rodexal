@@ -28,6 +28,6 @@ class CreateTestsAverageCharTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('tests_average_char');
+		Schema::connection('former_app_database')->dropIfExists('tests_average_char');
 	}
 }

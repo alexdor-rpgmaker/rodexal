@@ -18,7 +18,7 @@ class CreateJeuxFavorisTable extends Migration
 			$table->mediumInteger('id', true);
 			$table->mediumInteger('id_membre');
 			$table->mediumInteger('id_jeu');
-			$table->tinyInteger('favori');
+			$table->smallInteger('favori');
 			$table->dateTime('date_modification');
 		});
 	}
@@ -30,6 +30,6 @@ class CreateJeuxFavorisTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('jeux_favoris');
+		Schema::connection('former_app_database')->dropIfExists('jeux_favoris');
 	}
 }

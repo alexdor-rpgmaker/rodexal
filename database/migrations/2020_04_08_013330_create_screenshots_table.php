@@ -21,7 +21,7 @@ class CreateScreenshotsTable extends Migration
 			$table->text('distant');
 			$table->text('local');
 			$table->integer('statut_screenshot');
-			$table->tinyInteger('ordre');
+			$table->smallInteger('ordre');
 		});
 	}
 
@@ -32,6 +32,6 @@ class CreateScreenshotsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('screenshots');
+		Schema::connection('former_app_database')->dropIfExists('screenshots');
 	}
 }

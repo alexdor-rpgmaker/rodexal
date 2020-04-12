@@ -28,6 +28,6 @@ class CreateNewsCategoriesPivotTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('news_categories_pivot');
+		Schema::connection('former_app_database')->dropIfExists('news_categories_pivot');
 	}
 }

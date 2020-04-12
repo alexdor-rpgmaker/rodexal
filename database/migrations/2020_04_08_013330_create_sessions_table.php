@@ -18,7 +18,7 @@ class CreateSessionsTable extends Migration
 			$table->integer('id_session', true);
 			$table->integer('statut_session');
 			$table->string('nom_session');
-			$table->tinyInteger('etape')->comment('0:preparation, 1:debut, 2:fin-inscription-pre-tests, 3:tests, 4:nominations, 5:vainqueurs');
+			$table->smallInteger('etape')->comment('0:preparation, 1:debut, 2:fin-inscription-pre-tests, 3:tests, 4:nominations, 5:vainqueurs');
 			$table->dateTime('date_ajout');
 			$table->date('date_lancement');
 			$table->date('date_cloture_inscriptions');
@@ -36,6 +36,6 @@ class CreateSessionsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('sessions');
+		Schema::connection('former_app_database')->dropIfExists('sessions');
 	}
 }

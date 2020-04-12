@@ -17,7 +17,7 @@ class CreateSondagesTable extends Migration
 		{
 			$table->mediumInteger('id_sondage', true);
 			$table->string('question');
-			$table->tinyInteger('nb_reponses');
+			$table->smallInteger('nb_reponses');
 			$table->string('reponse1');
 			$table->string('reponse2');
 			$table->string('reponse3');
@@ -29,7 +29,7 @@ class CreateSondagesTable extends Migration
 			$table->smallInteger('votes4')->default(0);
 			$table->smallInteger('votes5')->default(0);
 			$table->smallInteger('nb_votes')->default(0);
-			$table->tinyInteger('statut_sondage')->default(1);
+			$table->smallInteger('statut_sondage')->default(1);
 			$table->dateTime('date_sondage');
 			$table->boolean('multiple')->default(0);
 		});
@@ -42,6 +42,6 @@ class CreateSondagesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('sondages');
+		Schema::connection('former_app_database')->dropIfExists('sondages');
 	}
 }

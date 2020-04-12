@@ -11,6 +11,7 @@
     "php": "^7.2.5",
     "ext-intl": "*",
     "cviebrock/eloquent-sluggable": "^7.0",
+    "doctrine/dbal": "^2.10",
     "fideloper/proxy": "^4.2",
     "fruitcake/laravel-cors": "^1.0",
     "genert/bbcode": "^1.1",
@@ -21,9 +22,10 @@
     "league/oauth2-client": "^2.4"
   },
   "require-dev": {
+    "barryvdh/laravel-ide-helper": "^2.6",
     "beyondcode/laravel-dump-server": "^1.0",
-    "filp/whoops": "^2.0",
     "facade/ignition": "^2.0",
+    "filp/whoops": "^2.0",
     "fzaninotto/faker": "^1.9.1",
     "heroku/heroku-buildpack-php": "^161.0",
     "laravel/dusk": "^5.0",

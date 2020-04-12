@@ -20,8 +20,8 @@ class CreateRecapTable extends Migration
 			$table->dateTime('date_action');
 			$table->string('ip', 15);
 			$table->mediumInteger('id_element');
-			$table->tinyInteger('type_element')->comment('1:news, 2:jeu, 3:participant, 4:screen, 5:test, 6:serie_test, 7:valid_test, 8:mb, 9:coms, 10:droits, 11:deliberations, 12:pseudo, 13:inscription, 14:acces-jukebox, 15:connexion, 16:nomines');
-			$table->tinyInteger('type_action')->comment('1:ajout,2:modif,3:erreur,4:suppr');
+			$table->smallInteger('type_element')->comment('1:news, 2:jeu, 3:participant, 4:screen, 5:test, 6:serie_test, 7:valid_test, 8:mb, 9:coms, 10:droits, 11:deliberations, 12:pseudo, 13:inscription, 14:acces-jukebox, 15:connexion, 16:nomines');
+			$table->smallInteger('type_action')->comment('1:ajout,2:modif,3:erreur,4:suppr');
 			$table->string('commentaire', 100);
 		});
 	}
@@ -33,6 +33,6 @@ class CreateRecapTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('recap');
+		Schema::connection('former_app_database')->dropIfExists('recap');
 	}
 }

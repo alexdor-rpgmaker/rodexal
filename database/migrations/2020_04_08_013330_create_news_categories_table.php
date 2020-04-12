@@ -29,6 +29,6 @@ class CreateNewsCategoriesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('news_categories');
+		Schema::connection('former_app_database')->dropIfExists('news_categories');
 	}
 }

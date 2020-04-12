@@ -29,6 +29,6 @@ class CreateImagesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('images');
+		Schema::connection('former_app_database')->dropIfExists('images');
 	}
 }

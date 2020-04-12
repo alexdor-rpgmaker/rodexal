@@ -35,6 +35,6 @@ class CreateSeriesTestsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('series_tests');
+		Schema::connection('former_app_database')->dropIfExists('series_tests');
 	}
 }

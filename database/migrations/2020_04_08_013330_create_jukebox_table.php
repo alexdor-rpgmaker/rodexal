@@ -33,6 +33,6 @@ class CreateJukeboxTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('jukebox');
+		Schema::connection('former_app_database')->dropIfExists('jukebox');
 	}
 }

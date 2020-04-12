@@ -30,6 +30,6 @@ class CreateTelechargementsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('telechargements');
+		Schema::connection('former_app_database')->dropIfExists('telechargements');
 	}
 }

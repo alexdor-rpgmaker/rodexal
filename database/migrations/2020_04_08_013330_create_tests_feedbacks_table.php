@@ -17,7 +17,7 @@ class CreateTestsFeedbacksTable extends Migration
 		{
 			$table->mediumInteger('id_test');
 			$table->mediumInteger('id_membre');
-			$table->tinyInteger('note');
+			$table->smallInteger('note');
 			$table->dateTime('date');
 			$table->primary(['id_test','id_membre']);
 		});
@@ -30,6 +30,6 @@ class CreateTestsFeedbacksTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('tests_feedbacks');
+		Schema::connection('former_app_database')->dropIfExists('tests_feedbacks');
 	}
 }

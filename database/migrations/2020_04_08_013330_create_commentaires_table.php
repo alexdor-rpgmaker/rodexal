@@ -25,8 +25,8 @@ class CreateCommentairesTable extends Migration
 			$table->dateTime('date_publication');
 			$table->dateTime('date_edition');
 			$table->integer('nombre_edition');
-			$table->tinyInteger('is_commentaire_jeu');
-			$table->tinyInteger('is_entre_jury');
+			$table->smallInteger('is_commentaire_jeu');
+			$table->smallInteger('is_entre_jury');
 		});
 	}
 
@@ -37,6 +37,6 @@ class CreateCommentairesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('commentaires');
+		Schema::connection('former_app_database')->dropIfExists('commentaires');
 	}
 }

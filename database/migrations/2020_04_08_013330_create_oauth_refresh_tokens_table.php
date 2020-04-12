@@ -30,6 +30,6 @@ class CreateOauthRefreshTokensTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('oauth_refresh_tokens');
+		Schema::connection('former_app_database')->dropIfExists('oauth_refresh_tokens');
 	}
 }

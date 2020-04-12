@@ -21,7 +21,7 @@ class CreateVideosTable extends Migration
 			$table->mediumInteger('id_jeu');
 			$table->mediumInteger('id_membre');
 			$table->dateTime('date_publication');
-			$table->tinyInteger('statut_video');
+			$table->smallInteger('statut_video');
 		});
 	}
 
@@ -32,6 +32,6 @@ class CreateVideosTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('videos');
+		Schema::connection('former_app_database')->dropIfExists('videos');
 	}
 }

@@ -2,14 +2,8 @@
 
 namespace App\Former;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Session extends Model
+class Session extends FormerModel
 {
-    /**
-     * @var string
-     */
-    protected $connection = 'former_app_database';
     /**
      * @var string
      */
@@ -19,7 +13,12 @@ class Session extends Model
      */
     protected $primaryKey = 'id_session';
     /**
-     * @var bool
+     * Default values.
+     *
+     * @var array
      */
-    public $timestamps = false;
+    protected $attributes = [
+        'statut_session' => '1',
+        'etape' => '1',
+    ];
 }

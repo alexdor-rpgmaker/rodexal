@@ -28,6 +28,6 @@ class CreateSeriesTestsJeuxTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('series_tests_jeux');
+		Schema::connection('former_app_database')->dropIfExists('series_tests_jeux');
 	}
 }

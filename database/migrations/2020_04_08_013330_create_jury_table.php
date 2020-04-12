@@ -20,8 +20,8 @@ class CreateJuryTable extends Migration
 			$table->string('pseudo');
 			$table->integer('id_membre');
 			$table->text('motivation');
-			$table->tinyInteger('statut_jury')->comment('0: supprimé, 1: accepté, 2: en-attente, 3: de-cote');
-			$table->tinyInteger('groupe');
+			$table->smallInteger('statut_jury')->comment('0: supprimé, 1: accepté, 2: en-attente, 3: de-cote');
+			$table->smallInteger('groupe');
 			$table->boolean('is_chef_groupe')->default(0);
 			$table->date('date_inscription');
 			$table->date('date_validation');
@@ -35,6 +35,6 @@ class CreateJuryTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('jury');
+		Schema::connection('former_app_database')->dropIfExists('jury');
 	}
 }

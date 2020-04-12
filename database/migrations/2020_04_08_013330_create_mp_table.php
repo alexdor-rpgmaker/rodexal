@@ -37,6 +37,6 @@ class CreateMpTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('mp');
+		Schema::connection('former_app_database')->dropIfExists('mp');
 	}
 }

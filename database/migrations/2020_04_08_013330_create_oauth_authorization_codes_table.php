@@ -32,6 +32,6 @@ class CreateOauthAuthorizationCodesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('oauth_authorization_codes');
+		Schema::connection('former_app_database')->dropIfExists('oauth_authorization_codes');
 	}
 }

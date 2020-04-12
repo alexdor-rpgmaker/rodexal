@@ -25,7 +25,7 @@ class CreatePartenariatTable extends Migration
 			$table->text('commentaire_equipe');
 			$table->dateTime('date_demande');
 			$table->boolean('valide')->default(0);
-			$table->tinyInteger('traite');
+			$table->smallInteger('traite');
 		});
 	}
 
@@ -36,6 +36,6 @@ class CreatePartenariatTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('partenariat');
+		Schema::connection('former_app_database')->dropIfExists('partenariat');
 	}
 }

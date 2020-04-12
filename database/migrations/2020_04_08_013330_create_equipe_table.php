@@ -18,10 +18,10 @@ class CreateEquipeTable extends Migration
 			$table->mediumInteger('id_equipe', true);
 			$table->mediumInteger('id_membre');
 			$table->string('pseudo');
-			$table->tinyInteger('id_session');
+			$table->smallInteger('id_session');
 			$table->string('role');
-			$table->tinyInteger('type_role')->comment('1:president;2:chef jure;3:respo site web;4:communication-externe;5:ambassadeur;6:illustrateur;7:aide;8:meilleur-jure');
-			$table->tinyInteger('ordre');
+			$table->smallInteger('type_role')->comment('1:president;2:chef jure;3:respo site web;4:communication-externe;5:ambassadeur;6:illustrateur;7:aide;8:meilleur-jure');
+			$table->smallInteger('ordre');
 		});
 	}
 
@@ -32,6 +32,6 @@ class CreateEquipeTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('equipe');
+		Schema::connection('former_app_database')->dropIfExists('equipe');
 	}
 }

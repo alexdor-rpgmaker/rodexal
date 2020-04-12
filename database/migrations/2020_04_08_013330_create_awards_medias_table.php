@@ -20,14 +20,14 @@ class CreateAwardsMediasTable extends Migration
 			$table->mediumInteger('id_jeu');
 			$table->mediumInteger('id_artiste');
 			$table->string('pseudo_artiste');
-			$table->tinyInteger('anonymat_artiste')->comment('0: non; 1:oui');
+			$table->smallInteger('anonymat_artiste')->comment('0: non; 1:oui');
 			$table->dateTime('date_ajout_media');
-			$table->tinyInteger('statut_media');
-			$table->tinyInteger('type_media')->comment('1: image, 2: video, 3: mp3');
+			$table->smallInteger('statut_media');
+			$table->smallInteger('type_media')->comment('1: image, 2: video, 3: mp3');
 			$table->string('url_media');
 			$table->text('description_media');
 			$table->boolean('declinaison_actuelle')->comment('1: or, 2: argent, 3: bronze');
-			$table->tinyInteger('is_placeholder')->comment('image temporaire en attendant le vrai award');
+			$table->smallInteger('is_placeholder')->comment('image temporaire en attendant le vrai award');
 		});
 	}
 
@@ -38,6 +38,6 @@ class CreateAwardsMediasTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('awards_medias');
+		Schema::connection('former_app_database')->dropIfExists('awards_medias');
 	}
 }

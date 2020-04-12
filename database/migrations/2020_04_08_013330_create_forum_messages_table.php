@@ -41,6 +41,6 @@ class CreateForumMessagesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('forum_messages');
+		Schema::connection('former_app_database')->dropIfExists('forum_messages');
 	}
 }

@@ -29,6 +29,6 @@ class CreateJeuxUploadsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('jeux_uploads');
+		Schema::connection('former_app_database')->dropIfExists('jeux_uploads');
 	}
 }

@@ -32,6 +32,6 @@ class CreateLusTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('lus');
+		Schema::connection('former_app_database')->dropIfExists('lus');
 	}
 }

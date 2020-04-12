@@ -29,6 +29,6 @@ class CreateScreenshotsDuMomentTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('screenshots_du_moment');
+		Schema::connection('former_app_database')->dropIfExists('screenshots_du_moment');
 	}
 }

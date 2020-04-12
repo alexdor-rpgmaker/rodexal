@@ -31,6 +31,6 @@ class CreateVoteTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('vote');
+		Schema::connection('former_app_database')->dropIfExists('vote');
 	}
 }

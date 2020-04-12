@@ -47,6 +47,6 @@ class CreateNotesTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('notes');
+		Schema::connection('former_app_database')->dropIfExists('notes');
 	}
 }

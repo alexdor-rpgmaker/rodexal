@@ -28,6 +28,6 @@ class CreateSondagesIdTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::connection('former_app_database')->drop('sondages_id');
+		Schema::connection('former_app_database')->dropIfExists('sondages_id');
 	}
 }
