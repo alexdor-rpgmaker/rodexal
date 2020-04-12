@@ -15,9 +15,9 @@ class CreateSondagesIdTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('sondages_id', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_sondages_id', true);
-			$table->mediumInteger('id_membre');
-			$table->mediumInteger('id_sondage');
+			$table->integer('id_sondages_id', true);
+			$table->integer('id_membre');
+			$table->integer('id_sondage');
 		});
 	}
 

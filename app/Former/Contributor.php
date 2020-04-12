@@ -2,7 +2,7 @@
 
 namespace App\Former;
 
-class Participant extends FormerModel
+class Contributor extends FormerModel
 {
     /**
      * @var string
@@ -16,5 +16,10 @@ class Participant extends FormerModel
     public function game()
     {
         return $this->belongsTo('App\Former\Game', 'id_jeu');
+    }
+
+    public function member()
+    {
+        return $this->belongsTo('App\Former\Member', 'id_membre');
     }
 }

@@ -20,12 +20,17 @@ class Game extends FormerModel
      * @var array
      */
     protected $attributes = [
-        'statut_jeu' => '1',
+        'statut_jeu' => 1
     ];
 
     public function session()
     {
         return $this->belongsTo('App\Former\Session', 'id_session');
+    }
+
+    public function contributors()
+    {
+        return $this->hasMany('App\Former\Contributor', 'id_jeu')->where('statut_participant', '>', 0);
     }
 
     public function getStatus(): string
@@ -62,7 +67,8 @@ class Game extends FormerModel
         return $stepStatusMatrix[$this->session->etape][$this->statut_jeu];
     }
 
-    public function logoUrl(): string {
+    public function getLogoUrl(): string
+    {
         if (!empty($this->logo)) {
             return env('FORMER_APP_URL') . '/uploads/logos/' . $this->logo;
         } else if (!empty($this->logo_distant)) {

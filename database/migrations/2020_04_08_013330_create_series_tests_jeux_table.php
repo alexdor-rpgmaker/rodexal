@@ -15,8 +15,8 @@ class CreateSeriesTestsJeuxTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('series_tests_jeux', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_serie');
-			$table->mediumInteger('id_jeu');
+			$table->integer('id_serie');
+			$table->integer('id_jeu');
 			$table->primary(['id_serie','id_jeu']);
 		});
 	}

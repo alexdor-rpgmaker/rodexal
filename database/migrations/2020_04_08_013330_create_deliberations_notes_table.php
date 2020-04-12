@@ -15,11 +15,11 @@ class CreateDeliberationsNotesTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('deliberations_notes', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_deliberations_notes', true);
-			$table->mediumInteger('id_membre');
-			$table->mediumInteger('id_jury');
-			$table->mediumInteger('id_jeu');
-			$table->mediumInteger('id_categorie');
+			$table->integer('id_deliberations_notes', true);
+			$table->integer('id_membre');
+			$table->integer('id_jury');
+			$table->integer('id_jeu');
+			$table->integer('id_categorie');
 			$table->smallInteger('note');
 			$table->decimal('note_coef', 10);
 			$table->smallInteger('position');

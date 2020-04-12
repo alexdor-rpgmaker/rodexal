@@ -15,12 +15,12 @@ class CreateMailTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('mail', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_mail', true);
+			$table->integer('id_mail', true);
 			$table->smallInteger('type_expediteur')->comment('0:invité, 1:membre, 2:equipe');
 			$table->string('type_destinataire', 10)->comment('1:membre, 2:equipe, 3:membres, 4:candidats, 5:ambassadeurs, 6:jures, 7:modos, 8:admins, 9:dessinateurs');
 			$table->integer('id_session_destinataire');
-			$table->mediumInteger('id_membre_expediteur');
-			$table->mediumInteger('id_membre_destinataire');
+			$table->integer('id_membre_expediteur');
+			$table->integer('id_membre_destinataire');
 			$table->string('mail_expediteur');
 			$table->dateTime('date');
 			$table->string('sujet_mail');

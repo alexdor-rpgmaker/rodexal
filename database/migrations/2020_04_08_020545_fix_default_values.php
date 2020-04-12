@@ -26,6 +26,39 @@ class FixDefaultValues extends Migration
             $table->boolean('public_can_rank')->nullable(false)->default(false)->change();
         });
 
+        Schema::connection('former_app_database')->table('membres', function (Blueprint $table) {
+            $table->text('commentaire_equipe')->nullable()->change();
+            $table->string('confirmation')->nullable()->change();
+            $table->string('titre')->nullable()->change();
+            $table->dateTime('date_visite')->nullable()->change();
+            $table->date('date_naissance')->nullable()->change();
+            $table->smallInteger('sexe')->nullable(false)->default(0)->comment('0:n/a,1:h,2:f')->change();
+            $table->string('ip_inscription', 20)->nullable()->change();
+            $table->string('citation')->nullable()->change();
+            $table->string('localisation')->nullable()->change();
+            $table->string('emploi')->nullable()->change();
+            $table->string('loisirs')->nullable()->change();
+            $table->string('jeux_perso')->nullable()->change();
+            $table->string('jeux_favoris')->nullable()->change();
+            $table->string('site')->nullable()->change();
+            $table->string('mail2')->nullable()->change();
+            $table->string('skype', 100)->nullable()->change();
+            $table->string('facebook')->nullable()->change();
+            $table->string('twitter', 100)->nullable()->change();
+            $table->string('avatar')->nullable()->change();
+            $table->string('avatar_distant')->nullable()->change();
+            $table->text('signature')->nullable()->change();
+            $table->text('texte_perso')->nullable()->change();
+            $table->integer('mp_non_lus')->nullable(false)->default(0)->change();
+            $table->smallInteger('design')->nullable(false)->default(5)->comment('0:lifaen,1:walinaEtKhoryl,2:papillon,3:booskaboo,4:rpgmaker2000,5:alexre')->change();
+            $table->integer('nb_messages')->nullable(false)->default(0)->change();
+            $table->string('preferences', 20)->default('1;0;')->change();
+            $table->boolean('is_fake')->nullable(false)->default(false)->change();
+            $table->string('discord_id', 100)->nullable()->change();
+            $table->string('twitch')->nullable()->change();
+            $table->string('steam')->nullable()->change();
+        });
+
         Schema::connection('former_app_database')->table('jeux', function (Blueprint $table) {
             $table->smallInteger('id_serie_jeu')->nullable()->change();
             $table->integer('id_session')->nullable()->change();
@@ -59,7 +92,6 @@ class FixDefaultValues extends Migration
             $table->foreign('id_session')
                 ->references('id_session')->on('sessions');
         });
-
 
         Schema::connection('former_app_database')->table('participants', function (Blueprint $table) {
             $table->integer('id_jeu')->nullable(false)->default(0)->change();

@@ -16,8 +16,8 @@ class CreateTestsTable extends Migration
 		Schema::connection('former_app_database')->create('tests', function(Blueprint $table)
 		{
 			$table->integer('id_test', true);
-			$table->mediumInteger('id_serie');
-			$table->mediumInteger('id_jeu');
+			$table->integer('id_serie');
+			$table->integer('id_jeu');
 			$table->integer('id_jury');
 			$table->text('contenu');
 			$table->boolean('is_apte');
@@ -25,7 +25,7 @@ class CreateTestsTable extends Migration
 			$table->dateTime('date_modification');
 			$table->boolean('is_video');
 			$table->string('youtube_token', 20);
-			$table->mediumInteger('reviewer_id')->default(0);
+			$table->integer('reviewer_id')->default(0);
 			$table->dateTime('reviewed_at');
 		});
 	}

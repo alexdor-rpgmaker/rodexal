@@ -15,11 +15,11 @@ class CreateTelechargementsTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('telechargements', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_telechargement', true);
+			$table->integer('id_telechargement', true);
 			$table->dateTime('date_telechargement');
 			$table->string('ip', 15);
-			$table->mediumInteger('id_jeu');
-			$table->mediumInteger('id_membre');
+			$table->integer('id_jeu');
+			$table->integer('id_membre');
 		});
 	}
 

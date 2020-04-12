@@ -15,8 +15,8 @@ class CreateEquipeTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('equipe', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_equipe', true);
-			$table->mediumInteger('id_membre');
+			$table->integer('id_equipe', true);
+			$table->integer('id_membre');
 			$table->string('pseudo');
 			$table->smallInteger('id_session');
 			$table->string('role');

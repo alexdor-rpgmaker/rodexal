@@ -15,7 +15,7 @@ class CreateSeriesJeuxTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('series_jeux', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_serie', true);
+			$table->integer('id_serie', true);
 			$table->string('nom_serie');
 			$table->text('description_serie');
 			$table->boolean('is_serie')->comment('Une série de jeux différents');

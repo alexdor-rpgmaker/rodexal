@@ -15,7 +15,7 @@ class CreateNewsCategoriesTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('news_categories', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_categorie', true);
+			$table->integer('id_categorie', true);
 			$table->string('titre_categorie');
 			$table->string('titre_categorie_public');
 			$table->string('couleur', 6);

@@ -15,10 +15,10 @@ class CreateAwardsMediasTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('awards_medias', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_media', true);
-			$table->mediumInteger('id_categorie')->comment('Réunit les awards d\'une même catégorie, la même année');
-			$table->mediumInteger('id_jeu');
-			$table->mediumInteger('id_artiste');
+			$table->integer('id_media', true);
+			$table->integer('id_categorie')->comment('Réunit les awards d\'une même catégorie, la même année');
+			$table->integer('id_jeu');
+			$table->integer('id_artiste');
 			$table->string('pseudo_artiste');
 			$table->smallInteger('anonymat_artiste')->comment('0: non; 1:oui');
 			$table->dateTime('date_ajout_media');

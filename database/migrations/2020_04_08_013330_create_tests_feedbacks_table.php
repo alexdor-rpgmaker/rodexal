@@ -15,8 +15,8 @@ class CreateTestsFeedbacksTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('tests_feedbacks', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_test');
-			$table->mediumInteger('id_membre');
+			$table->integer('id_test');
+			$table->integer('id_membre');
 			$table->smallInteger('note');
 			$table->dateTime('date');
 			$table->primary(['id_test','id_membre']);

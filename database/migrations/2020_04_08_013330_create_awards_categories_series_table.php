@@ -15,7 +15,7 @@ class CreateAwardsCategoriesSeriesTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('awards_categories_series', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_serie', true);
+			$table->integer('id_serie', true);
 			$table->string('nom_serie');
 			$table->text('description_serie');
 		});

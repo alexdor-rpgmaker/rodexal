@@ -15,10 +15,10 @@ class CreateDeliberationsSuffisammentJoueTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('deliberations_suffisamment_joue', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_deliberations_suffisamment_joue', true);
-			$table->mediumInteger('id_membre');
-			$table->mediumInteger('id_jury');
-			$table->mediumInteger('id_jeu');
+			$table->integer('id_deliberations_suffisamment_joue', true);
+			$table->integer('id_membre');
+			$table->integer('id_jury');
+			$table->integer('id_jeu');
 			$table->boolean('suffisamment_joue');
 		});
 	}

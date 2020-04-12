@@ -41,7 +41,7 @@ class CreateJeuxTable extends Migration
 			$table->text('informations');
 			$table->dateTime('date_inscription');
 			$table->integer('eligible');
-			$table->mediumInteger('favori');
+			$table->integer('favori');
 			$table->integer('nb_commentaires');
 			$table->boolean('can_be_tested');
 		});

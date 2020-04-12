@@ -18,7 +18,7 @@ class CreateScreenshotsDuMomentTable extends Migration
 			$table->smallInteger('id_screenshot', true);
 			$table->string('url_screenshot');
 			$table->dateTime('date');
-			$table->mediumInteger('id_membre');
+			$table->integer('id_membre');
 		});
 	}
 

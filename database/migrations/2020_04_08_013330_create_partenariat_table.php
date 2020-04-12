@@ -15,7 +15,7 @@ class CreatePartenariatTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('partenariat', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_partenariat', true);
+			$table->integer('id_partenariat', true);
 			$table->string('nom_site');
 			$table->string('lien_site');
 			$table->string('lien_banniere');

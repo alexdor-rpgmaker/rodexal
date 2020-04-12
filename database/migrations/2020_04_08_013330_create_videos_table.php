@@ -15,11 +15,11 @@ class CreateVideosTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('videos', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_video', true);
+			$table->integer('id_video', true);
 			$table->string('nom_video');
 			$table->string('url_video');
-			$table->mediumInteger('id_jeu');
-			$table->mediumInteger('id_membre');
+			$table->integer('id_jeu');
+			$table->integer('id_membre');
 			$table->dateTime('date_publication');
 			$table->smallInteger('statut_video');
 		});

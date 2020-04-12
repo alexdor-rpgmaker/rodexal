@@ -25,7 +25,7 @@ class CreateMembresTable extends Migration
 			$table->string('confirmation');
 			$table->string('titre');
 			$table->dateTime('date_inscription');
-			$table->dateTime('date_visite');
+            $table->dateTime('date_visite');
 			$table->date('date_naissance');
 			$table->smallInteger('sexe')->comment('0:n/a,1:h,2:f');
 			$table->string('ip_inscription', 20);
@@ -46,7 +46,7 @@ class CreateMembresTable extends Migration
 			$table->text('texte_perso');
 			$table->integer('mp_non_lus');
 			$table->smallInteger('design')->default(5)->comment('0:lifaen,1:walinaEtKhoryl,2:papillon,3:booskaboo,4:rpgmaker2000,5:alexre');
-			$table->mediumInteger('nb_messages');
+			$table->integer('nb_messages');
 			$table->string('preferences', 20)->default('1;0;');
 			$table->boolean('is_fake')->default(0);
 			$table->string('discord_id', 100);

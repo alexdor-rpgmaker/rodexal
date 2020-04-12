@@ -15,9 +15,9 @@ class CreateTestsAverageCharTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('tests_average_char', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_tests_average_char', true);
-			$table->mediumInteger('id_test');
-			$table->mediumInteger('average_char');
+			$table->integer('id_tests_average_char', true);
+			$table->integer('id_test');
+			$table->integer('average_char');
 		});
 	}
 

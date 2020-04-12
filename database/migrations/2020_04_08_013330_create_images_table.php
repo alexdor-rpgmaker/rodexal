@@ -15,9 +15,9 @@ class CreateImagesTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('images', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_image', true);
+			$table->integer('id_image', true);
 			$table->string('url_image');
-			$table->mediumInteger('id_membre');
+			$table->integer('id_membre');
 			$table->dateTime('date_upload');
 		});
 	}

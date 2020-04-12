@@ -15,9 +15,9 @@ class CreateSeriesTestsJeuxJuresTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('series_tests_jeux_jures', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_serie');
-			$table->mediumInteger('id_jeu');
-			$table->mediumInteger('id_jury');
+			$table->integer('id_serie');
+			$table->integer('id_jeu');
+			$table->integer('id_jury');
 			$table->smallInteger('statut_jeu_jure')->comment('0: ???; 1: attribué a un moment ; 2: doit le faire maintenant');
 			$table->primary(['id_serie','id_jeu','id_jury']);
 		});

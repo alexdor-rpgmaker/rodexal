@@ -15,8 +15,8 @@ class CreateNewsCategoriesPivotTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('news_categories_pivot', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_news');
-			$table->mediumInteger('id_categorie');
+			$table->integer('id_news');
+			$table->integer('id_categorie');
 			$table->primary(['id_news','id_categorie']);
 		});
 	}

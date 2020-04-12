@@ -15,10 +15,10 @@ class CreateDeliberationsCommentairesTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('deliberations_commentaires', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_deliberations_commentaires', true);
-			$table->mediumInteger('id_membre');
-			$table->mediumInteger('id_jury');
-			$table->mediumInteger('id_categorie');
+			$table->integer('id_deliberations_commentaires', true);
+			$table->integer('id_membre');
+			$table->integer('id_jury');
+			$table->integer('id_categorie');
 			$table->text('contenu_deliberation');
 		});
 	}

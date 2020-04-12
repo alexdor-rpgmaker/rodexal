@@ -15,9 +15,9 @@ class CreateJeuxUploadsTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('jeux_uploads', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_jeu_upload', true);
+			$table->integer('id_jeu_upload', true);
 			$table->string('url_jeu_upload');
-			$table->mediumInteger('id_membre');
+			$table->integer('id_membre');
 			$table->dateTime('date_upload');
 		});
 	}

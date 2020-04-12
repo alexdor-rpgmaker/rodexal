@@ -15,8 +15,8 @@ class CreateNotesTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('notes', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_note', true);
-			$table->mediumInteger('id_test');
+			$table->integer('id_note', true);
+			$table->integer('id_test');
 			$table->decimal('total', 10)->default(0.00);
 			$table->decimal('col_1', 10)->nullable()->default(0.00);
 			$table->decimal('col_2', 10)->nullable()->default(0.00);

@@ -15,7 +15,7 @@ class CreateCarrouselTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('carrousel', function(Blueprint $table)
 		{
-			$table->mediumInteger('id', true);
+			$table->integer('id', true);
 			$table->string('url_image');
 			$table->string('alt');
 			$table->string('description');

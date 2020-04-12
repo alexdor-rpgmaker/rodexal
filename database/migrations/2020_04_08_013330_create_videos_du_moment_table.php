@@ -18,7 +18,7 @@ class CreateVideosDuMomentTable extends Migration
 			$table->smallInteger('id_video', true);
 			$table->string('code_video');
 			$table->dateTime('date');
-			$table->mediumInteger('id_membre');
+			$table->integer('id_membre');
 		});
 	}
 

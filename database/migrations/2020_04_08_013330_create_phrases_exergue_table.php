@@ -18,7 +18,7 @@ class CreatePhrasesExergueTable extends Migration
 			$table->smallInteger('id_phrase', true);
 			$table->string('phrase');
 			$table->dateTime('date');
-			$table->mediumInteger('id_membre');
+			$table->integer('id_membre');
 		});
 	}
 

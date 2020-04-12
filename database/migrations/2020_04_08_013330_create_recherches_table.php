@@ -18,7 +18,7 @@ class CreateRecherchesTable extends Migration
 			$table->integer('id_recherche', true);
 			$table->string('contenu_recherche');
 			$table->integer('id_membre');
-			$table->mediumInteger('nb_resultats');
+			$table->integer('nb_resultats');
 			$table->dateTime('date_recherche');
 		});
 	}

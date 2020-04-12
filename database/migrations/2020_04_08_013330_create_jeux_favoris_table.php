@@ -15,9 +15,9 @@ class CreateJeuxFavorisTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('jeux_favoris', function(Blueprint $table)
 		{
-			$table->mediumInteger('id', true);
-			$table->mediumInteger('id_membre');
-			$table->mediumInteger('id_jeu');
+			$table->integer('id', true);
+			$table->integer('id_membre');
+			$table->integer('id_jeu');
 			$table->smallInteger('favori');
 			$table->dateTime('date_modification');
 		});

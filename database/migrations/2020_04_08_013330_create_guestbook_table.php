@@ -16,7 +16,7 @@ class CreateGuestbookTable extends Migration
 		Schema::connection('former_app_database')->create('guestbook', function(Blueprint $table)
 		{
 			$table->increments('id_signature');
-			$table->mediumInteger('id_membre');
+			$table->integer('id_membre');
 			$table->smallInteger('id_guestbook');
 			$table->string('nom', 40);
 			$table->string('mail', 40);

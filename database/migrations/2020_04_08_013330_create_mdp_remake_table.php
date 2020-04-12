@@ -15,9 +15,9 @@ class CreateMdpRemakeTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('mdp_remake', function(Blueprint $table)
 		{
-			$table->mediumInteger('id', true);
+			$table->integer('id', true);
 			$table->integer('nb_verif');
-			$table->mediumInteger('id_mb');
+			$table->integer('id_mb');
 			$table->string('mail', 100);
 			$table->integer('timestamp');
 		});

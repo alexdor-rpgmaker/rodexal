@@ -15,8 +15,8 @@ class CreateRecrutementTable extends Migration
 	{
 		Schema::connection('former_app_database')->create('recrutement', function(Blueprint $table)
 		{
-			$table->mediumInteger('id_recrutement', true);
-			$table->mediumInteger('id_membre');
+			$table->integer('id_recrutement', true);
+			$table->integer('id_membre');
 			$table->string('postes_interesses')->comment('1:respjure;2:communication;3:animation;4:qualite;5:;6:prez');
 			$table->string('poste_main');
 			$table->text('experiences');
