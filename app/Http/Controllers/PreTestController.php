@@ -3,17 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\PreTest;
-use BBCode;
+use App\Helpers\BBCode;
+
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class PreTestController extends Controller
 {
+
+    /**
+     * @var GuzzleClient
+     */
     private $client;
+
     public function __construct(GuzzleClient $client)
     {
         $this->client = $client;
@@ -66,7 +72,15 @@ class PreTestController extends Controller
             $validator_array["questionnaire.$field.activated"] = 'required|boolean';
             $validator_array["questionnaire.$field.explanation"] = 'nullable|string';
         }
+
         $this->validate($request, $validator_array);
+
+        // TODO ?
+        // try {
+        //     $this->validate($request, $validator_array);
+        // } catch (ValidationException $e) {
+        //     abort(400, "Non valide");
+        // }
 
         $preTest = new PreTest;
         $preTest->user_id = Auth::id();
@@ -120,7 +134,7 @@ class PreTestController extends Controller
 
     // Helper
 
-    private static function checkGameIsInUserAssignments($gameId, $userId, $client)
+    private static function checkGameIsInUserAssignments($gameId, $userId, GuzzleClient $client)
     {
         if (env('DUSK', false)) {
             return true;
@@ -129,10 +143,10 @@ class PreTestController extends Controller
         $gameInAssignment = current(array_filter($assignments, function ($assignment) use ($gameId) {
             return $assignment->game_id == $gameId;
         }));
-        abort_unless($gameInAssignment, 403, "Ce jeu ne vous est pas attribué !");
+        return abort_unless($gameInAssignment, 403, "Ce jeu ne vous est pas attribué !");
     }
 
-    private static function fetchUserAssignments($userId, $client)
+    private static function fetchUserAssignments($userId, GuzzleClient $client)
     {
         try {
             $response = $client->request('GET', '/api/v0/attributions.php', [
@@ -142,28 +156,29 @@ class PreTestController extends Controller
                     'id_session' => 20, // TODO: Make this variable
                 ],
             ]);
+
+            return json_decode($response->getBody());
         } catch (RequestException $e) {
             Log::warning($e);
-            abort($e->getResponse()->getStatusCode());
+            return abort($e->getResponse()->getStatusCode());
         }
-        return json_decode($response->getBody());
     }
 
-    private static function fetchGame($id, $client)
+    private static function fetchGame($id, GuzzleClient $client)
     {
         try {
             $response = $client->request('GET', '/api/v0/jeu.php', [
                 'base_uri' => env('FORMER_APP_URL'),
                 'query' => ['id' => intval($id)],
             ]);
+            return json_decode($response->getBody());
         } catch (RequestException $e) {
             Log::warning($e);
-            abort($e->getResponse()->getStatusCode());
+            return abort($e->getResponse()->getStatusCode());
         }
-        return json_decode($response->getBody());
     }
 
-    private static function assignTestToUser($game_id, $user_id, $client)
+    private static function assignTestToUser($game_id, $user_id, GuzzleClient $client)
     {
         if (env('DUSK', false)) {
             return null;

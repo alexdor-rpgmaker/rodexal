@@ -9,6 +9,7 @@
   "license": "CC",
   "require": {
     "php": "^7.2.5",
+    "ext-json": "*",
     "ext-intl": "*",
     "cviebrock/eloquent-sluggable": "^7.0",
     "doctrine/dbal": "^2.10",
@@ -63,7 +64,7 @@
   "scripts": {
     "test": "phpunit --testdox",
     "test:watch": "phpunit-watcher watch --testdox",
-    "test:e2e": " php artisan dusk --testdox",
+    "test:e2e": "php artisan dusk --testdox",
     "post-autoload-dump": [
       "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
       "@php artisan package:discover --ansi"

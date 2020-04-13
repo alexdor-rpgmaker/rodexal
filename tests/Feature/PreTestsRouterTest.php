@@ -8,16 +8,12 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 /**
  * @testdox PreTestsRouter
  */
-class PreTestsRouterTest extends TestCase
+class PreTestsRouterTest extends FeatureTest
 {
-    use RefreshDatabase;
-
     // Show
 
     /**
@@ -329,11 +325,6 @@ class PreTestsRouterTest extends TestCase
         ]));
     }
 
-    private function newAssignmentResponse()
-    {
-        return new Response(200, [], $new_id);
-    }
-
     private function mockHttpClientShow()
     {
         $mock = new MockHandler([
@@ -355,15 +346,20 @@ class PreTestsRouterTest extends TestCase
         $this->app->instance(GuzzleClient::class, $client);
     }
 
-    private function mockHttpClientStore()
-    {
-        $new_id = 14;
-        $mock = new MockHandler([
-            self::assignmentsResponse(),
-            self::newAssignmentResponse(),
-        ]);
-        $handler = HandlerStack::create($mock);
-        $client = new GuzzleClient(['handler' => $handler]);
-        $this->app->instance(GuzzleClient::class, $client);
-    }
+//    private function mockHttpClientStore()
+//    {
+//        $mock = new MockHandler([
+//            self::assignmentsResponse(),
+//            self::newAssignmentResponse(),
+//        ]);
+//        $handler = HandlerStack::create($mock);
+//        $client = new GuzzleClient(['handler' => $handler]);
+//        $this->app->instance(GuzzleClient::class, $client);
+//    }
+//
+//    private function newAssignmentResponse()
+//    {
+//        $new_id = 14;
+//        return new Response(200, [], $new_id);
+//    }
 }

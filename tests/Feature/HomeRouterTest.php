@@ -2,12 +2,10 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-// use Illuminate\Foundation\Testing\WithoutMiddleware;
 /**
  * @testdox HomeRouter
  */
-class HomeRouterTest extends TestCase
+class HomeRouterTest extends FeatureTest
 {
     // Index
 

@@ -2,12 +2,10 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 
-class Word extends Model
+class Word extends MainModel
 {
     use Sluggable, SluggableScopeHelpers;
 

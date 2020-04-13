@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Api\V0;
 
 use App\Former\Game;
 use App\Former\Member;
@@ -8,19 +8,13 @@ use App\Former\Screenshot;
 use App\Former\Session;
 use App\Former\Contributor;
 
-use Tests\TestCase;
+use Tests\Feature\FeatureTest;
 
 /**
  * @testdox GameApiRouter
  */
-class GameApiRouterTest extends TestCase
+class GameApiRouterTest extends FeatureTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->artisan('migrate:refresh');
-    }
-
     /**
      * @testdox On peut accéder à la liste des jeux via l'API
      */
@@ -154,13 +148,13 @@ class GameApiRouterTest extends TestCase
                     'size' => 130,
                     'website' => 'https://fake-game.com',
                     'creation_group' => 'Faking Games Software',
-                    'logo' => 'http://fake-alex-dor.test/uploads/logos/fake-game-logo.png',
+                    'logo' => 'http://alex-dor.test/uploads/logos/fake-game-logo.png',
                     'created_at' => '2020-04-01T12:00:00+02:00',
                     'description' => 'Just a sample game in order to test',
                     'download_links' => [
                         [
                             'platform' => 'windows',
-                            'url' => 'http://fake-alex-dor.test/archives/2001/jeux/fake_game.zip'
+                            'url' => 'http://alex-dor.test/archives/2001/jeux/fake_game.zip'
                         ]
                     ],
                     'authors' => [
@@ -178,11 +172,11 @@ class GameApiRouterTest extends TestCase
                     'screenshots' => [
                         [
                             'title' => 'First screenshot',
-                            'url' => 'http://fake-alex-dor.test/uploads/screenshots/2001/screenshot-1.jpg'
+                            'url' => 'http://alex-dor.test/uploads/screenshots/2001/screenshot-1.jpg'
                         ],
                         [
                             'title' => 'Second screenshot',
-                            'url' => 'http://fake-alex-dor.test/uploads/screenshots/2001/screenshot-2.jpg'
+                            'url' => 'http://alex-dor.test/uploads/screenshots/2001/screenshot-2.jpg'
                         ]
                     ]
                 ],

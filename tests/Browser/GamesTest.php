@@ -2,16 +2,14 @@
 
 namespace Tests\Browser;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
+use Throwable;
 
-class GamesTest extends DuskTestCase
+class GamesTest extends BrowserTest
 {
-    use DatabaseMigrations;
-
     /**
      * @testdox On peut consulter la liste des jeux du concours
+     * @throws Throwable
      */
     public function testConsulterListeDesJeux()
     {

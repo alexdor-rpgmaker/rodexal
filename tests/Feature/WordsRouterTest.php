@@ -5,16 +5,11 @@ namespace Tests\Feature;
 use App\User;
 use App\Word;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
 /**
  * @testdox WordsRouter
  */
-class WordsRouterTest extends TestCase
+class WordsRouterTest extends FeatureTest
 {
-    use RefreshDatabase;
-
     // Index
 
     /**

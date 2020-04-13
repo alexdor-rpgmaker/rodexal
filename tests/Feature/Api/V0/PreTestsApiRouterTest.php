@@ -1,18 +1,15 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Api\V0;
 
 use App\PreTest;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Tests\Feature\FeatureTest;
 
 /**
  * @testdox PreTestsApiRouter
  */
-class PreTestsApiRouterTest extends TestCase
+class PreTestsApiRouterTest extends FeatureTest
 {
-    use RefreshDatabase;
-
     /**
      * @testdox On peut accéder à la liste des QCM remplis via l'API
      */

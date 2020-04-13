@@ -4,17 +4,15 @@ namespace Tests\Browser;
 
 use App\User;
 
-use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 use Facebook\WebDriver\WebDriverBy;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Throwable;
 
-class QcmTest extends DuskTestCase
+class QcmTest extends BrowserTest
 {
-    use DatabaseMigrations;
-
     /**
      * @testdox On est redirigés sur l'ancien site si on essaye de créer un QCM en n'étant pas connecté
+     * @throws Throwable
      */
     public function testRedirectionSiCreerQcmNonConnecte()
     {
@@ -27,6 +25,7 @@ class QcmTest extends DuskTestCase
 
     /**
      * @testdox On peut créer et modifier un QCM si on est juré
+     * @throws Throwable
      */
     public function testCreerEtModifierQcmSiJury()
     {
@@ -35,6 +34,7 @@ class QcmTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)
                 ->visit('/qcm/creer?game_id=937')
+                ->assertPathBeginsWith('/qcm/creer')
                 ->assertDontSee('Ce jeu ne vous est pas attribué !')
                 ->assertSee('Remplir un QCM pour le jeu');
 

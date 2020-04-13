@@ -4,16 +4,14 @@ namespace Tests\Browser;
 
 use App\User;
 
-use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Throwable;
 
-class DictionaryTest extends DuskTestCase
+class DictionaryTest extends BrowserTest
 {
-    use DatabaseMigrations;
-
     /**
      * @testdox On est redirigés sur l'ancien site si on essaye de créer un mot du dictionnaire en n'étant pas connecté
+     * @throws Throwable
      */
     public function testRedirectionSiRemplirDictionnaireNonConnecte()
     {
@@ -26,6 +24,7 @@ class DictionaryTest extends DuskTestCase
 
     /**
      * @testdox On peut ajouter et modifier un mot du dictionnaire si on est admin
+     * @throws Throwable
      */
     public function testRemplirDictionnaireSiConnecte()
     {

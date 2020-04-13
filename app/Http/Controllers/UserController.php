@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Log;
 use App\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use League\OAuth2\Client\Provider\GenericProvider as GenericOAuth2Provider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use UnexpectedValueException;
 
 class UserController extends Controller
 {
@@ -50,7 +51,7 @@ class UserController extends Controller
                 session(['resource-owner' => $resourceOwnerArray]);
 
                 $user = User::where('id', $resourceOwnerArray['id'])->first();
-                if ($user === null) {
+                if (!$user) {
                     $user = new User;
                     $user->id = $resourceOwnerArray['id'];
                     $user->name = $resourceOwnerArray['username'];
@@ -66,7 +67,7 @@ class UserController extends Controller
             } catch (IdentityProviderException $e) {
                 Log::emergency($e);
                 return redirect('/dictionnaire')->with('status', 'Erreur dans la connexion...');
-            } catch (\UnexpectedValueException $e) {
+            } catch (UnexpectedValueException $e) {
                 Log::emergency($e);
                 return redirect('/dictionnaire')->with('status', 'Erreur dans la connexion...');
             }

@@ -3,9 +3,8 @@
 namespace App;
 
 use Illuminate\Support\Arr;
-use Illuminate\Database\Eloquent\Model;
 
-class PreTest extends Model
+class PreTest extends MainModel
 {
     protected $table = 'pre_tests';
 
