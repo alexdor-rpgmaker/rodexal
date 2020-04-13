@@ -121,6 +121,16 @@ class FixDefaultValues extends Migration
             $table->foreign('id_jeu')
                 ->references('id_jeu')->on('jeux');
         });
+
+        Schema::connection('former_app_database')->table('nomines', function (Blueprint $table) {
+            $table->smallInteger('is_vainqueur')->comment('0:non vainqueur; 1:vainqueur et/ou or; 2: argent; 3:bronze')->nullable(false)->change();
+
+            $table->foreign('id_jeu')
+                ->references('id_jeu')->on('jeux');
+
+            $table->foreign('id_categorie')
+                ->references('id_categorie')->on('awards_categories');
+        });
     }
 
     /**
@@ -146,6 +156,13 @@ class FixDefaultValues extends Migration
         if (Schema::connection('former_app_database')->hasTable('screenshots')) {
             Schema::connection('former_app_database')->table('screenshots', function (Blueprint $table) {
                 $table->dropForeign(['id_jeu']);
+            });
+        }
+
+        if (Schema::connection('former_app_database')->hasTable('screenshots')) {
+            Schema::connection('former_app_database')->table('nomines', function (Blueprint $table) {
+                $table->dropForeign(['id_jeu']);
+                $table->dropForeign(['id_categorie']);
             });
         }
     }

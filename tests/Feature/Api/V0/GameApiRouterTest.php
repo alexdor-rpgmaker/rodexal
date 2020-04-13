@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Api\V0;
 
+use App\Former\AwardSessionCategory;
 use App\Former\Game;
 use App\Former\Member;
+use App\Former\Nomination;
 use App\Former\Screenshot;
 use App\Former\Session;
 use App\Former\Contributor;
@@ -86,6 +88,32 @@ class GameApiRouterTest extends FeatureTest
             'local' => 'screenshot-x.jpg',
             'ordre' => 3,
             'statut_screenshot' => 0
+        ]);
+
+        factory(Nomination::class)->create([
+            'id_jeu' => $firstGame->id_jeu,
+            'is_vainqueur' => 1,
+            'id_categorie' => factory(AwardSessionCategory::class)->create([
+                'nom_categorie' => 'Gameplay',
+                'is_declinaison' => true
+            ]),
+        ]);
+        factory(Nomination::class)->create([
+            'id_jeu' => $firstGame->id_jeu,
+            'is_vainqueur' => 0,
+            'id_categorie' => factory(AwardSessionCategory::class)->create([
+                'nom_categorie' => 'Atmosphere',
+                'is_declinaison' => true
+            ])
+        ]);
+        factory(Nomination::class)->create([
+            'id_jeu' => $firstGame->id_jeu,
+            'is_vainqueur' => 1,
+            'id_categorie' => factory(AwardSessionCategory::class)->create([
+                'nom_categorie' => 'Deleted category',
+                'is_declinaison' => false,
+                'statut_categorie' => 0
+            ])
         ]);
 
         factory(Game::class)->create([
@@ -178,6 +206,18 @@ class GameApiRouterTest extends FeatureTest
                             'title' => 'Second screenshot',
                             'url' => 'http://alex-dor.test/uploads/screenshots/2001/screenshot-2.jpg'
                         ]
+                    ],
+                    'awards' => [
+                        [
+                            'status' => 'awarded',
+                            'award_level' => 'gold',
+                            'category_name' => 'Gameplay'
+                        ],
+                        [
+                            'status' => 'nominated',
+                            'award_level' => null,
+                            'category_name' => 'Atmosphere'
+                        ]
                     ]
                 ],
                 [
@@ -200,7 +240,8 @@ class GameApiRouterTest extends FeatureTest
                     'description' => 'Just a second sample game in order to test',
                     'download_links' => [],
                     'authors' => [],
-                    'screenshots' => []
+                    'screenshots' => [],
+                    'awards' => []
                 ]
             ]
         ]);

@@ -47,6 +47,11 @@ class Game extends FormerModel
         return $this->hasMany('App\Former\Screenshot', 'id_jeu')->where('statut_screenshot', '>', 0);
     }
 
+    public function awards()
+    {
+        return $this->belongsToMany('App\Former\AwardSessionCategory', 'nomines', 'id_jeu', 'id_categorie')->withPivot('is_vainqueur')->where('statut_categorie', '>', 0);
+    }
+
     /**
      * @return void
      */

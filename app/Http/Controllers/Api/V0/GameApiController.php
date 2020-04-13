@@ -12,7 +12,7 @@ class GameApiController extends Controller
     public function index()
     {
         // TODO : Check N+1
-        $games = Game::with(['session', 'contributors.member', 'screenshots'])->paginate(30);
+        $games = Game::with(['session', 'contributors.member', 'screenshots', 'awards'])->paginate(30);
         $games->getCollection()->transform(function ($game) {
             $authors = $game->contributors->transform(function ($contributor) {
                 $username = $contributor->id_membre ? $contributor->member->pseudo : $contributor->nom_membre;
@@ -23,10 +23,34 @@ class GameApiController extends Controller
                     'role' => $contributor->role
                 ];
             });
+
             $screenshots = $game->screenshots->transform(function ($screenshot) use ($game) {
                 return [
                     'title' => StringParser::html($screenshot->nom_screenshot),
                     'url' => $screenshot->getImageUrlForSession($game->session->id_session),
+                ];
+            });
+
+            $awards = $game->awards->transform(function ($award) {
+                $awardLevel = null;
+                if ($award->is_declinaison) {
+                    switch ($award->pivot->is_vainqueur) {
+                        case 1:
+                            $awardLevel = 'gold';
+                            break;
+                        case 2:
+                            $awardLevel = 'silver';
+                            break;
+                        case 3:
+                            $awardLevel = 'bronze';
+                            break;
+                    }
+                }
+
+                return [
+                    'status' => $award->pivot->is_vainqueur > 0 ? 'awarded' : 'nominated',
+                    'award_level' => $awardLevel,
+                    'category_name' => StringParser::html($award->nom_categorie)
                 ];
             });
 
@@ -50,7 +74,8 @@ class GameApiController extends Controller
                 'description' => $game->description_jeu,
                 'download_links' => $this->extractDownloadLinks($game),
                 'authors' => $authors,
-                'screenshots' => $screenshots
+                'screenshots' => $screenshots,
+                'awards' => $awards
             ];
         });
         return response()->json($games, 200);
