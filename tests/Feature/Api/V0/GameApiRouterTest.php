@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Former\Game;
 use App\Former\Member;
+use App\Former\Screenshot;
 use App\Former\Session;
 use App\Former\Contributor;
 
@@ -14,6 +15,8 @@ use Tests\TestCase;
  */
 class GameApiRouterTest extends TestCase
 {
+//    protected $connectionsToTransact = ['mysql', 'former_app_database'];
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -27,12 +30,13 @@ class GameApiRouterTest extends TestCase
     {
         $session = factory(Session::class)->create([
             'id_session' => 1,
-            'etape' => 1,
+            'etape' => 3,
             'nom_session' => 'Session 2001',
         ]);
         $firstGame = factory(Game::class)->create([
+            'id_jeu' => 1,
             'id_session' => $session->id_session,
-            'statut_jeu' => 1,
+            'statut_jeu' => 2,
             'nom_jeu' => 'Fake Game',
             'genre_jeu' => 'Adventure game',
             'support' => 'RPG Maker 2003',
@@ -72,16 +76,74 @@ class GameApiRouterTest extends TestCase
             'ordre' => 3,
             'statut_participant' => 0
         ]);
+        factory(Screenshot::class)->create([
+            'id_jeu' => $firstGame->id_jeu,
+            'nom_screenshot' => 'Second screenshot',
+            'local' => 'screenshot-2.jpg',
+            'ordre' => 2
+        ]);
+        factory(Screenshot::class)->create([
+            'id_jeu' => $firstGame->id_jeu,
+            'nom_screenshot' => 'First screenshot',
+            'local' => 'screenshot-1.jpg',
+            'ordre' => 1
+        ]);
+        factory(Screenshot::class)->create([
+            'id_jeu' => $firstGame->id_jeu,
+            'nom_screenshot' => 'Deleted screenshot',
+            'local' => 'screenshot-x.jpg',
+            'ordre' => 3,
+            'statut_screenshot' => 0
+        ]);
+
+        factory(Game::class)->create([
+            'id_jeu' => 2,
+            'id_session' => $session->id_session,
+            'statut_jeu' => 1,
+            'nom_jeu' => 'Fake Game 2',
+            'genre_jeu' => 'Racing game',
+            'support' => 'RPG Maker XP',
+            'theme' => 'Faking',
+            'duree' => '1:00',
+            'poids' => '110',
+            'site_officiel' => 'https://fake-game2.com',
+            'description_jeu' => 'Just a second sample game in order to test',
+            'groupe' => null,
+            'logo' => null,
+            'logo_distant' => 'https://fake-game2.com/logo.png',
+            'date_inscription' => '2020-04-03 18:00:00',
+        ]);
+        factory(Game::class)->states('deleted')->create();
 
         $response = $this->get('/api/v0/games', ['query' => ['page' => 1]]);
 
         $response->assertOk();
 
+        // Data count
+        $response->assertJsonCount(2, 'data');
+
+        // Pagination
+        $response->assertJsonFragment([
+            "current_page" => 1,
+            "from" => 1,
+            "last_page" => 1,
+            "per_page" => 30,
+            "to" => 2,
+            "total" => 2,
+
+            "path" => "http://rodexal.test/api/v0/games",
+            "first_page_url" => "http://rodexal.test/api/v0/games?page=1",
+            "last_page_url" => "http://rodexal.test/api/v0/games?page=1",
+            "prev_page_url" => null,
+            "next_page_url" => null,
+        ]);
+
+        // Data
         $response->assertJsonFragment([
             'data' => [
                 [
                     'id' => 1,
-                    'status' => 'applied',
+                    'status' => 'qualified',
                     'title' => 'Fake Game',
                     'session' => [
                         'id' => 1,
@@ -95,7 +157,7 @@ class GameApiRouterTest extends TestCase
                     'website' => 'https://fake-game.com',
                     'creation_group' => 'Faking Games Software',
                     'logo' => 'http://fake-alex-dor.test/uploads/logos/fake-game-logo.png',
-                    'created_at' => '2020-04-01T12:00:00+0200',
+                    'created_at' => '2020-04-01T12:00:00+02:00',
                     'description' => 'Just a sample game in order to test',
                     'download_links' => [
                         [
@@ -115,6 +177,38 @@ class GameApiRouterTest extends TestCase
                             'role' => 'Programmer',
                         ]
                     ],
+                    'screenshots' => [
+                        [
+                            'title' => 'First screenshot',
+                            'url' => 'http://fake-alex-dor.test/uploads/screenshots/2001/screenshot-1.jpg'
+                        ],
+                        [
+                            'title' => 'Second screenshot',
+                            'url' => 'http://fake-alex-dor.test/uploads/screenshots/2001/screenshot-2.jpg'
+                        ]
+                    ]
+                ],
+                [
+                    'id' => 2,
+                    'status' => 'not_qualified',
+                    'title' => 'Fake Game 2',
+                    'session' => [
+                        'id' => 1,
+                        'name' => 'Session 2001',
+                    ],
+                    'genre' => 'Racing game',
+                    'software' => 'RPG Maker XP',
+                    'theme' => 'Faking',
+                    'duration' => '1:00',
+                    'size' => 110,
+                    'website' => 'https://fake-game2.com',
+                    'creation_group' => null,
+                    'logo' => 'https://fake-game2.com/logo.png',
+                    'created_at' => '2020-04-03T18:00:00+02:00',
+                    'description' => 'Just a second sample game in order to test',
+                    'download_links' => [],
+                    'authors' => [],
+                    'screenshots' => []
                 ]
             ]
         ]);

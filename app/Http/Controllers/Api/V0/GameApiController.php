@@ -7,27 +7,32 @@ use App\Former\Session;
 use App\Helpers\StringParser;
 use App\Http\Controllers\Controller;
 
-use Exception;
-use DateTime;
-use DateTimeZone;
-
 class GameApiController extends Controller
 {
     public function index()
     {
-        $games = Game::with(['session', 'contributors.member'])->paginate(30);
+        // TODO : Check N+1
+        $games = Game::with(['session', 'contributors.member', 'screenshots'])->paginate(30);
         $games->getCollection()->transform(function ($game) {
             $authors = $game->contributors->transform(function ($contributor) {
+                $username = $contributor->id_membre ? $contributor->member->pseudo : $contributor->nom_membre;
+
                 return [
                     'id' => $contributor->id_membre,
-                    'username' => $contributor->id_membre ? StringParser::html($contributor->member->pseudo) : $contributor->nom_membre,
+                    'username' => StringParser::html($username),
                     'role' => $contributor->role
+                ];
+            });
+            $screenshots = $game->screenshots->transform(function ($screenshot) use ($game) {
+                return [
+                    'title' => StringParser::html($screenshot->nom_screenshot),
+                    'url' => $screenshot->getImageUrlForSession($game->session->id_session),
                 ];
             });
 
             return [
                 'id' => $game->id_jeu,
-                'status' => $game->getStatus(), // TODO N+1
+                'status' => $game->getStatus(),
                 'title' => $game->nom_jeu,
                 'session' => [
                     'id' => $game->session->id_session,
@@ -41,25 +46,14 @@ class GameApiController extends Controller
                 'website' => $game->site_officiel,
                 'creation_group' => $game->groupe,
                 'logo' => $game->getLogoUrl(),
-                'created_at' => $this->dateAsIso($game->date_inscription),
+                'created_at' => $game->date_inscription->format('c'),
                 'description' => $game->description_jeu,
                 'download_links' => $this->extractDownloadLinks($game),
-                'authors' => $authors
+                'authors' => $authors,
+                'screenshots' => $screenshots
             ];
         });
         return response()->json($games, 200);
-    }
-
-    private function dateAsIso($date)
-    {
-        // TODO : Use Carbon
-        $parisTimezone = new DateTimeZone('Europe/Paris');
-        try {
-            $dateWithTimezone = new DateTime($date, $parisTimezone);
-            return $dateWithTimezone->format(DateTime::ISO8601);
-        } catch (Exception $e) {
-            return null;
-        }
     }
 
     private function extractDownloadLinks($game)

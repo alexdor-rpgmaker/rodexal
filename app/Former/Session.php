@@ -19,7 +19,7 @@ class Session extends FormerModel
      */
     protected $attributes = [
         'statut_session' => 1,
-        'etape' => '1',
+        'etape' => 1,
     ];
 
     public static function nameFromId($sessionId) {

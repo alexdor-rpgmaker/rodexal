@@ -94,7 +94,7 @@ class FixDefaultValues extends Migration
         });
 
         Schema::connection('former_app_database')->table('participants', function (Blueprint $table) {
-            $table->integer('id_jeu')->nullable(false)->default(0)->change();
+            $table->integer('id_jeu')->nullable(false)->change();
             $table->integer('id_membre')->nullable()->change();
             $table->smallInteger('statut_participant')->nullable(false)->default(1)->change();
             $table->string('nom_membre')->nullable()->change();
@@ -109,6 +109,18 @@ class FixDefaultValues extends Migration
             $table->foreign('id_membre')
                 ->references('id_membre')->on('membres');
         });
+
+        Schema::connection('former_app_database')->table('screenshots', function (Blueprint $table) {
+            $table->integer('id_jeu')->nullable(false)->change();
+            $table->string('nom_screenshot')->nullable()->change();
+            $table->text('distant')->nullable()->change();
+            $table->text('local')->nullable()->change();
+            $table->integer('statut_screenshot')->nullable(false)->default(1)->change();
+            $table->smallInteger('ordre')->nullable()->change();
+
+            $table->foreign('id_jeu')
+                ->references('id_jeu')->on('jeux');
+        });
     }
 
     /**
@@ -118,13 +130,23 @@ class FixDefaultValues extends Migration
      */
     public function down()
     {
-        Schema::connection('former_app_database')->table('jeux', function (Blueprint $table) {
-            $table->dropForeign(['id_session']);
-        });
+        if (Schema::connection('former_app_database')->hasTable('jeux')) {
+            Schema::connection('former_app_database')->table('jeux', function (Blueprint $table) {
+                $table->dropForeign(['id_session']);
+            });
+        }
 
-        Schema::connection('former_app_database')->table('participants', function (Blueprint $table) {
-            $table->dropForeign(['id_jeu']);
-            $table->dropForeign(['id_membre']);
-        });
+        if (Schema::connection('former_app_database')->hasTable('participants')) {
+            Schema::connection('former_app_database')->table('participants', function (Blueprint $table) {
+                $table->dropForeign(['id_jeu']);
+                $table->dropForeign(['id_membre']);
+            });
+        }
+
+        if (Schema::connection('former_app_database')->hasTable('screenshots')) {
+            Schema::connection('former_app_database')->table('screenshots', function (Blueprint $table) {
+                $table->dropForeign(['id_jeu']);
+            });
+        }
     }
 }

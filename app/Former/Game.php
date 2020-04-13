@@ -3,6 +3,7 @@
 namespace App\Former;
 
 use App\Helpers\StringParser;
+use Illuminate\Database\Eloquent\Builder;
 
 class Game extends FormerModel
 {
@@ -22,6 +23,14 @@ class Game extends FormerModel
     protected $attributes = [
         'statut_jeu' => 1
     ];
+    /**
+     * Attributes automatically parsed as dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'date_inscription',
+    ];
 
     public function session()
     {
@@ -31,6 +40,21 @@ class Game extends FormerModel
     public function contributors()
     {
         return $this->hasMany('App\Former\Contributor', 'id_jeu')->where('statut_participant', '>', 0);
+    }
+
+    public function screenshots()
+    {
+        return $this->hasMany('App\Former\Screenshot', 'id_jeu')->where('statut_screenshot', '>', 0);
+    }
+
+    /**
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope('deleted', function (Builder $builder) {
+            $builder->where('statut_jeu', '>', 0);
+        });
     }
 
     public function getStatus(): string
@@ -67,7 +91,10 @@ class Game extends FormerModel
         return $stepStatusMatrix[$this->session->etape][$this->statut_jeu];
     }
 
-    public function getLogoUrl(): string
+    /**
+     * @return string|null
+     */
+    public function getLogoUrl()
     {
         if (!empty($this->logo)) {
             return env('FORMER_APP_URL') . '/uploads/logos/' . $this->logo;
