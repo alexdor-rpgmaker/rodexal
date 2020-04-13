@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Blade;
+use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,14 +20,6 @@ class AppServiceProvider extends ServiceProvider
             'create' => 'creer',
             'edit' => 'editer'
         ]);
-
-        if(config('app.env') === 'production') {
-            \URL::forceScheme('https');
-        }
-
-        /* Blade::directive('datetime', function ($expression) {
-            return "<?php echo ($expression)->format('m/d/Y H:i'); ?>";
-        }); */
     }
 
     /**
@@ -36,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if ($this->app->environment() !== 'production') {
+            $this->app->register(IdeHelperServiceProvider::class);
+        }
     }
 }

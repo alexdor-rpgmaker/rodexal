@@ -15,8 +15,6 @@ use Tests\TestCase;
  */
 class GameApiRouterTest extends TestCase
 {
-//    protected $connectionsToTransact = ['mysql', 'former_app_database'];
-
     protected function setUp(): void
     {
         parent::setUp();

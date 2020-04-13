@@ -6,7 +6,6 @@ describe('Jukebox', () => {
   const methods = {
     fetchMusics: jest.fn(),
     initializeAmplitude: jest.fn(),
-    initializeAmplitude: jest.fn(),
     playCallback: jest.fn(),
     durationChangeCallback: jest.fn(),
     songChangeCallback: jest.fn(),
