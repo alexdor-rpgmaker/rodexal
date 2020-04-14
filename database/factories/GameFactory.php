@@ -8,6 +8,7 @@ $factory->define(App\Former\Game::class, function (Faker $faker) {
         'nom_jeu' => $faker->words(3, true),
         'id_session' => factory(Session::class),
         'statut_jeu' => 1,
+        'date_inscription' => now()
     ];
 });
 

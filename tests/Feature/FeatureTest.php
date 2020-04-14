@@ -13,8 +13,13 @@ abstract class FeatureTest extends TestCase
         parent::setUp();
 
         if (!self::$databasesRefreshed) {
-            $this->artisan('migrate:refresh');
+            $this->resetDatabase();
             self::$databasesRefreshed = true;
         }
+    }
+
+    protected function resetDatabase(): void
+    {
+        $this->artisan('migrate:refresh');
     }
 }

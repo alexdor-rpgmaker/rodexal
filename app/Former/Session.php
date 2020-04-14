@@ -22,7 +22,8 @@ class Session extends FormerModel
         'etape' => 1,
     ];
 
-    public static function nameFromId($sessionId) {
+    public static function nameFromId($sessionId)
+    {
         $sessionName = ($sessionId < 10) ? '0' . $sessionId : $sessionId;
         if ($sessionId == 3) {
             $sessionName .= '-2004';
@@ -37,5 +38,23 @@ class Session extends FormerModel
         }
 
         return "20" . $sessionName;
+    }
+
+    public static function sessionIdExists($sessionId, $options = ['include_abandonned_sessions' => true]): bool
+    {
+        if (
+            $sessionId < 1 ||
+            $sessionId == 4 ||
+            $sessionId == 18 ||
+            $sessionId > 20 # TODO : Make variable?
+        ) {
+            return false;
+        }
+
+        if (!$options['include_abandonned_sessions'] && $sessionId == 8) {
+            return false;
+        }
+
+        return true;
     }
 }

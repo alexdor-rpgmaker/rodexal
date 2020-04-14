@@ -17,10 +17,16 @@ use Tests\Feature\FeatureTest;
  */
 class GameApiRouterTest extends FeatureTest
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->resetDatabase();
+    }
+
     /**
      * @testdox On peut accéder à la liste des jeux via l'API
      */
-    public function testGamesApiIndex()
+    public function testListGamesWithPagination()
     {
         $session = factory(Session::class)->create([
             'id_session' => 1,
@@ -245,5 +251,118 @@ class GameApiRouterTest extends FeatureTest
                 ]
             ]
         ]);
+    }
+
+    /**
+     * @testdox On peut filtrer la liste de jeux de l'API
+     */
+    public function testListGamesWithFilters()
+    {
+        $session = factory(Session::class)->create([
+            'id_session' => 1,
+            'nom_session' => 'Session 2001',
+        ]);
+
+        // 5 relevant games
+
+        factory(Game::class)->create([
+            'nom_jeu' => 'Game with search query in genre',
+            'genre_jeu' => '--My amazing search query--',
+            'support' => 'RPG Maker 2003',
+            'theme' => 'Fake theme',
+            'description_jeu' => 'Just a sample game in order to test',
+            'groupe' => 'Faking Games Software',
+            'id_session' => $session
+        ]);
+
+        factory(Game::class)->create([
+            'nom_jeu' => '--My amazing search query--',
+            'genre_jeu' => 'Adventure game',
+            'support' => 'RPG Maker 2003',
+            'theme' => 'Fake theme',
+            'description_jeu' => 'Game with search query in name',
+            'groupe' => 'Faking Games Software',
+            'id_session' => $session
+        ]);
+
+        factory(Game::class)->create([
+            'nom_jeu' => 'Game with search query in description',
+            'genre_jeu' => 'Adventure game',
+            'support' => 'RPG Maker 2003',
+            'theme' => 'Fake theme',
+            'description_jeu' => '--My amazing search query--',
+            'groupe' => 'Faking Games Software',
+            'id_session' => $session
+        ]);
+
+        factory(Game::class)->create([
+            'nom_jeu' => 'Game with search query in theme',
+            'genre_jeu' => 'Adventure game',
+            'support' => 'RPG Maker 2003',
+            'theme' => '--My amazing search query--',
+            'description_jeu' => 'Just a sample game in order to test',
+            'groupe' => 'Faking Games Software',
+            'id_session' => $session
+        ]);
+
+        factory(Game::class)->create([
+            'nom_jeu' => 'Game with search query in group',
+            'genre_jeu' => 'Adventure game',
+            'support' => 'RPG Maker 2003',
+            'theme' => 'Fake theme',
+            'description_jeu' => 'Just a sample game in order to test',
+            'groupe' => '--My amazing search query--',
+            'id_session' => $session
+        ]);
+
+        // Irrelevant games
+
+        factory(Game::class)->create([
+            'nom_jeu' => 'Game with wrong session',
+            'genre_jeu' => 'My amazing search query',
+            'support' => 'RPG Maker 2003',
+            'theme' => 'Fake theme',
+            'description_jeu' => 'Just a sample game in order to test',
+            'groupe' => 'Faking Games Software',
+            'id_session' => factory(Session::class)->create([
+                'id_session' => 2,
+                'nom_session' => 'Session 2002',
+            ])
+        ]);
+
+        factory(Game::class)->create([
+            'nom_jeu' => 'Game with wrong support/software',
+            'genre_jeu' => 'My amazing search query',
+            'support' => 'RPG Maker XP',
+            'theme' => 'Fake theme',
+            'description_jeu' => 'Just a sample game in order to test',
+            'groupe' => 'Faking Games Software',
+            'id_session' => $session
+        ]);
+
+        factory(Game::class)->create([
+            'nom_jeu' => 'Game without search query',
+            'genre_jeu' => 'Adventure game',
+            'support' => 'RPG Maker 2003',
+            'theme' => 'Fake theme',
+            'description_jeu' => 'Just a sample game in order to test',
+            'groupe' => 'Faking Games Software',
+            'id_session' => $session
+        ]);
+
+        $queryParameters = [
+            'q' => 'My amazing search query',
+            'session_id' => 1,
+            'software' => 'RPG Maker 2003'
+        ];
+        $response = $this->call('GET', '/api/v0/games', $queryParameters);
+
+        $response->assertOk();
+        $response->assertJsonCount(5, 'data');
+        $response->assertJsonPath('data.0.title', 'Game with search query in genre');
+        $response->assertJsonPath('data.1.description', 'Game with search query in name');
+        $response->assertJsonPath('data.2.title', 'Game with search query in description');
+        $response->assertJsonPath('data.3.title', 'Game with search query in theme');
+        $response->assertJsonPath('data.4.title', 'Game with search query in group');
     }
 }
