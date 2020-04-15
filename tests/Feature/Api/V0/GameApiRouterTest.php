@@ -357,12 +357,77 @@ class GameApiRouterTest extends FeatureTest
         ];
         $response = $this->call('GET', '/api/v0/games', $queryParameters);
 
-        $response->assertOk();
-        $response->assertJsonCount(5, 'data');
-        $response->assertJsonPath('data.0.title', 'Game with search query in genre');
-        $response->assertJsonPath('data.1.description', 'Game with search query in name');
-        $response->assertJsonPath('data.2.title', 'Game with search query in description');
-        $response->assertJsonPath('data.3.title', 'Game with search query in theme');
-        $response->assertJsonPath('data.4.title', 'Game with search query in group');
+        $response->assertOk()
+            ->assertJsonCount(5, 'data')
+            ->assertJsonPath('data.0.title', 'Game with search query in genre')
+            ->assertJsonPath('data.1.description', 'Game with search query in name')
+            ->assertJsonPath('data.2.title', 'Game with search query in description')
+            ->assertJsonPath('data.3.title', 'Game with search query in theme')
+            ->assertJsonPath('data.4.title', 'Game with search query in group');
+    }
+
+    /**
+     * @testdox On peut trier la liste de jeux de l'API
+     */
+    public function testListGamesWithSorting()
+    {
+        factory(Game::class)->create([
+            'id_jeu' => 1,
+            'nom_jeu' => 'Game in old session (2001)',
+            'support' => 'RPG Maker XP',
+            'id_session' => factory(Session::class)->create([
+                'id_session' => 1,
+                'nom_session' => 'Session 2001',
+            ])
+        ]);
+
+        $session = factory(Session::class)->create([
+            'id_session' => 20,
+            'nom_session' => 'Session 2020',
+        ]);
+
+        factory(Game::class)->create([
+            'id_jeu' => 2,
+            'nom_jeu' => 'AAAA',
+            'support' => 'ZZZZ',
+            'id_session' => $session
+        ]);
+
+        factory(Game::class)->create([
+            'id_jeu' => 3,
+            'nom_jeu' => 'BBBB',
+            'support' => 'ZZZZ',
+            'id_session' => $session
+        ]);
+
+        factory(Game::class)->create([
+            'id_jeu' => 4,
+            'nom_jeu' => 'CCCC',
+            'support' => 'YYYY',
+            'id_session' => $session
+        ]);
+
+        // With requested sorting
+
+        $queryParameters = [
+            'sort' => 'session:desc,software:asc,title'
+        ];
+        $response = $this->call('GET', '/api/v0/games', $queryParameters);
+
+        $response->assertOk()
+            ->assertJsonPath('data.0.id', 4)
+            ->assertJsonPath('data.1.id', 2)
+            ->assertJsonPath('data.2.id', 3)
+            ->assertJsonPath('data.3.id', 1);
+
+        // With default sorting
+
+        $responseWithDefaultSorting = $this->call('GET', '/api/v0/games');
+
+        $responseWithDefaultSorting->assertOk()
+            ->assertJsonPath('data.0.id', 1)
+            ->assertJsonPath('data.1.id', 2)
+            ->assertJsonPath('data.2.id', 3)
+            ->assertJsonPath('data.3.id', 4);
     }
 }

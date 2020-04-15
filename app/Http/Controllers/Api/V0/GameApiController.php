@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class GameApiController extends Controller
 {
@@ -17,6 +18,7 @@ class GameApiController extends Controller
         // TODO : Check N+1
         $games = Game::with(['session', 'contributors.member', 'screenshots', 'awards']);
 
+        // TODO : Change for 'session'
         if ($request->session_id) {
             if (!Session::sessionIdExists($request->session_id)) {
                 abort(400, "This session does not exist");
@@ -42,7 +44,13 @@ class GameApiController extends Controller
             });
         }
 
-        $games = $games->paginate(30);
+        if ($request->sort) {
+            $games = $this->sortGamesFromQuery($games, $request->sort);
+        }
+
+        $games = $games->orderBy('id_session')
+            ->orderBy('id_jeu')
+            ->paginate(30);
 
         $games->getCollection()->transform(function ($game) {
             return [
@@ -156,5 +164,59 @@ class GameApiController extends Controller
                 'category_name' => StringParser::html($award->nom_categorie)
             ];
         };
+    }
+
+    /**
+     * @param Builder $games
+     * @param string $sort
+     * @return Builder
+     */
+    private function sortGamesFromQuery(Builder $games, string $sort): Builder
+    {
+        $columnNamesConverter = array_flip([
+            'id_jeu' => 'id',
+            'statut_jeu' => 'status',
+            'nom_jeu' => 'title',
+            'id_session' => 'session',
+            'genre_jeu' => 'genre',
+            'support' => 'software',
+            'duree' => 'duration',
+            'poids' => 'size',
+            'site_officiel' => 'website',
+            'groupe' => 'creation_group',
+            'date_inscription' => 'created_at',
+        ]);
+
+        $DEFAULT_SORT_COLUMN = 'created_at';
+        $DEFAULT_SORT_DIRECTION = 'asc';
+
+        $sortingSegments = explode(',', $sort);
+        foreach ($sortingSegments as $sortingSegment) {
+            if (empty($sortingSegment)) {
+                continue;
+            }
+
+            list($columnToSort, $sortingDirection) = array_pad(explode(":", $sortingSegment), 2, null);
+
+            if (!$columnToSort) {
+                $columnToSort = $DEFAULT_SORT_COLUMN;
+            }
+
+            if (!array_key_exists($columnToSort, $columnNamesConverter)) {
+                continue;
+            }
+
+            if (!$sortingDirection) {
+                $sortingDirection = $DEFAULT_SORT_DIRECTION;
+            }
+
+            if (array_key_exists($columnToSort, $columnNamesConverter)) {
+                $columnToSort = $columnNamesConverter[$columnToSort];
+            }
+
+            $games = $games->orderBy($columnToSort, $sortingDirection);
+        }
+
+        return $games;
     }
 }
