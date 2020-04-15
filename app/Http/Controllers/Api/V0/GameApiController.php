@@ -53,6 +53,10 @@ class GameApiController extends Controller
             ->paginate(30);
 
         $games->getCollection()->transform(function ($game) {
+            $game = $this->cleanAttributes($game, [
+                'nom_jeu', 'taille', 'genre_jeu', 'theme', 'duree', 'support', 'site_officiel', 'groupe'
+            ]);
+
             return [
                 'id' => $game->id_jeu,
                 'status' => $game->getStatus(),
@@ -69,7 +73,7 @@ class GameApiController extends Controller
                 'website' => $game->site_officiel,
                 'creation_group' => $game->groupe,
                 'logo' => $game->getLogoUrl(),
-                'created_at' => $game->date_inscription->format('c'),
+                'created_at' => $this->formatDateOrNullify($game->date_inscription),
                 'description' => $game->description_jeu,
                 'download_links' => $this->extractDownloadLinks($game),
                 'awards' => $game->awards->transform($this->parseAwards()),
@@ -116,9 +120,9 @@ class GameApiController extends Controller
             $username = $contributor->id_membre ? $contributor->member->pseudo : $contributor->nom_membre;
 
             return [
-                'id' => $contributor->id_membre,
+                'id' => $contributor->id_membre ? $contributor->id_membre : null,
                 'username' => StringParser::html($username),
-                'role' => $contributor->role
+                'role' => $this->parseOrNullify($contributor->role)
             ];
         };
     }
@@ -131,7 +135,7 @@ class GameApiController extends Controller
     {
         return function ($screenshot) use ($game) {
             return [
-                'title' => StringParser::html($screenshot->nom_screenshot),
+                'title' => $this->parseOrNullify($screenshot->nom_screenshot),
                 'url' => $screenshot->getImageUrlForSession($game->session->id_session),
             ];
         };
@@ -164,6 +168,24 @@ class GameApiController extends Controller
                 'category_name' => StringParser::html($award->nom_categorie)
             ];
         };
+    }
+
+    private function parseOrNullify($string)
+    {
+        return empty($string) ? null : StringParser::html($string);
+    }
+
+    private function formatDateOrNullify($date)
+    {
+        return empty($date) ? null : $date->format('c');
+    }
+
+    private function cleanAttributes($object, $attributes)
+    {
+        foreach ($attributes as $attribute) {
+            $object->{$attribute} = $this->parseOrNullify($object->{$attribute});
+        }
+        return $object;
     }
 
     /**

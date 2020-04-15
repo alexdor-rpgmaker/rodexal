@@ -122,14 +122,14 @@ class GameApiRouterTest extends FeatureTest
             ])
         ]);
 
-        factory(Game::class)->create([
+        $secondGame = factory(Game::class)->create([
             'id_jeu' => 2,
             'id_session' => $session->id_session,
             'statut_jeu' => 1,
             'nom_jeu' => 'Fake Game 2',
             'genre_jeu' => 'Racing game',
             'support' => 'RPG Maker XP',
-            'theme' => 'Faking',
+            'theme' => '', // Empty string for theme
             'duree' => '1:00',
             'poids' => '110',
             'site_officiel' => 'https://fake-game2.com',
@@ -137,8 +137,17 @@ class GameApiRouterTest extends FeatureTest
             'groupe' => null,
             'logo' => null,
             'logo_distant' => 'https://fake-game2.com/logo.png',
-            'date_inscription' => '2020-04-03 18:00:00',
+            'date_inscription' => null, // Null date
         ]);
+
+        factory(Contributor::class)->create([
+            'id_jeu' => $secondGame,
+            'nom_membre' => 'Paul',
+            'role' => '',
+            'ordre' => 3,
+            'statut_participant' => 0
+        ]);
+
         factory(Game::class)->states('deleted')->create();
 
         $response = $this->get('/api/v0/games', ['query' => ['page' => 1]]);
@@ -236,13 +245,13 @@ class GameApiRouterTest extends FeatureTest
                     ],
                     'genre' => 'Racing game',
                     'software' => 'RPG Maker XP',
-                    'theme' => 'Faking',
+                    'theme' => null,
                     'duration' => '1:00',
                     'size' => 110,
                     'website' => 'https://fake-game2.com',
                     'creation_group' => null,
                     'logo' => 'https://fake-game2.com/logo.png',
-                    'created_at' => '2020-04-03T18:00:00+02:00',
+                    'created_at' => null,
                     'description' => 'Just a second sample game in order to test',
                     'download_links' => [],
                     'authors' => [],
