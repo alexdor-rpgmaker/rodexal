@@ -15,7 +15,6 @@ describe('Games', () => {
 
   beforeEach(() => {
     const apiResponseBody = {
-      pagination: {},
       data: []
     }
     axios.mockResolvedValue({
@@ -153,12 +152,9 @@ describe('Games', () => {
     function createWrapperWithParams(params) {
       const wrapper = shallowMount(Games, params)
       const apiResponseBody = {
-        pagination: {
-          page: 2,
-          totalPagesCount: 5,
-          totalResultsCount: 150,
-          resultsCountOnThisPage: 30
-        },
+        current_page: 2,
+        last_page: 5,
+        total: 150,
         data: [{ title: 'game-1' }, { title: 'game-2' }]
       }
       axios.mockClear().mockResolvedValue({
@@ -175,7 +171,7 @@ describe('Games', () => {
       expect(wrapper.vm.$data.page).toEqual(2)
       expect(wrapper.vm.$data.totalPagesCount).toEqual(5)
       expect(wrapper.vm.$data.totalResultsCount).toEqual(150)
-      expect(wrapper.vm.$data.resultsCountOnThisPage).toEqual(30)
+      expect(wrapper.vm.$data.resultsCountOnThisPage).toEqual(2)
     })
 
     it('stores games information in component', async () => {
@@ -199,9 +195,9 @@ describe('Games', () => {
         expect(axios).toHaveBeenCalledWith({
           params: {
             page: 1,
-            sort: 'session:asc'
+            sort: 'session:asc,title:asc'
           },
-          url: 'https://former-app/api/v0/jeux.php'
+          url: '/api/v0/games'
         })
       })
     })
@@ -219,9 +215,9 @@ describe('Games', () => {
           params: {
             page: 1,
             session_id: '17',
-            sort: 'session:asc'
+            sort: 'session:asc,title:asc'
           },
-          url: 'https://former-app/api/v0/jeux.php'
+          url: '/api/v0/games'
         })
       })
     })
@@ -249,7 +245,7 @@ describe('Games', () => {
             session_id: '15',
             sort: 'title:asc'
           },
-          url: 'https://former-app/api/v0/jeux.php'
+          url: '/api/v0/games'
         })
       })
     })

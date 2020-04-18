@@ -6,6 +6,7 @@
           <div class="col-md-6 mb-2">
             <label for="query">Recherche</label>
             <input
+              id="query"
               name="query"
               class="form-control"
               type="text"
@@ -16,7 +17,7 @@
 
           <div class="col-md-6 mb-2">
             <label for="session">Session</label>
-            <select name="session" class="custom-select" v-model="selectedSession">
+            <select id="session" name="session" class="custom-select" v-model="selectedSession">
               <option :value="null">(Toutes les sessions)</option>
               <option
                 :value="session"
@@ -30,15 +31,15 @@
         <div class="form-row">
           <div class="col-md-6 mb-2">
             <label for="software">Logiciels</label>
-            <select name="software" class="custom-select" v-model="selectedSoftware">
+            <select id="software" name="software" class="custom-select" v-model="selectedSoftware">
               <option :value="null">(Tous les logiciels)</option>
               <option :value="software" v-for="software in softwares" :key="software">{{ software }}</option>
             </select>
           </div>
 
           <div class="col-md-6 mb-2">
-            <label for="session">Trier par</label>
-            <select name="sort" class="custom-select" v-model="selectedSort">
+            <label for="sort">Trier par</label>
+            <select id="sort" name="sort" class="custom-select" v-model="selectedSort">
               <option :value="key" v-for="(name, key) in sortings" :key="key">{{ name }}</option>
             </select>
           </div>
@@ -53,10 +54,10 @@
         <th></th>
         <th>Nom du Jeu</th>
         <th>Session</th>
-        <th width="160">Auteur(s)</th>
-        <th width="130">Support</th>
-        <th width="130">Genre</th>
-        <th width="50">Téléch.</th>
+        <th class="author">Auteur(s)</th>
+        <th class="software">Support</th>
+        <th class="genre">Genre</th>
+        <th class="download">Téléch.</th>
       </tr>
       <game-row
         class="tr"
@@ -181,7 +182,8 @@ export default {
   methods: {
     async fetchGames() {
       const params = {
-        page: this.page
+        page: this.page,
+        sort: 'title:asc'
       }
       if (this.query) {
         params['q'] = this.query
@@ -193,18 +195,22 @@ export default {
         params['session_id'] = this.selectedSession
       }
       if (this.selectedSort) {
-        params['sort'] = `${this.selectedSort}:asc`
+        params.sort = `${this.selectedSort}:asc`
+
+        if (this.selectedSort !== 'title') {
+          params.sort += ',title:asc'
+        }
       }
+
       const request = await axios({
-        url: formerAppUrl + '/api/v0/jeux.php',
+        url: '/api/v0/games',
         params
       })
 
-      const pagination = request.data.pagination
-      this.page = pagination.page
-      this.totalPagesCount = pagination.totalPagesCount
-      this.totalResultsCount = pagination.totalResultsCount
-      this.resultsCountOnThisPage = pagination.resultsCountOnThisPage
+      this.page = request.data.current_page
+      this.totalPagesCount = request.data.last_page
+      this.totalResultsCount = request.data.total
+      this.resultsCountOnThisPage = request.data.data.length
 
       this.games = request.data.data.map(this.formatGameForList)
     },
@@ -249,5 +255,15 @@ export default {
 <style lang="scss" scoped>
 #games-list {
   text-align: center;
+
+  .author {
+    width: 160px;
+  }
+  .software, .genre {
+    width: 130px;
+  }
+  .download {
+    width: 50px;
+  }
 }
 </style>
