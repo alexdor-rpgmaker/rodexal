@@ -89,7 +89,10 @@ export default {
     GameRow
   },
   props: {
-    session: String
+    session: {
+      type: String,
+      required: false
+    }
   },
   data() {
     return {

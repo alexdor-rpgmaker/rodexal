@@ -8,9 +8,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div id="games-wrapper" class="col-md-10">
-                <games
-                    {{-- :session='17' --}}
-                />
+                <games :session='@json($sessionId)' />
             </div>
         </div>
     </div>
