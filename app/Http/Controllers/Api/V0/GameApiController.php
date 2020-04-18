@@ -18,7 +18,6 @@ class GameApiController extends Controller
         // TODO : Check N+1
         $games = Game::with(['session', 'contributors.member', 'screenshots', 'awards']);
 
-        // TODO : Change for 'session'
         if ($request->session_id) {
             if (!Session::sessionIdExists($request->session_id)) {
                 abort(400, "This session does not exist");
@@ -48,9 +47,12 @@ class GameApiController extends Controller
             $games = $this->sortGamesFromQuery($games, $request->sort);
         }
 
+        $PER_PAGE_DEFAULT = 50;
+        $perPage = isset($request->per_page) && $this->between1And50($request->per_page) ? (int) $request->per_page : $PER_PAGE_DEFAULT;
+
         $games = $games->orderBy('id_session')
             ->orderBy('id_jeu')
-            ->paginate(30);
+            ->paginate($perPage);
 
         $games->getCollection()->transform(function ($game) {
             $game = $this->cleanAttributes($game, [
@@ -168,6 +170,11 @@ class GameApiController extends Controller
                 'category_name' => StringParser::html($award->nom_categorie)
             ];
         };
+    }
+
+    private function between1And50($number)
+    {
+        return in_array(intval($number), range(1, 50));
     }
 
     private function parseOrNullify($string)

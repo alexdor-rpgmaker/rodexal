@@ -162,7 +162,7 @@ class GameApiRouterTest extends FeatureTest
             "current_page" => 1,
             "from" => 1,
             "last_page" => 1,
-            "per_page" => 30,
+            "per_page" => 50,
             "to" => 2,
             "total" => 2,
 
