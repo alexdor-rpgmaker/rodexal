@@ -119,10 +119,11 @@ class GameApiController extends Controller
     private function parseContributors(): Closure
     {
         return function ($contributor) {
-            $username = $contributor->id_membre ? $contributor->member->pseudo : $contributor->nom_membre;
+            $userId = $contributor->id_membre ? $contributor->id_membre : null;
+            $username = $userId && $contributor->member ? $contributor->member->pseudo : $contributor->nom_membre;
 
             return [
-                'id' => $contributor->id_membre ? $contributor->id_membre : null,
+                'id' => $userId,
                 'username' => StringParser::html($username),
                 'role' => $this->parseOrNullify($contributor->role)
             ];

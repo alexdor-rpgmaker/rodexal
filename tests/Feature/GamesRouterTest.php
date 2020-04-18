@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Former\Session;
+
 /**
  * @testdox GamesRouter
  */
@@ -18,6 +20,7 @@ class GamesRouterTest extends FeatureTest
 
         $response->assertOk();
         $response->assertViewHas('sessionId', null);
+        $response->assertViewHas('sessionName', null);
     }
 
     /**
@@ -25,6 +28,11 @@ class GamesRouterTest extends FeatureTest
      */
     public function testListeDesJeuxDUneSession()
     {
+        factory(Session::class)->create([
+            'id_session' => 11,
+            'nom_session' => 'Session 2011',
+        ]);
+
         $queryParameters = [
             'session_id' => '11',
         ];
@@ -32,6 +40,7 @@ class GamesRouterTest extends FeatureTest
 
         $response->assertOk();
         $response->assertViewHas('sessionId', '11');
+        $response->assertViewHas('sessionName', 'Session 2011');
     }
 
     /**
@@ -46,5 +55,6 @@ class GamesRouterTest extends FeatureTest
 
         $response->assertOk();
         $response->assertViewHas('sessionId', null);
+        $response->assertViewHas('sessionName', null);
     }
 }

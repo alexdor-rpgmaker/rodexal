@@ -94,35 +94,9 @@ describe('Games', () => {
     })
   })
 
-  describe('.resultsCount()', () => {
-    describe('when results count is 0', () => {
-      it('displays Aucun résultat', () => {
-        const wrapper = shallowMount(Games, {
-          data: () => ({
-            totalResultsCount: 10,
-            resultsCountOnThisPage: 0
-          })
-        })
-
-        expect(wrapper.vm.resultsCount).toEqual('Aucun résultat')
-      })
-    })
-
-    describe('when results count is 1', () => {
-      it('displays 1 résultat', () => {
-        const wrapper = shallowMount(Games, {
-          data: () => ({
-            totalResultsCount: 10,
-            resultsCountOnThisPage: 1
-          })
-        })
-
-        expect(wrapper.vm.resultsCount).toEqual('1 résultat')
-      })
-    })
-
+  describe('.gamesCount()', () => {
     describe('when results count equals total results count (less than two pages)', () => {
-      it('displays X résultats', () => {
+      it('displays X', () => {
         const wrapper = shallowMount(Games, {
           data: () => ({
             totalResultsCount: 2,
@@ -130,12 +104,12 @@ describe('Games', () => {
           })
         })
 
-        expect(wrapper.vm.resultsCount).toEqual('2 résultats')
+        expect(wrapper.vm.gamesCount).toEqual(2)
       })
     })
 
     describe('when results count does not equal total results count (more than one page)', () => {
-      it('displays X résultats sur Y', () => {
+      it('displays X sur Y', () => {
         const wrapper = shallowMount(Games, {
           data: () => ({
             totalResultsCount: 5,
@@ -143,7 +117,7 @@ describe('Games', () => {
           })
         })
 
-        expect(wrapper.vm.resultsCount).toEqual('2 résultats sur 5')
+        expect(wrapper.vm.gamesCount).toEqual('2 sur 5')
       })
     })
   })
@@ -304,6 +278,42 @@ describe('Games', () => {
       expect(fetchGames).toHaveBeenCalled()
       expect(wrapper.vm.$data.page).toEqual(4)
       expect(windowScroll).toHaveBeenCalledWith(0, 0)
+    })
+  })
+
+  describe('.sortBy(sortParam)', () => {
+    it('sorts by title in ascending direction', async () => {
+      const search = jest.fn()
+      const wrapper = shallowMount(Games, {
+        propsData,
+        data: () => ({ selectedSort: 'session' }),
+        methods: {
+          search
+        }
+      })
+
+      await wrapper.vm.sortBy('title')
+
+      expect(search).toHaveBeenCalled()
+      expect(wrapper.vm.$data.selectedSort).toEqual('title')
+      expect(wrapper.vm.$data.sortDirection).toEqual('asc')
+    })
+
+    it('sorts by title in descending direction', async () => {
+      const search = jest.fn()
+      const wrapper = shallowMount(Games, {
+        propsData,
+        data: () => ({ selectedSort: 'title' }),
+        methods: {
+          search
+        }
+      })
+
+      await wrapper.vm.sortBy('title')
+
+      expect(search).toHaveBeenCalled()
+      expect(wrapper.vm.$data.selectedSort).toEqual('title')
+      expect(wrapper.vm.$data.sortDirection).toEqual('desc')
     })
   })
 

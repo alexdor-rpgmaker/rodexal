@@ -9,9 +9,14 @@ class GameController extends Controller
 {
     public function index(Request $request)
     {
-        $sessionId = (Session::sessionIdExists($request->query('session_id'))) ? $request->query('session_id') : null;
+        $session = null;
+        if ($request->query('session_id')) {
+            $session = Session::find($request->query('session_id'));
+        }
+
         return view('games.index', [
-            'sessionId' => $sessionId,
+            'sessionId' => $session ? $session->id_session : null,
+            'sessionName' => $session ? $session->nom_session : null
         ]);
     }
 }

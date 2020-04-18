@@ -1,62 +1,60 @@
 <template>
   <div id="games-list">
-    <div id="games-form">
-      <form @submit.prevent="search">
-        <div class="form-row">
-          <div class="col-md-6 mb-2">
-            <label for="query">Recherche</label>
-            <input
-              id="query"
-              name="query"
-              class="form-control"
-              type="text"
-              v-model="query"
-              placeholder="Aventure, Humour, RuTiPa's Quest, ..."
-            />
-          </div>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div id="games-wrapper" class="col-md-12">
+          <form @submit.prevent="search" class="games-form">
+            <div class="form-row">
+              <div class="col-md-4 mb-2">
+                <label for="query">Recherche</label>
+                <input
+                  id="query"
+                  name="query"
+                  class="form-control"
+                  type="text"
+                  v-model="query"
+                  placeholder="Aventure, Humour, RuTiPa's Quest, ..."
+                />
+              </div>
 
-          <div class="col-md-6 mb-2">
-            <label for="session">Session</label>
-            <select id="session" name="session" class="custom-select" v-model="selectedSession">
-              <option :value="null">(Toutes les sessions)</option>
-              <option
-                :value="session"
-                v-for="session in sessions"
-                :key="session"
-              >{{ sessionName(session) }}</option>
-            </select>
-          </div>
+              <div class="col-md-3 mb-2">
+                <label for="session">Session</label>
+                <select id="session" name="session" class="custom-select" v-model="selectedSession">
+                  <option :value="null">(Toutes les sessions)</option>
+                  <option
+                    :value="session"
+                    v-for="session in sessions"
+                    :key="session"
+                  >{{ sessionName(session) }}</option>
+                </select>
+              </div>
+
+              <div class="col-md-3 mb-2">
+                <label for="software">Logiciels</label>
+                <select id="software" name="software" class="custom-select" v-model="selectedSoftware">
+                  <option :value="null">(Tous les logiciels)</option>
+                  <option :value="software" v-for="software in softwares" :key="software">{{ software }}</option>
+                </select>
+              </div>
+
+              <div class="col-md-1 form-button-wrapper">
+                <button class="bouton" type="submit">Rechercher</button>
+              </div>
+            </div>
+          </form>
         </div>
+      </div>
 
-        <div class="form-row">
-          <div class="col-md-6 mb-2">
-            <label for="software">Logiciels</label>
-            <select id="software" name="software" class="custom-select" v-model="selectedSoftware">
-              <option :value="null">(Tous les logiciels)</option>
-              <option :value="software" v-for="software in softwares" :key="software">{{ software }}</option>
-            </select>
-          </div>
-
-          <div class="col-md-6 mb-2">
-            <label for="sort">Trier par</label>
-            <select id="sort" name="sort" class="custom-select" v-model="selectedSort">
-              <option :value="key" v-for="(name, key) in sortings" :key="key">{{ name }}</option>
-            </select>
-          </div>
-        </div>
-
-        <button class="btn btn-primary mt-4" type="submit">Rechercher</button>
-      </form>
+      <p class="mb-4">Nombre de jeux : <strong>{{ gamesCount }}</strong>.</p>
     </div>
-    <p>{{ resultsCount }}.</p>
     <table class="table">
       <tr class="tableau_legend">
         <th></th>
-        <th>Nom du Jeu</th>
-        <th>Session</th>
+        <th class="title" @click="sortBy('title')">Titre du Jeu</th>
+        <th class="session" @click="sortBy('session')">Session</th>
         <th class="author">Auteur(s)</th>
-        <th class="software">Support</th>
-        <th class="genre">Genre</th>
+        <th class="software" @click="sortBy('software')">Support</th>
+        <th class="genre" @click="sortBy('genre')">Genre</th>
         <th class="download">Téléch.</th>
       </tr>
       <game-row
@@ -105,6 +103,7 @@ export default {
       selectedSoftware: null,
       selectedSession: null,
       selectedSort: 'session',
+      sortDirection: 'asc',
       sessions: [
         1,
         2,
@@ -125,14 +124,6 @@ export default {
         19,
         20
       ],
-      sortings: {
-        title: 'Titre',
-        session: 'Session',
-        software: 'Support',
-        genre: 'Genre',
-        created_at: "Date d'inscription",
-        size: 'Taille'
-      },
       softwares: [
         'adventure game studio',
         'AINSI',
@@ -170,16 +161,12 @@ export default {
     notLastPage() {
       return this.page < this.totalPagesCount
     },
-    resultsCount() {
-      if (this.resultsCountOnThisPage === 0) {
-        return 'Aucun résultat'
-      } else if (this.resultsCountOnThisPage === 1) {
-        return '1 résultat'
-      } else if (this.resultsCountOnThisPage === this.totalResultsCount) {
-        return `${this.resultsCountOnThisPage} résultats`
+    gamesCount() {
+      if (this.resultsCountOnThisPage === this.totalResultsCount) {
+        return this.resultsCountOnThisPage
       }
 
-      return `${this.resultsCountOnThisPage} résultats sur ${this.totalResultsCount}`
+      return `${this.resultsCountOnThisPage} sur ${this.totalResultsCount}`
     }
   },
   methods: {
@@ -198,7 +185,7 @@ export default {
         params['session_id'] = this.selectedSession
       }
       if (this.selectedSort) {
-        params.sort = `${this.selectedSort}:asc`
+        params.sort = `${this.selectedSort}:${this.sortDirection}`
 
         if (this.selectedSort !== 'title') {
           params.sort += ',title:asc'
@@ -231,6 +218,13 @@ export default {
       this.page += 1
       await this.fetchGames()
     },
+    async sortBy(sortParam) {
+      if(this.selectedSort === sortParam) {
+        this.sortDirection = this.sortDirection !== 'asc' ? 'asc' : 'desc'
+      }
+      this.selectedSort = sortParam
+      await this.search()
+    },
     sessionName(id) {
       if (id === 3) return 'Session 2003-2004'
       else if (id === 17) return 'Session 2017-2018'
@@ -257,7 +251,18 @@ export default {
 
 <style lang="scss" scoped>
 #games-list {
-  text-align: center;
+  .games-form {
+    text-align: center;
+  }
+
+  .form-button-wrapper {
+    padding-left: 20px;
+    margin-top: 32px;
+  }
+
+  .title, .session, .software, .genre {
+    cursor: pointer;
+  }
 
   .author {
     width: 160px;
