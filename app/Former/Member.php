@@ -22,4 +22,19 @@ class Member extends FormerModel
         'rang' => 1,
         'sexe' => 0,
     ];
+
+    public function getRankAttribute() {
+        $rankIdToString = [
+            0 => "guest",
+            1 => "member",
+            2 => "challenger",
+            3 => "ambassador",
+            4 => "juror",
+            5 => "moderator",
+            6 => "administrator",
+            7 => "webmaster"
+        ];
+
+        return $rankIdToString[$this->rang];
+    }
 }

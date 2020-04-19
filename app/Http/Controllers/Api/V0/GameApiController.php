@@ -127,10 +127,12 @@ class GameApiController extends Controller
     {
         return function ($contributor) {
             $userId = $contributor->id_membre ? $contributor->id_membre : null;
+            $rank = $userId && $contributor->member ? $contributor->member->rank : null;
             $username = $userId && $contributor->member ? $contributor->member->pseudo : $contributor->nom_membre;
 
             return [
                 'id' => $userId,
+                'rank' => $rank,
                 'username' => StringParser::html($username),
                 'role' => $this->parseOrNullify($contributor->role)
             ];

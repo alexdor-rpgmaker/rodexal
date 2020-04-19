@@ -24,9 +24,11 @@
     <td class="makers">
       <span v-if="game.creationGroup">{{ game.creationGroup }} :</span>
       <span v-for="(author, index) in game.authors" :key="author.id + author.username">
-        <a :href="formerAppUrl + '/?p=profil&membre=' + author.id">{{
+        <a :href="formerAppUrl + '/?p=profil&membre=' + author.id" :class="'color-' + author.rank" v-if="author.id">{{
           author.username
-        }}</a><template v-if="index < game.authors.length - 1">, </template>
+        }}</a><template v-else>{{
+          author.username
+        }}</template><template v-if="index < game.authors.length - 1">, </template>
       </span>
     </td>
     <td class="software">{{ game.software }}</td>
@@ -98,6 +100,43 @@ export default {
 <style lang="scss" scoped>
 .tr td {
   text-align: left;
+}
+
+.makers {
+  a.color-member,
+  a.color-challenger,
+  a.color-ambassador,
+  a.color-juror,
+  a.color-moderator,
+  a.color-administrator,
+  a.color-webmaster {
+    font-weight: bold;
+  }
+
+  a.color-member {
+    color: #2954ff;
+  }
+
+  a.color-challenger {
+    color: #0b00a1;
+  }
+
+  a.color-ambassador {
+    color: #00acb8;
+  }
+
+  a.color-juror {
+    color: #9f3ad1;
+  }
+
+  a.color-moderator {
+    color: #269600;
+  }
+
+  a.color-administrator,
+  a.color-webmaster {
+    color: #cf0000;
+  }
 }
 
 .awarded-categories, .nominated-categories {

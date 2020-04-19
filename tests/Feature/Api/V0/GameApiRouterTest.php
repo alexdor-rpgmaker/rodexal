@@ -54,7 +54,8 @@ class GameApiRouterTest extends FeatureTest
         ]);
         $membre = factory(Member::class)->create([
             'id_membre' => 3,
-            'pseudo' => 'Juan-Pablo'
+            'pseudo' => 'Juan-Pablo',
+            'rang' => 4
         ]);
         factory(Contributor::class)->create([
             'id_jeu' => $firstGame->id_jeu,
@@ -203,11 +204,13 @@ class GameApiRouterTest extends FeatureTest
                     'authors' => [
                         [
                             'id' => null,
+                            'rank' => null,
                             'username' => 'Anita',
                             'role' => 'Game designer',
                         ],
                         [
                             'id' => 3,
+                            'rank' => 'juror',
                             'username' => 'Juan-Pablo',
                             'role' => 'Programmer',
                         ]

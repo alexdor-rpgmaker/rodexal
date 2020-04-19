@@ -9,11 +9,15 @@ describe('GameRow', () => {
       authors: [
         {
           id: 25,
-          username: 'Jack'
+          rank: 'juror',
+          username: 'Jack',
+          role: 'Programmer'
         },
         {
-          id: 27,
-          username: 'Jones'
+          id: null,
+          rank: null,
+          username: 'Jones',
+          role: 'Musician'
         }
       ],
       session: {
@@ -94,8 +98,7 @@ describe('GameRow', () => {
         .findAll('a')
         .wrappers.map(a => a.attributes('href'))
       expect(linksHref).toEqual([
-        'https://former-app/?p=profil&membre=25',
-        'https://former-app/?p=profil&membre=27'
+        'https://former-app/?p=profil&membre=25'
       ])
     })
 
