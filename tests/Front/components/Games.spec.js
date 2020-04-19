@@ -169,7 +169,7 @@ describe('Games', () => {
         expect(axios).toHaveBeenCalledWith({
           params: {
             page: 1,
-            sort: 'session:asc,title:asc'
+            sort: 'awards_count:desc,title:asc'
           },
           url: '/api/v0/games'
         })
@@ -179,7 +179,7 @@ describe('Games', () => {
     describe('with a session props', () => {
       it('fetches games from API with page, session and session sort parameters', async () => {
         const wrapper = createWrapperWithParams({
-          propsData: { ...propsData, session: '17' }
+          propsData: { ...propsData, session: 17 }
         })
 
         await wrapper.vm.fetchGames()
@@ -188,7 +188,7 @@ describe('Games', () => {
         expect(axios).toHaveBeenCalledWith({
           params: {
             page: 1,
-            session_id: '17',
+            session_id: 17,
             sort: 'awards_count:desc,title:asc'
           },
           url: '/api/v0/games'
@@ -204,7 +204,8 @@ describe('Games', () => {
             query: 'rutipa',
             selectedSoftware: 'RPG Maker 2003',
             selectedSession: '15',
-            selectedSort: 'title'
+            selectedSort: 'title',
+            sortDirection: 'asc'
           })
         })
 
@@ -286,7 +287,7 @@ describe('Games', () => {
       const search = jest.fn()
       const wrapper = shallowMount(Games, {
         propsData,
-        data: () => ({ selectedSort: 'session' }),
+        data: () => ({ selectedSort: 'session', sortDirection: 'asc' }),
         methods: {
           search
         }
@@ -303,7 +304,7 @@ describe('Games', () => {
       const search = jest.fn()
       const wrapper = shallowMount(Games, {
         propsData,
-        data: () => ({ selectedSort: 'title' }),
+        data: () => ({ selectedSort: 'title', sortDirection: 'asc' }),
         methods: {
           search
         }

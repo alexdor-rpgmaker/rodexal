@@ -88,7 +88,7 @@ export default {
   },
   props: {
     session: {
-      type: String,
+      type: Number,
       required: false
     }
   },
@@ -102,8 +102,8 @@ export default {
       totalResultsCount: null,
       selectedSoftware: null,
       selectedSession: null,
-      selectedSort: this.session > 0 ? 'awards_count' : 'session',
-      sortDirection: this.session > 0 ? 'desc' : 'asc',
+      selectedSort: 'awards_count',
+      sortDirection: 'desc',
       sessions: [
         1,
         2,

@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 
 class GameApiController extends Controller
@@ -18,11 +17,11 @@ class GameApiController extends Controller
     {
         // TODO : Check N+1
         $games = Game::with(['session', 'contributors.member', 'screenshots', 'awards'])
-            ->withCount(['nominations as awarded_categories_count' => function($query) {
-                $query->select(DB::raw('count(id_jeu)'))->where('is_vainqueur', true);
+            ->withCount(['nominations as awarded_categories_count' => function($nominationsQuery) {
+                $nominationsQuery->where('is_vainqueur', '>', '0');
             }])
-            ->withCount(['nominations as nominated_categories_count' => function($query) {
-                $query->select(DB::raw('count(id_jeu)'))->where('is_vainqueur', false);
+            ->withCount(['nominations as nominated_categories_count' => function($nominationsQuery) {
+                $nominationsQuery->where('is_vainqueur', '0');
             }]);
 
         if ($request->session_id) {

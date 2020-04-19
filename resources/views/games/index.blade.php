@@ -30,7 +30,7 @@
             Cliquez sur le titre d'un jeu si vous souhaitez en savoir plus le concernant.
         </p>
         <div id="games-wrapper">
-            <games session='@json($sessionId)' />
+            <games :session='@json($sessionId)' />
         </div>
     </div>
 @stop
