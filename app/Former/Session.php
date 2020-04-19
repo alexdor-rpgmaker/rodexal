@@ -21,6 +21,9 @@ class Session extends FormerModel
         'statut_session' => 1,
         'etape' => 1,
     ];
+    protected $dates = [
+        'date_cloture_inscriptions',
+    ];
 
     public static function nameFromId($sessionId)
     {

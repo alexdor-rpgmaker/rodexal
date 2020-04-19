@@ -13,10 +13,11 @@ class GameController extends Controller
         if ($request->query('session_id')) {
             $session = Session::find($request->query('session_id'));
         }
+        $currentSession = Session::orderBy('id_session', 'desc')->first();
 
         return view('games.index', [
-            'sessionId' => $session ? $session->id_session : null,
-            'sessionName' => $session ? $session->nom_session : null
+            'selectedSession' => $session,
+            'currentSession' => $currentSession
         ]);
     }
 }

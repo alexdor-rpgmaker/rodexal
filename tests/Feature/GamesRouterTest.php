@@ -9,6 +9,17 @@ use App\Former\Session;
  */
 class GamesRouterTest extends FeatureTest
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->resetDatabase();
+
+        factory(Session::class)->create([
+            'id_session' => 19,
+            'nom_session' => 'Session 2019',
+        ]);
+    }
+
     // Index
 
     /**
@@ -16,11 +27,16 @@ class GamesRouterTest extends FeatureTest
      */
     public function testListeDesJeuxSansParams()
     {
+        $currentSession = factory(Session::class)->create([
+            'id_session' => 20,
+            'nom_session' => 'Session 2020',
+        ]);
+
         $response = $this->get('/jeux');
 
         $response->assertOk();
-        $response->assertViewHas('sessionId', null);
-        $response->assertViewHas('sessionName', null);
+        $response->assertViewHas('selectedSession', null);
+        $response->assertViewHas('currentSession', $currentSession);
     }
 
     /**
@@ -28,7 +44,7 @@ class GamesRouterTest extends FeatureTest
      */
     public function testListeDesJeuxDUneSession()
     {
-        factory(Session::class)->create([
+        $session = factory(Session::class)->create([
             'id_session' => 11,
             'nom_session' => 'Session 2011',
         ]);
@@ -39,8 +55,8 @@ class GamesRouterTest extends FeatureTest
         $response = $this->call('GET', '/jeux', $queryParameters);
 
         $response->assertOk();
-        $response->assertViewHas('sessionId', '11');
-        $response->assertViewHas('sessionName', 'Session 2011');
+        $response->assertViewHas('selectedSession', $session);
+        $response->assertViewHas('currentSession');
     }
 
     /**
@@ -54,7 +70,7 @@ class GamesRouterTest extends FeatureTest
         $response = $this->call('GET', '/jeux', $queryParameters);
 
         $response->assertOk();
-        $response->assertViewHas('sessionId', null);
-        $response->assertViewHas('sessionName', null);
+        $response->assertViewHas('selectedSession', null);
+        $response->assertViewHas('currentSession');
     }
 }
