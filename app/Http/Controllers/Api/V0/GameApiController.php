@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 
 class GameApiController extends Controller
@@ -16,7 +17,13 @@ class GameApiController extends Controller
     public function index(Request $request)
     {
         // TODO : Check N+1
-        $games = Game::with(['session', 'contributors.member', 'screenshots', 'awards']);
+        $games = Game::with(['session', 'contributors.member', 'screenshots', 'awards'])
+            ->withCount(['nominations as awarded_categories_count' => function($query) {
+                $query->select(DB::raw('count(id_jeu)'))->where('is_vainqueur', true);
+            }])
+            ->withCount(['nominations as nominated_categories_count' => function($query) {
+                $query->select(DB::raw('count(id_jeu)'))->where('is_vainqueur', false);
+            }]);
 
         if ($request->session_id) {
             if (!Session::sessionIdExists($request->session_id)) {
@@ -48,7 +55,7 @@ class GameApiController extends Controller
         }
 
         $PER_PAGE_DEFAULT = 50;
-        $perPage = isset($request->per_page) && $this->between1And50($request->per_page) ? (int) $request->per_page : $PER_PAGE_DEFAULT;
+        $perPage = isset($request->per_page) && $this->between1And50($request->per_page) ? (int)$request->per_page : $PER_PAGE_DEFAULT;
 
         $games = $games->orderBy('id_session')
             ->orderBy('id_jeu')
@@ -215,6 +222,7 @@ class GameApiController extends Controller
             'site_officiel' => 'website',
             'groupe' => 'creation_group',
             'date_inscription' => 'created_at',
+            'awards_count' => 'awards_count',
         ]);
 
         $DEFAULT_SORT_COLUMN = 'created_at';
@@ -244,7 +252,12 @@ class GameApiController extends Controller
                 $columnToSort = $columnNamesConverter[$columnToSort];
             }
 
-            $games = $games->orderBy($columnToSort, $sortingDirection);
+            if ($columnToSort == 'awards_count') {
+                $games = $games->orderBy('awarded_categories_count', $sortingDirection)
+                    ->orderBy('nominated_categories_count', $sortingDirection);
+            } else {
+                $games = $games->orderBy($columnToSort, $sortingDirection);
+            }
         }
 
         return $games;

@@ -189,7 +189,7 @@ describe('Games', () => {
           params: {
             page: 1,
             session_id: '17',
-            sort: 'session:asc,title:asc'
+            sort: 'awards_count:desc,title:asc'
           },
           url: '/api/v0/games'
         })
@@ -348,7 +348,19 @@ describe('Games', () => {
         genre: 'Adventure',
         creation_group: 'IndieDev Team',
         screenshots: [{ url: 'img.jpg' }],
-        download_links: [{ url: 'img.jpg', platform: 'windows' }]
+        download_links: [{ url: 'img.jpg', platform: 'windows' }],
+        awards: [
+          {
+            status: "awarded",
+            award_level: null,
+            category_name: "Alex d'or"
+          },
+          {
+            status: "nominated",
+            award_level: null,
+            category_name: "Alex du gameplay"
+          }
+        ]
       }
 
       const wrapper = shallowMount(Games, {
@@ -374,7 +386,19 @@ describe('Games', () => {
         genre: 'Adventure',
         creationGroup: 'IndieDev Team',
         screenshots: [{ url: 'img.jpg' }],
-        downloadLinks: [{ url: 'img.jpg', platform: 'windows' }]
+        downloadLinks: [{ url: 'img.jpg', platform: 'windows' }],
+        awards: [
+          {
+            status: "awarded",
+            award_level: null,
+            category_name: "Alex d'or"
+          },
+          {
+            status: "nominated",
+            award_level: null,
+            category_name: "Alex du gameplay"
+          }
+        ]
       })
     })
   })

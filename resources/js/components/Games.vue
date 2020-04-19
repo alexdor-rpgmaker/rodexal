@@ -102,8 +102,8 @@ export default {
       totalResultsCount: null,
       selectedSoftware: null,
       selectedSession: null,
-      selectedSort: 'session',
-      sortDirection: 'asc',
+      selectedSort: this.session > 0 ? 'awards_count' : 'session',
+      sortDirection: this.session > 0 ? 'desc' : 'asc',
       sessions: [
         1,
         2,
@@ -172,8 +172,7 @@ export default {
   methods: {
     async fetchGames() {
       const params = {
-        page: this.page,
-        sort: 'title:asc'
+        page: this.page
       }
       if (this.query) {
         params['q'] = this.query
@@ -185,10 +184,10 @@ export default {
         params['session_id'] = this.selectedSession
       }
       if (this.selectedSort) {
-        params.sort = `${this.selectedSort}:${this.sortDirection}`
+        params['sort'] = `${this.selectedSort}:${this.sortDirection}`
 
         if (this.selectedSort !== 'title') {
-          params.sort += ',title:asc'
+          params['sort'] += ',title:asc'
         }
       }
 

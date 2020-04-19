@@ -60,7 +60,7 @@ export default {
     },
     awardedCategoriesList() {
       return this.awardedCategories
-        .map(award => award.category_name)
+        .map(this.awardName)
         .join(", ")
     },
     wasAwarded() {
@@ -78,6 +78,18 @@ export default {
     },
     wasNominated() {
       return this.nominatedCategories.length > 0
+    }
+  },
+  methods: {
+    awardName(award) {
+      let awardName = award.category_name
+      switch(award.award_level) {
+        case 'gold': awardName += ' (or)';  break;
+        case 'silver': awardName += ' (argent)';  break;
+        case 'bronze': awardName += ' (bronze)';  break;
+        default: break;
+      }
+      return awardName
     }
   }
 }

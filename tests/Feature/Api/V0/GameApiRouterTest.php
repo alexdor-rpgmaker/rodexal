@@ -380,7 +380,7 @@ class GameApiRouterTest extends FeatureTest
      */
     public function testListGamesWithSorting()
     {
-        factory(Game::class)->create([
+        $firstGame = factory(Game::class)->create([
             'id_jeu' => 1,
             'nom_jeu' => 'Game in old session (2001)',
             'support' => 'RPG Maker XP',
@@ -395,14 +395,14 @@ class GameApiRouterTest extends FeatureTest
             'nom_session' => 'Session 2020',
         ]);
 
-        factory(Game::class)->create([
+        $secondGame = factory(Game::class)->create([
             'id_jeu' => 2,
             'nom_jeu' => 'AAAA',
             'support' => 'ZZZZ',
             'id_session' => $session
         ]);
 
-        factory(Game::class)->create([
+        $thirdGame = factory(Game::class)->create([
             'id_jeu' => 3,
             'nom_jeu' => 'BBBB',
             'support' => 'ZZZZ',
@@ -414,6 +414,36 @@ class GameApiRouterTest extends FeatureTest
             'nom_jeu' => 'CCCC',
             'support' => 'YYYY',
             'id_session' => $session
+        ]);
+
+        factory(Nomination::class)->create([
+            'id_jeu' => $thirdGame->id_jeu,
+            'is_vainqueur' => 1,
+            'id_categorie' => factory(AwardSessionCategory::class)->create(),
+        ]);
+
+        factory(Nomination::class)->create([
+            'id_jeu' => $thirdGame->id_jeu,
+            'is_vainqueur' => 1,
+            'id_categorie' => factory(AwardSessionCategory::class)->create()
+        ]);
+
+        factory(Nomination::class)->create([
+            'id_jeu' => $secondGame->id_jeu,
+            'is_vainqueur' => 1,
+            'id_categorie' => factory(AwardSessionCategory::class)->create()
+        ]);
+
+        factory(Nomination::class)->create([
+            'id_jeu' => $secondGame->id_jeu,
+            'is_vainqueur' => 0,
+            'id_categorie' => factory(AwardSessionCategory::class)->create()
+        ]);
+
+        factory(Nomination::class)->create([
+            'id_jeu' => $firstGame->id_jeu,
+            'is_vainqueur' => 0,
+            'id_categorie' => factory(AwardSessionCategory::class)->create()
         ]);
 
         // With requested sorting
@@ -428,6 +458,19 @@ class GameApiRouterTest extends FeatureTest
             ->assertJsonPath('data.1.id', 2)
             ->assertJsonPath('data.2.id', 3)
             ->assertJsonPath('data.3.id', 1);
+
+        // With awards count sorting
+
+        $queryParameters = [
+            'sort' => 'awards_count:desc'
+        ];
+        $response = $this->call('GET', '/api/v0/games', $queryParameters);
+
+        $response->assertOk()
+            ->assertJsonPath('data.0.id', 3)
+            ->assertJsonPath('data.1.id', 2)
+            ->assertJsonPath('data.2.id', 1)
+            ->assertJsonPath('data.3.id', 4);
 
         // With default sorting
 

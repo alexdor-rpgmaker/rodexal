@@ -31,8 +31,13 @@ describe('GameRow', () => {
       awards: [
         {
           status: "awarded",
+          award_level: "gold",
+          category_name: "Alex"
+        },
+        {
+          status: "awarded",
           award_level: "bronze",
-          category_name: "Meilleur jeu"
+          category_name: "Ambiance"
         },
         {
           status: "nominated",
@@ -107,7 +112,7 @@ describe('GameRow', () => {
       const awardedCategories = wrapper.find('.awarded-categories')
       const nominatedCategories = wrapper.find('.nominated-categories')
 
-      expect(awardedCategories.text()).toEqual('Victoire : Meilleur jeu')
+      expect(awardedCategories.text()).toEqual('Victoire : Alex (or), Ambiance (bronze)')
       expect(nominatedCategories.text()).toEqual(
         'Nominations : Meilleurs graphismes'
       )
