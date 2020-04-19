@@ -2,13 +2,13 @@
 
 namespace Tests\Feature\Api\V0;
 
-use App\Former\AwardSessionCategory;
 use App\Former\Game;
 use App\Former\Member;
-use App\Former\Nomination;
-use App\Former\Screenshot;
 use App\Former\Session;
+use App\Former\Screenshot;
+use App\Former\Nomination;
 use App\Former\Contributor;
+use App\Former\AwardSessionCategory;
 
 use Tests\Feature\FeatureTest;
 
@@ -383,7 +383,7 @@ class GameApiRouterTest extends FeatureTest
      */
     public function testListGamesWithSorting()
     {
-        $firstGame = factory(Game::class)->create([
+        factory(Game::class)->create([
             'id_jeu' => 1,
             'nom_jeu' => 'Game in old session (2001)',
             'support' => 'RPG Maker XP',
@@ -398,14 +398,14 @@ class GameApiRouterTest extends FeatureTest
             'nom_session' => 'Session 2020',
         ]);
 
-        $secondGame = factory(Game::class)->create([
+        factory(Game::class)->create([
             'id_jeu' => 2,
             'nom_jeu' => 'AAAA',
             'support' => 'ZZZZ',
             'id_session' => $session
         ]);
 
-        $thirdGame = factory(Game::class)->create([
+        factory(Game::class)->create([
             'id_jeu' => 3,
             'nom_jeu' => 'BBBB',
             'support' => 'ZZZZ',
@@ -417,6 +417,51 @@ class GameApiRouterTest extends FeatureTest
             'nom_jeu' => 'CCCC',
             'support' => 'YYYY',
             'id_session' => $session
+        ]);
+
+        // With requested sorting
+
+        $queryParameters = [
+            'sort' => 'session:desc,software:asc,title'
+        ];
+        $response = $this->call('GET', '/api/v0/games', $queryParameters);
+
+        $response->assertOk()
+            ->assertJsonPath('data.0.id', 4)
+            ->assertJsonPath('data.1.id', 2)
+            ->assertJsonPath('data.2.id', 3)
+            ->assertJsonPath('data.3.id', 1);
+
+        // With default sorting
+
+        $responseWithDefaultSorting = $this->call('GET', '/api/v0/games');
+
+        $responseWithDefaultSorting->assertOk()
+            ->assertJsonPath('data.0.id', 1)
+            ->assertJsonPath('data.1.id', 2)
+            ->assertJsonPath('data.2.id', 3)
+            ->assertJsonPath('data.3.id', 4);
+    }
+
+    /**
+     * @testdox On peut trier la liste de jeux de l'API par nombre d'awards
+     */
+    public function testListGamesWithSortingOnAwardsCount()
+    {
+        $firstGame = factory(Game::class)->create([
+            'id_jeu' => 1,
+        ]);
+
+        $secondGame = factory(Game::class)->create([
+            'id_jeu' => 2,
+        ]);
+
+        $thirdGame = factory(Game::class)->create([
+            'id_jeu' => 3,
+        ]);
+
+        factory(Game::class)->create([
+            'id_jeu' => 4,
         ]);
 
         factory(Nomination::class)->create([
@@ -449,21 +494,6 @@ class GameApiRouterTest extends FeatureTest
             'id_categorie' => factory(AwardSessionCategory::class)->create()
         ]);
 
-        // With requested sorting
-
-        $queryParameters = [
-            'sort' => 'session:desc,software:asc,title'
-        ];
-        $response = $this->call('GET', '/api/v0/games', $queryParameters);
-
-        $response->assertOk()
-            ->assertJsonPath('data.0.id', 4)
-            ->assertJsonPath('data.1.id', 2)
-            ->assertJsonPath('data.2.id', 3)
-            ->assertJsonPath('data.3.id', 1);
-
-        // With awards count sorting
-
         $queryParameters = [
             'sort' => 'awards_count:desc'
         ];
@@ -473,16 +503,6 @@ class GameApiRouterTest extends FeatureTest
             ->assertJsonPath('data.0.id', 3)
             ->assertJsonPath('data.1.id', 2)
             ->assertJsonPath('data.2.id', 1)
-            ->assertJsonPath('data.3.id', 4);
-
-        // With default sorting
-
-        $responseWithDefaultSorting = $this->call('GET', '/api/v0/games');
-
-        $responseWithDefaultSorting->assertOk()
-            ->assertJsonPath('data.0.id', 1)
-            ->assertJsonPath('data.1.id', 2)
-            ->assertJsonPath('data.2.id', 3)
             ->assertJsonPath('data.3.id', 4);
     }
 }

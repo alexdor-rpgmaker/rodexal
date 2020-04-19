@@ -17,10 +17,10 @@ class GameApiController extends Controller
     {
         // TODO : Check N+1
         $games = Game::with(['session', 'contributors.member', 'screenshots', 'awards'])
-            ->withCount(['nominations as awarded_categories_count' => function($nominationsQuery) {
+            ->withCount(['nominations as awarded_categories_count' => function ($nominationsQuery) {
                 $nominationsQuery->where('is_vainqueur', '>', '0');
             }])
-            ->withCount(['nominations as nominated_categories_count' => function($nominationsQuery) {
+            ->withCount(['nominations as nominated_categories_count' => function ($nominationsQuery) {
                 $nominationsQuery->where('is_vainqueur', '0');
             }]);
 
@@ -223,7 +223,7 @@ class GameApiController extends Controller
             'site_officiel' => 'website',
             'groupe' => 'creation_group',
             'date_inscription' => 'created_at',
-            'awards_count' => 'awards_count',
+            'awards_count' => 'awards_count'
         ]);
 
         $DEFAULT_SORT_COLUMN = 'created_at';
