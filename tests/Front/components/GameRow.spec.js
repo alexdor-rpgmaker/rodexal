@@ -27,7 +27,19 @@ describe('GameRow', () => {
       downloadLinks: [
         { url: 'my-game-mac.zip', platform: 'mac' },
         { url: 'my-game-windows.zip', platform: 'windows' }
-      ]
+      ],
+      awards: [
+        {
+          status: "awarded",
+          award_level: "bronze",
+          category_name: "Meilleur jeu"
+        },
+        {
+          status: "nominated",
+          award_level: null,
+          category_name: "Meilleurs graphismes"
+        }
+      ],
     }
   }
 
@@ -90,6 +102,16 @@ describe('GameRow', () => {
         'https://former-app/design/divers/disquette-verte.gif'
       )
     })
+
+    it('displays the awards', () => {
+      const awardedCategories = wrapper.find('.awarded-categories')
+      const nominatedCategories = wrapper.find('.nominated-categories')
+
+      expect(awardedCategories.text()).toEqual('Victoire : Meilleur jeu')
+      expect(nominatedCategories.text()).toEqual(
+        'Nominations : Meilleurs graphismes'
+      )
+    })
   })
 
   describe('When there is no screenshot', () => {
@@ -114,6 +136,22 @@ describe('GameRow', () => {
 
       const gameMakers = wrapper.find('.makers')
       expect(gameMakers.text()).toEqual('Jack, Jones')
+    })
+  })
+
+  describe('When there is no awards', () => {
+    it('does not display awards', () => {
+      const propsDataWithoutGroup = { ...propsData }
+      propsDataWithoutGroup.game.awards = []
+      const wrapper = shallowMount(GameRow, {
+        propsData: propsDataWithoutGroup
+      })
+
+      const awardedCategories = wrapper.find('.awarded-categories')
+      const nominatedCategories = wrapper.find('.nominated-categories')
+
+      expect(awardedCategories.exists()).toEqual(false)
+      expect(nominatedCategories.exists()).toEqual(false)
     })
   })
 })

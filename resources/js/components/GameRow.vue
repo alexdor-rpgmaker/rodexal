@@ -3,14 +3,22 @@
     <td>
       <template v-if="game.screenshots[0]">
         <a :href="formerAppUrl + '/?p=jeu&id=' + game.id" class="screenshot-link">
-          <img :src="game.screenshots[0].url" width="100" class="screenshot" style="border: none;" />
+          <img :src="game.screenshots[0].url" width="100" class="screenshot" style="border: none;" alt="" />
         </a>
       </template>
     </td>
     <td>
-      <a :href="formerAppUrl + '/?p=jeu&id=' + game.id" class="title-link">
-        {{ game.title }}
-      </a>
+      <p class="title mb-1">
+        <a :href="formerAppUrl + '/?p=jeu&id=' + game.id" class="title-link">
+          {{ game.title }}
+        </a>
+      </p>
+      <p class="awarded-categories mb-1" v-if="wasAwarded">
+        Victoire : {{ awardedCategoriesList }}
+      </p>
+      <p class="nominated-categories mb-1" v-if="wasNominated">
+        Nominations : {{ nominatedCategoriesList }}
+      </p>
     </td>
     <td class="session">{{ game.session.name }}</td>
     <td class="makers">
@@ -36,13 +44,51 @@
 <script>
 export default {
   props: {
-    game: Object
+    game: {
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    awardedCategories() {
+      if(!this.game.awards) {
+        console.log(this.game)
+      }
+      return this.game
+        .awards
+        .filter(award => award.status === "awarded")
+    },
+    awardedCategoriesList() {
+      return this.awardedCategories
+        .map(award => award.category_name)
+        .join(", ")
+    },
+    wasAwarded() {
+      return this.awardedCategoriesList.length > 0
+    },
+    nominatedCategories() {
+      return this.game
+        .awards
+        .filter(award => award.status === "nominated")
+    },
+    nominatedCategoriesList() {
+      return this.nominatedCategories
+        .map(award => award.category_name)
+        .join(", ")
+    },
+    wasNominated() {
+      return this.nominatedCategories.length > 0
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-td {
+.tr td {
   text-align: left;
+}
+
+.awarded-categories, .nominated-categories {
+  font-style: italic;
 }
 </style>

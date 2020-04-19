@@ -242,7 +242,8 @@ export default {
         screenshots: gameDto.screenshots,
         description: gameDto.description,
         creationGroup: gameDto.creation_group,
-        downloadLinks: gameDto.download_links
+        downloadLinks: gameDto.download_links,
+        awards: gameDto.awards
       }
     }
   }
