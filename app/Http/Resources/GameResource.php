@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Helpers\StringParser;
 
 use Closure;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -83,6 +84,10 @@ class GameResource extends JsonResource
         };
     }
 
+    /**
+     * @param Carbon|null $date
+     * @return string|null
+     */
     private function formatDateOrNullify($date)
     {
         return empty($date) ? null : $date->format('c');

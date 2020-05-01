@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\GameResource;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\Builder;
 
 class GameApiController extends Controller
@@ -77,9 +78,10 @@ class GameApiController extends Controller
             ->orderBy('id_jeu')
             ->paginate($perPage);
 
-        // TODO : Response::HTTP_PARTIAL_CONTENT
-        // TODO : ->response()->setStatusCode()
-        return GameResource::collection($games);
+        $statusCode = $games->hasPages() ? Response::HTTP_PARTIAL_CONTENT : Response::HTTP_OK;
+        return GameResource::collection($games)
+            ->response()
+            ->setStatusCode($statusCode);
     }
 
     private function between1And50($number)
