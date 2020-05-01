@@ -38,7 +38,7 @@ describe('Games', () => {
 
   describe('Page buttons', () => {
     describe('when current page is the first and the last', () => {
-      it('does not display buttons', () => {
+      it('disables previous and next buttons', () => {
         const wrapper = shallowMount(Games, {
           data: () => ({
             page: 1,
@@ -46,13 +46,13 @@ describe('Games', () => {
           })
         })
 
-        expect(wrapper.find('.previous').exists()).toEqual(false)
-        expect(wrapper.find('.next').exists()).toEqual(false)
+        expect(wrapper.find('.previous').classes('disabled')).toEqual(true)
+        expect(wrapper.find('.next').classes('disabled')).toEqual(true)
       })
     })
 
     describe('when current page is the first but not the last', () => {
-      it('displays next button', () => {
+      it('disables previous button', () => {
         const wrapper = shallowMount(Games, {
           data: () => ({
             page: 1,
@@ -60,13 +60,13 @@ describe('Games', () => {
           })
         })
 
-        expect(wrapper.find('.previous').exists()).toEqual(false)
-        expect(wrapper.find('.next').exists()).toEqual(true)
+        expect(wrapper.find('.previous').classes('disabled')).toEqual(true)
+        expect(wrapper.find('.next').classes('disabled')).toEqual(false)
       })
     })
 
     describe('when current page is neither the first nor the last', () => {
-      it('displays both buttons', () => {
+      it('does not disable buttons', () => {
         const wrapper = shallowMount(Games, {
           data: () => ({
             page: 5,
@@ -74,13 +74,13 @@ describe('Games', () => {
           })
         })
 
-        expect(wrapper.find('.previous').exists()).toEqual(true)
-        expect(wrapper.find('.next').exists()).toEqual(true)
+        expect(wrapper.find('.previous').classes('disabled')).toEqual(false)
+        expect(wrapper.find('.next').classes('disabled')).toEqual(false)
       })
     })
 
     describe('when current page is the last and not the first', () => {
-      it('displays previous button', () => {
+      it('disables next button', () => {
         const wrapper = shallowMount(Games, {
           data: () => ({
             page: 10,
@@ -88,8 +88,8 @@ describe('Games', () => {
           })
         })
 
-        expect(wrapper.find('.previous').exists()).toEqual(true)
-        expect(wrapper.find('.next').exists()).toEqual(false)
+        expect(wrapper.find('.previous').classes('disabled')).toEqual(false)
+        expect(wrapper.find('.next').classes('disabled')).toEqual(true)
       })
     })
   })

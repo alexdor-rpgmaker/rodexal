@@ -51,18 +51,18 @@
                 </div>
               </div>
               <div class="col">
-                  <div class="form-check form-group pt-4 mb-5">
-                    <input
-                            id="download-links"
-                            name="download-links"
-                            class="form-check-input"
-                            type="checkbox"
-                            v-model="withDownloadLinks"
-                    />
-                    <label for="download-links" class="form-check-label">Avec lien de téléchargement</label>
-                  </div>
+                <div class="form-check form-group pt-4 mb-5">
+                  <input
+                          id="download-links"
+                          name="download-links"
+                          class="form-check-input"
+                          type="checkbox"
+                          v-model="withDownloadLinks"
+                  />
+                  <label for="download-links" class="form-check-label">Avec lien de téléchargement</label>
+                </div>
 
-                  <button class="bouton" type="submit">Rechercher</button>
+                <button class="bouton" type="submit">Rechercher</button>
               </div>
             </div>
           </form>
@@ -88,20 +88,30 @@
               :key="game.id"
       />
     </table>
-    <button
-            v-if="page > 1"
-            @click="previousPage"
-            class="previous btn btn-primary mt-4"
-            type="button"
-    >Résultats précédents
-    </button>
-    <button
-            v-if="notLastPage"
-            @click="nextPage"
-            class="next btn btn-primary mt-4"
-            type="button"
-    >Résultats suivants
-    </button>
+
+    <nav aria-label="Pagination de la liste des jeux" v-if="totalPagesCount > 1">
+      <ul class="pagination justify-content-center mt-4 mb-4">
+        <li class="page-item previous" :class="{disabled: page === 1}">
+          <a class="page-link" href="#" @click.prevent="previousPage" tabindex="-1">Précédente</a>
+        </li>
+        <li v-for="index in totalPagesCount" :key="index" class="page-item" :class="{active: index === page}">
+          <template v-if="index === page">
+            <a class="page-link">
+              {{ index }}
+              <span class="sr-only">(current)</span>
+            </a>
+          </template>
+          <template v-else>
+            <a class="page-link" href="#" @click.prevent="goToPage(index)">
+              {{ index }}
+            </a>
+          </template>
+        </li>
+        <li class="page-item next" :class="{disabled: lastPage}">
+          <a class="page-link" href="#" @click.prevent="nextPage">Suivante</a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
@@ -185,8 +195,8 @@
       await this.fetchGames()
     },
     computed: {
-      notLastPage() {
-        return this.page < this.totalPagesCount
+      lastPage() {
+        return this.page === this.totalPagesCount
       },
       gamesCount() {
         if (this.resultsCountOnThisPage === this.totalResultsCount) {
@@ -235,6 +245,11 @@
       },
       async search() {
         this.page = 1
+        await this.fetchGames()
+      },
+      async goToPage(page) {
+        window.scrollTo(0, 0)
+        this.page = page
         await this.fetchGames()
       },
       async previousPage() {
@@ -295,6 +310,29 @@
 
     .download {
       width: 50px;
+    }
+
+    .pagination {
+      .page-item {
+        .page-link {
+          color: #d39501;
+        }
+
+        &.active {
+          .page-link {
+            color: white;
+            border-color: #d39501;
+            background-color: #d39501;
+          }
+        }
+
+        &.disabled {
+          .page-link {
+            color: #6c757d;
+          }
+        }
+      }
+
     }
   }
 </style>
