@@ -15,7 +15,7 @@ class GamesTest extends BrowserTest
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/jeux')
-                ->assertSee('Nom du Jeu')
+                ->assertSee('Titre du Jeu')
                 ->assertSee('Auteur(s)');
         });
     }
