@@ -174,4 +174,42 @@ class Game extends FormerModel
 
         return null;
     }
+
+    public function hasWindowsDownloadLink(): bool
+    {
+        return !empty($this->lien_sur_site) ||
+            (!empty($this->lien) && !$this->is_lien_errone);
+    }
+
+    public function hasMacDownloadLink(): bool
+    {
+        return !empty($this->lien_sur_site_sur_mac) ||
+            (!empty($this->lien_sur_mac) && !$this->is_lien_errone);
+    }
+
+    public function getWindowsDownloadLink(): string
+    {
+        if (!empty($this->lien_sur_site)) {
+            return $this->onWebsiteDownloadUrl('lien_sur_site');
+        }
+
+        return $this->lien;
+    }
+
+    public function getMacDownloadLink(): string
+    {
+        if (!empty($this->lien_sur_site_sur_mac)) {
+            return $this->onWebsiteDownloadUrl('lien_sur_site_sur_mac');
+        }
+
+        return $this->lien_sur_mac;
+    }
+
+    private function onWebsiteDownloadUrl($downloadColumn): string
+    {
+        $downloadUrl = env('FORMER_APP_URL') . '/archives/';
+        $downloadUrl .= Session::nameFromId($this->id_session);
+        $downloadUrl .= '/jeux/' . StringParser::html($this->{$downloadColumn});
+        return $downloadUrl;
+    }
 }

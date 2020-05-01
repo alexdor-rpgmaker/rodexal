@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Former\Session;
 use App\Helpers\StringParser;
 
 use Closure;
@@ -12,7 +11,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class GameResource extends JsonResource
 {
     /**
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
     public function toArray($request)
@@ -49,29 +48,25 @@ class GameResource extends JsonResource
 
     private function extractDownloadLinks($game)
     {
+        if ($game->link_removed_on_author_demand) {
+            return [];
+        }
+
         $downloadLinks = [];
-        if (!empty($game->lien_sur_site) || !empty($game->lien)) {
+        if ($game->hasWindowsDownloadLink()) {
             $downloadLinks[] = [
                 'platform' => 'windows',
-                'url' => !empty($game->lien_sur_site) ? $this->onWebsiteDownloadUrl($game, 'lien_sur_site') : $game->lien,
+                'url' => $game->getWindowsDownloadLink(),
             ];
         }
-        if (!empty($game->lien_sur_site_sur_mac) || !empty($game->lien_sur_mac)) {
+        if ($game->hasMacDownloadLink()) {
             $downloadLinks[] = [
                 'platform' => 'mac',
-                'url' => !empty($game->lien_sur_site_sur_mac) ? $this->onWebsiteDownloadUrl($game, 'lien_sur_site_sur_mac') : $game->lien_sur_mac,
+                'url' => $game->getMacDownloadLink(),
             ];
         }
 
         return $downloadLinks;
-    }
-
-    private function onWebsiteDownloadUrl($game, $downloadColumn)
-    {
-        $downloadUrl = env('FORMER_APP_URL') . '/archives/';
-        $downloadUrl .= Session::nameFromId($game->session->id_session);
-        $downloadUrl .= '/jeux/' . StringParser::html($game->{$downloadColumn});
-        return $downloadUrl;
     }
 
     /**
