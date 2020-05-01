@@ -64,6 +64,7 @@ class BBCode
             '$1'
         );
 
+        /** @noinspection CssUnitlessNumber */
         $bbCode->addParser(
             'size-with-letters',
             '/\[size=(xx-small|x-small|small|medium|large|x-large|xx-large)\](.*?)\[\/size\]/s',
@@ -158,14 +159,14 @@ class BBCode
         $bbCode->addParser(
             'twitch',
             '/\[twitch\](.+)\[\/twitch\]/s',
-            '<iframe src="https://player.twitch.tv/?autoplay=false&video=v$1" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>',
+            '<iframe src="https://player.twitch.tv/?autoplay=false&video=v$1" allowfullscreen="true" height="378" width="620" style="border: 0; overflow: hidden;"></iframe>',
             '$1'
         );
 
         $bbCode->addParser(
             'twitch-clip',
             '/\[twitch=clip\](.+)\[\/twitch\]/s',
-            '<iframe src="https://clips.twitch.tv/embed?autoplay=false&clip=$1" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>',
+            '<iframe src="https://clips.twitch.tv/embed?autoplay=false&clip=$1" allowfullscreen="true" height="378" width="620" style="border: 0; overflow: hidden;"></iframe>',
             '$1'
         );
 

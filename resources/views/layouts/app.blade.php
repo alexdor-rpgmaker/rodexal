@@ -263,7 +263,7 @@
 
                 <li>
                     {{-- <a href="?p=connexion">Se connecter</a> --}}
-                    <a href="{{ url('/oauth/callback') }}">Se connecter</a></li>
+                    <a href="{{ url('/oauth/callback') }}">Se connecter</a>
                 </li>
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=inscription">S'inscrire</a></li>
 
@@ -306,7 +306,7 @@
                 @php
                     $connected_users = mt_rand(1, 5);
                     $unconnected_visitors = mt_rand(3, 10);
-                    $all_visitors = $connected_users + $unconnected_visitors;
+                    $all_visitors = $connected_users + $unconnected_visitors
                 @endphp
                 {{ $all_visitors }} visiteurs connectés ({{ $connected_users }} membres et {{ $unconnected_visitors }} anonymes)
             </div>

@@ -103,6 +103,7 @@ export default {
 }
 
 .makers {
+  //noinspection CssUnusedSymbol
   a.color-member,
   a.color-challenger,
   a.color-ambassador,

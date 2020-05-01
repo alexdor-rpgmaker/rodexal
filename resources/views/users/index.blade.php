@@ -10,7 +10,7 @@
                     <p>Pas d'utilisateurs...</p>
                 @else
                     <ul>
-                        @forelse ($users as $user)
+                        @foreach ($users as $user)
                             <li>{{ $user->name }}</li>
                         @endforeach
                     </ul>

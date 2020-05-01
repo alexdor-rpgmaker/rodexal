@@ -326,6 +326,7 @@
           }
         }
 
+        //noinspection CssUnusedSymbol
         &.disabled {
           .page-link {
             color: #6c757d;

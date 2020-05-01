@@ -378,7 +378,7 @@ class BBCodeTest extends TestCase
 
         $htmlReel = $this->bbCode->convertToHtml($texteAvecBbcode);
 
-        $htmlAttendu = "<iframe src=\"https://player.twitch.tv/?autoplay=false&video=v1234567\" frameborder=\"0\" allowfullscreen=\"true\" scrolling=\"no\" height=\"378\" width=\"620\"></iframe>";
+        $htmlAttendu = "<iframe src=\"https://player.twitch.tv/?autoplay=false&video=v1234567\" allowfullscreen=\"true\" height=\"378\" width=\"620\" style=\"border: 0; overflow: hidden;\"></iframe>";
         $this->assertEquals($htmlAttendu, $htmlReel);
     }
 
@@ -391,7 +391,7 @@ class BBCodeTest extends TestCase
 
         $htmlReel = $this->bbCode->convertToHtml($texteAvecBbcode);
 
-        $htmlAttendu = "<iframe src=\"https://clips.twitch.tv/embed?autoplay=false&clip=IncredibleSpeedrunnerHavingItems\" frameborder=\"0\" allowfullscreen=\"true\" scrolling=\"no\" height=\"378\" width=\"620\"></iframe>";
+        $htmlAttendu = "<iframe src=\"https://clips.twitch.tv/embed?autoplay=false&clip=IncredibleSpeedrunnerHavingItems\" allowfullscreen=\"true\" height=\"378\" width=\"620\" style=\"border: 0; overflow: hidden;\"></iframe>";
         $this->assertEquals($htmlAttendu, $htmlReel);
     }
 

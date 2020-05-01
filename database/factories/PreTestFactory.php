@@ -2,8 +2,11 @@
 
 use App\User;
 use App\PreTest;
-use Faker\Generator as Faker;
 
+use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
+
+/** @var Factory $factory */
 $factory->define(PreTest::class, function (Faker $faker) {
     return [
         'user_id' => factory(User::class)->create()->id,

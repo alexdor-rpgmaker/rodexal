@@ -81,7 +81,7 @@
           <div v-if="errors && errors.finalThought" class="text-danger">{{ errors.finalThought[0] }}</div>
           <div class="final-thought-precision" v-if="fields.finalThought === false">
             <label for="finalThoughtPrecision">Précisions</label>
-            
+
             <textarea
               class="form-control"
               name="finalThoughtPrecision"
@@ -96,7 +96,7 @@
         </div>
       </div>
 
-      <div class="form-group row submit-wrapper">
+      <div class="form-group row mt-3">
         <div class="col-md-12 text-center">
           <button type="submit" class="submit btn btn-primary mb-0">Envoyer</button>
         </div>
@@ -107,7 +107,7 @@
 
 <script>
 import FormMixin from '../FormMixin'
-      
+
 export default {
   props: {
     questions: Array,
@@ -140,6 +140,7 @@ export default {
           explanation: null
         }
       })
+      // noinspection UnnecessaryLocalVariableJS
       const fields =
         this.initMethod === 'PUT'
           ? this.preTest
@@ -174,9 +175,5 @@ h2 {
 
 .final-thought-precision {
   margin-top: 10px;
-}
-
-.card .card-body .submit-wrapper {
-  margin-top: 30px;
 }
 </style>

@@ -2,6 +2,7 @@
 
 namespace Tests\Browser;
 
+use App\Former\Game;
 use Laravel\Dusk\Browser;
 use Throwable;
 
@@ -13,6 +14,7 @@ class GamesTest extends BrowserTest
      */
     public function testConsulterListeDesJeux()
     {
+        factory(Game::class)->create();
         $this->browse(function (Browser $browser) {
             $browser->visit('/jeux')
                 ->assertSee('Titre du Jeu')

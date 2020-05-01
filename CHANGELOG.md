@@ -4,4 +4,4 @@
 
 ## To do before deployment
 
-Adding migrations in old database => Fill laralex_migrations table with those "already processed migrations" (batch = 4)
+Add migrations in the old database => Fill laralex_migrations table with those "already processed migrations" (batch = 4)

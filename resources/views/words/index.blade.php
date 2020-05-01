@@ -36,9 +36,10 @@
 
                             @foreach ($letters as $letter)
                                 @php
-                                    $transliterator = Transliterator::create('NFD; [:Nonspacing Mark:] Remove; NFC'); 
+                                    $transliterator = Transliterator::create('NFD; [:Nonspacing Mark:] Remove; NFC');
+                                    /** @noinspection PhpUndefinedVariableInspection */
                                     $transliterated_letter = $transliterator->transliterate($letter);
-                                    $uppercased_letter = strtoupper($transliterated_letter);
+                                    $uppercased_letter = strtoupper($transliterated_letter)
                                 @endphp
                                     @if($uppercased_letter == $page_letter)
                                         <li class="page-item active">
@@ -77,7 +78,7 @@
                                             </form> -
                                         @endcan
                                         @can('update', $word)
-                                            <a href="{{ route('dictionnaire.edit', $word) }}" class="edit">Modifier</a> - 
+                                            <a href="{{ route('dictionnaire.edit', $word) }}" class="edit">Modifier</a> -
                                         @endcan
                                         <a href="{{ route('dictionnaire.index') }}#{{ $word->slug }}" class="quick-link">Lien</a>
                                     </div>

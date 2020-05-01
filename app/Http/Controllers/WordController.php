@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Transliterator;
-use BBCode;
 use App\Word;
+use App\Helpers\BBCode;
+
+use Transliterator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
