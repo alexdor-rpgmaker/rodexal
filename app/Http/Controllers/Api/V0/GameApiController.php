@@ -44,9 +44,11 @@ class GameApiController extends Controller
                 $games = $games->withMacDownloadLink();
             }
             if ($request->download_links == 'any') {
-                $games = $games->withWindowsDownloadLink()
-                    ->orWhere
-                    ->withMacDownloadLink();
+                $games = $games->where(function ($query) {
+                    $query->withWindowsDownloadLink()
+                        ->orWhere
+                        ->withMacDownloadLink();
+                });
             }
             if ($request->download_links == 'none') {
                 $games = $games->withoutDownloadLinks();

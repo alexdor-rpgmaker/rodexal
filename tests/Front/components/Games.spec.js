@@ -205,7 +205,8 @@ describe('Games', () => {
             selectedSoftware: 'RPG Maker 2003',
             selectedSession: '15',
             selectedSort: 'title',
-            sortDirection: 'asc'
+            sortDirection: 'asc',
+            withDownloadLinks: true
           })
         })
 
@@ -218,7 +219,8 @@ describe('Games', () => {
             q: 'rutipa',
             software: 'RPG Maker 2003',
             session_id: '15',
-            sort: 'title:asc'
+            sort: 'title:asc',
+            download_links: 'any'
           },
           url: '/api/v0/games'
         })
