@@ -160,18 +160,21 @@ class GameApiRouterTest extends FeatureTest
 
         // Pagination
         $response->assertJsonFragment([
-            "current_page" => 1,
-            "from" => 1,
-            "last_page" => 1,
-            "per_page" => 50,
-            "to" => 2,
-            "total" => 2,
-
-            "path" => "http://rodexal.test/api/v0/games",
-            "first_page_url" => "http://rodexal.test/api/v0/games?page=1",
-            "last_page_url" => "http://rodexal.test/api/v0/games?page=1",
-            "prev_page_url" => null,
-            "next_page_url" => null,
+            "meta" => [
+                "current_page" => 1,
+                "from" => 1,
+                "last_page" => 1,
+                "per_page" => 50,
+                "to" => 2,
+                "total" => 2,
+                "path" => "http://rodexal.test/api/v0/games",
+            ],
+            "links" => [
+                "first" => "http://rodexal.test/api/v0/games?page=1",
+                "last" => "http://rodexal.test/api/v0/games?page=1",
+                "prev" => null,
+                "next" => null,
+            ]
         ]);
 
         // Data

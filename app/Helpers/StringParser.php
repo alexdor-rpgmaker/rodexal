@@ -9,4 +9,9 @@ class StringParser
         // TODO
         return $string;
     }
+
+    public static function parseOrNullify($string)
+    {
+        return empty($string) ? null : self::html($string);
+    }
 }

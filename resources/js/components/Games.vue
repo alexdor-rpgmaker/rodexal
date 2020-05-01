@@ -236,9 +236,9 @@
           params
         })
 
-        this.page = request.data.current_page
-        this.totalPagesCount = request.data.last_page
-        this.totalResultsCount = request.data.total
+        this.page = request.data.meta.current_page
+        this.totalPagesCount = request.data.meta.last_page
+        this.totalResultsCount = request.data.meta.total
         this.resultsCountOnThisPage = request.data.data.length
 
         this.games = request.data.data.map(this.formatGameForList)

@@ -15,6 +15,7 @@ describe('Games', () => {
 
   beforeEach(() => {
     const apiResponseBody = {
+      meta: {},
       data: []
     }
     axios.mockResolvedValue({
@@ -37,8 +38,8 @@ describe('Games', () => {
   })
 
   describe('Page buttons', () => {
-    describe('when current page is the first and the last', () => {
-      it('disables previous and next buttons', () => {
+    describe('when there is only one page', () => {
+      it('has no navigation bar', () => {
         const wrapper = shallowMount(Games, {
           data: () => ({
             page: 1,
@@ -46,8 +47,7 @@ describe('Games', () => {
           })
         })
 
-        expect(wrapper.find('.previous').classes('disabled')).toEqual(true)
-        expect(wrapper.find('.next').classes('disabled')).toEqual(true)
+        expect(wrapper.find('ul.pagination').exists()).toEqual(false)
       })
     })
 
@@ -126,9 +126,11 @@ describe('Games', () => {
     function createWrapperWithParams(params) {
       const wrapper = shallowMount(Games, params)
       const apiResponseBody = {
-        current_page: 2,
-        last_page: 5,
-        total: 150,
+        meta: {
+          current_page: 2,
+          last_page: 5,
+          total: 150
+        },
         data: [{ title: 'game-1' }, { title: 'game-2' }]
       }
       axios.mockClear().mockResolvedValue({

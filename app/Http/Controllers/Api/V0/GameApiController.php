@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Api\V0;
 
 use App\Former\Game;
 use App\Former\Session;
-use App\Helpers\StringParser;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\GameResource;
 
-use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -79,148 +78,14 @@ class GameApiController extends Controller
             ->orderBy('id_jeu')
             ->paginate($perPage);
 
-        $games->getCollection()->transform(function ($game) {
-            $game = $this->cleanAttributes($game, [
-                'nom_jeu', 'taille', 'genre_jeu', 'theme', 'duree', 'support', 'site_officiel', 'groupe'
-            ]);
-
-            return [
-                'id' => $game->id_jeu,
-                'status' => $game->getStatus(),
-                'title' => $game->nom_jeu,
-                'session' => [
-                    'id' => $game->session->id_session,
-                    'name' => $game->session->nom_session
-                ],
-                'genre' => $game->genre_jeu,
-                'software' => $game->support,
-                'theme' => $game->theme,
-                'duration' => $game->duree,
-                'size' => $game->poids,
-                'website' => $game->site_officiel,
-                'creation_group' => $game->groupe,
-                'logo' => $game->getLogoUrl(),
-                'created_at' => $this->formatDateOrNullify($game->date_inscription),
-                'description' => $game->description_jeu,
-                'download_links' => $this->extractDownloadLinks($game),
-                'awards' => $game->awards->transform($this->parseAwards()),
-                'authors' => $game->contributors->transform($this->parseContributors()),
-                'screenshots' => $game->screenshots->transform($this->parseScreenshots($game))
-            ];
-        });
-        return response()->json($games, 200);
-    }
-
-    private function extractDownloadLinks($game)
-    {
-        $downloadLinks = [];
-        if (!empty($game->lien_sur_site) || !empty($game->lien)) {
-            $downloadLinks[] = [
-                'platform' => 'windows',
-                'url' => !empty($game->lien_sur_site) ? $this->onWebsiteDownloadUrl($game, 'lien_sur_site') : $game->lien,
-            ];
-        }
-        if (!empty($game->lien_sur_site_sur_mac) || !empty($game->lien_sur_mac)) {
-            $downloadLinks[] = [
-                'platform' => 'mac',
-                'url' => !empty($game->lien_sur_site_sur_mac) ? $this->onWebsiteDownloadUrl($game, 'lien_sur_site_sur_mac') : $game->lien_sur_mac,
-            ];
-        }
-
-        return $downloadLinks;
-    }
-
-    private function onWebsiteDownloadUrl($game, $downloadColumn)
-    {
-        $downloadUrl = env('FORMER_APP_URL') . '/archives/';
-        $downloadUrl .= Session::nameFromId($game->session->id_session);
-        $downloadUrl .= '/jeux/' . StringParser::html($game->{$downloadColumn});
-        return $downloadUrl;
-    }
-
-    /**
-     * @return Closure
-     */
-    private function parseContributors(): Closure
-    {
-        return function ($contributor) {
-            $userId = $contributor->id_membre ? $contributor->id_membre : null;
-            $rank = $userId && $contributor->member ? $contributor->member->rank : null;
-            $username = $userId && $contributor->member ? $contributor->member->pseudo : $contributor->nom_membre;
-
-            return [
-                'id' => $userId,
-                'rank' => $rank,
-                'username' => StringParser::html($username),
-                'role' => $this->parseOrNullify($contributor->role)
-            ];
-        };
-    }
-
-    /**
-     * @param $game
-     * @return Closure
-     */
-    private function parseScreenshots($game): Closure
-    {
-        return function ($screenshot) use ($game) {
-            return [
-                'title' => $this->parseOrNullify($screenshot->nom_screenshot),
-                'url' => $screenshot->getImageUrlForSession($game->session->id_session),
-            ];
-        };
-    }
-
-    /**
-     * @return Closure
-     */
-    private function parseAwards(): Closure
-    {
-        return function ($award) {
-            $awardLevel = null;
-            if ($award->is_declinaison) {
-                switch ($award->pivot->is_vainqueur) {
-                    case 1:
-                        $awardLevel = 'gold';
-                        break;
-                    case 2:
-                        $awardLevel = 'silver';
-                        break;
-                    case 3:
-                        $awardLevel = 'bronze';
-                        break;
-                }
-            }
-
-            return [
-                'status' => $award->pivot->is_vainqueur > 0 ? 'awarded' : 'nominated',
-                'award_level' => $awardLevel,
-                'category_name' => StringParser::html($award->nom_categorie)
-            ];
-        };
+        // TODO : Response::HTTP_PARTIAL_CONTENT
+        // TODO : ->response()->setStatusCode()
+        return GameResource::collection($games);
     }
 
     private function between1And50($number)
     {
         return in_array(intval($number), range(1, 50));
-    }
-
-    private function parseOrNullify($string)
-    {
-        return empty($string) ? null : StringParser::html($string);
-    }
-
-    private function formatDateOrNullify($date)
-    {
-        return empty($date) ? null : $date->format('c');
-    }
-
-    private function cleanAttributes($object, $attributes)
-    {
-        foreach ($attributes as $attribute) {
-            $object->{$attribute} = $this->parseOrNullify($object->{$attribute});
-        }
-        return $object;
     }
 
     /**

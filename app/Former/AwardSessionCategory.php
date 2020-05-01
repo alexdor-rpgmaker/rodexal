@@ -2,6 +2,8 @@
 
 namespace App\Former;
 
+use Illuminate\Database\Eloquent\Builder;
+
 class AwardSessionCategory extends FormerModel
 {
     /**
@@ -29,5 +31,15 @@ class AwardSessionCategory extends FormerModel
     public function session()
     {
         return $this->belongsTo('App\Former\Session', 'id_session');
+    }
+
+    /**
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope('deleted', function (Builder $builder) {
+            $builder->where('statut_categorie', '>', 0);
+        });
     }
 }
