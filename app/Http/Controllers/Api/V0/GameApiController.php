@@ -36,16 +36,33 @@ class GameApiController extends Controller
             $games = $games->where('support', $request->software);
         }
 
+        if ($request->download_links) {
+            if ($request->download_links == 'windows') {
+                $games = $games->withWindowsDownloadLink();
+            }
+            if ($request->download_links == 'mac') {
+                $games = $games->withMacDownloadLink();
+            }
+            if ($request->download_links == 'any') {
+                $games = $games->withWindowsDownloadLink()
+                    ->orWhere
+                    ->withMacDownloadLink();
+            }
+            if ($request->download_links == 'none') {
+                $games = $games->withoutDownloadLinks();
+            }
+        }
+
         if ($request->q) {
             $searchedTerm = "%" . $request->q . "%";
 
             $games = $games->where(function ($query) use ($searchedTerm) {
-                $query->where('nom_jeu', 'like', $searchedTerm);
-                $query->orWhere('description_jeu', 'like', $searchedTerm);
-                $query->orWhere('genre_jeu', 'like', $searchedTerm);
-                $query->orWhere('theme', 'like', $searchedTerm);
-                $query->orWhere('support', 'like', $searchedTerm);
-                $query->orWhere('groupe', 'like', $searchedTerm);
+                $query->where('nom_jeu', 'like', $searchedTerm)
+                    ->orWhere('description_jeu', 'like', $searchedTerm)
+                    ->orWhere('genre_jeu', 'like', $searchedTerm)
+                    ->orWhere('theme', 'like', $searchedTerm)
+                    ->orWhere('support', 'like', $searchedTerm)
+                    ->orWhere('groupe', 'like', $searchedTerm);
             });
         }
 

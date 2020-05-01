@@ -379,7 +379,106 @@ class GameApiRouterTest extends FeatureTest
     }
 
     /**
-     * @testdox On peut trier la liste de jeux de l'API
+     * @testdox On peut filtrer la liste de jeux de l'API par lien de téléchargement
+     */
+    public function testListGamesFilteredByDownloadLink()
+    {
+        factory(Game::class)->create([
+            'id_jeu' => 1,
+            'nom_jeu' => 'Game without download links',
+        ]);
+
+        factory(Game::class)->create([
+            'id_jeu' => 2,
+            'nom_jeu' => 'Game with Windows link',
+            'lien' => 'https://windows-link',
+        ]);
+
+        factory(Game::class)->create([
+            'id_jeu' => 3,
+            'nom_jeu' => 'Game with Mac link',
+            'lien_sur_mac' => 'https://mac-link',
+        ]);
+
+        factory(Game::class)->create([
+            'id_jeu' => 4,
+            'nom_jeu' => 'Game with Windows link',
+            'lien_sur_site' => 'https://windows-link',
+        ]);
+
+        factory(Game::class)->create([
+            'id_jeu' => 5,
+            'nom_jeu' => 'Game with Mac link',
+            'lien_sur_site_sur_mac' => 'https://mac-link',
+        ]);
+
+        factory(Game::class)->create([
+            'id_jeu' => 6,
+            'nom_jeu' => 'Game with both platform links',
+            'lien' => 'https://windows-link',
+            'lien_sur_mac' => 'https://mac-link',
+        ]);
+
+        factory(Game::class)->create([
+            'id_jeu' => 7,
+            'nom_jeu' => 'Game with link removed by author',
+            'lien' => 'https://windows-link',
+            'lien_sur_mac' => 'https://mac-link',
+            'link_removed_on_author_demand' => true,
+        ]);
+
+        factory(Game::class)->create([
+            'id_jeu' => 8,
+            'nom_jeu' => 'Game with unavailable link',
+            'lien' => 'https://windows-link',
+            'lien_sur_mac' => 'https://mac-link',
+            'is_lien_errone' => true,
+        ]);
+
+        // Windows games
+
+        $queryParameters = ['download_links' => 'windows'];
+        $response = $this->call('GET', '/api/v0/games', $queryParameters);
+
+        $response->assertOk()
+            ->assertJsonCount(3, 'data')
+            ->assertJsonPath('data.0.id', 2)
+            ->assertJsonPath('data.1.id', 4)
+            ->assertJsonPath('data.2.id', 6);
+
+        // Mac games
+
+        $queryParameters = ['download_links' => 'mac'];
+        $response = $this->call('GET', '/api/v0/games', $queryParameters);
+
+        $response->assertOk()
+            ->assertJsonCount(3, 'data')
+            ->assertJsonPath('data.0.id', 3)
+            ->assertJsonPath('data.1.id', 5)
+            ->assertJsonPath('data.2.id', 6);
+
+        // Games with links
+
+        $queryParameters = ['download_links' => 'any'];
+        $response = $this->call('GET', '/api/v0/games', $queryParameters);
+
+        $response->assertOk()
+            ->assertJsonCount(5, 'data');
+
+        // Games without links
+
+        $queryParameters = ['download_links' => 'none'];
+        $response = $this->call('GET', '/api/v0/games', $queryParameters);
+
+        $response->assertOk()
+            ->assertJsonCount(3, 'data')
+            ->assertJsonPath('data.0.id', 1)
+            ->assertJsonPath('data.1.id', 7)
+            ->assertJsonPath('data.2.id', 8);
+    }
+
+    /**
+     * @testdox On peut ordonner la liste de jeux de l'API
      */
     public function testListGamesWithSorting()
     {
@@ -444,7 +543,7 @@ class GameApiRouterTest extends FeatureTest
     }
 
     /**
-     * @testdox On peut trier la liste de jeux de l'API par nombre d'awards
+     * @testdox On peut ordonner la liste de jeux de l'API par nombre d'awards
      */
     public function testListGamesWithSortingOnAwardsCount()
     {

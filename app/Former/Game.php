@@ -67,6 +67,66 @@ class Game extends FormerModel
         });
     }
 
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeWithWindowsDownloadLink($query)
+    {
+        return $query->where('link_removed_on_author_demand', false)
+            ->where(function ($query) {
+                $query->where('lien', '!=', '')
+                    ->whereNotNull('lien')
+                    ->where('is_lien_errone', false);
+            })->orWhere(function ($query) {
+                $query->where('lien_sur_site', '!=', '')
+                    ->whereNotNull('lien_sur_site');
+            });
+    }
+
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeWithMacDownloadLink($query)
+    {
+        return $query->where('link_removed_on_author_demand', false)
+            ->where(function ($query) {
+                $query->where('lien_sur_mac', '!=', '')
+                    ->whereNotNull('lien_sur_mac')
+                    ->where('is_lien_errone', false);
+            })->orWhere(function ($query) {
+                $query->where('lien_sur_site_sur_mac', '!=', '')
+                    ->whereNotNull('lien_sur_site_sur_mac');
+            });
+    }
+
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeWithoutDownloadLinks($query)
+    {
+        return $query->where('link_removed_on_author_demand', true)
+            ->orWhere(function ($query) {
+                $query->where(function ($query) {
+                    $query->where('lien_sur_mac', '=', '')
+                        ->orWhereNull('lien_sur_mac')
+                        ->orWhere('is_lien_errone', true);
+                })->where(function ($query) {
+                    $query->where('lien_sur_site_sur_mac', '=', '')
+                        ->orWhereNull('lien_sur_site_sur_mac');
+                })->where(function ($query) {
+                    $query->where('lien', '=', '')
+                        ->orWhereNull('lien')
+                        ->orWhere('is_lien_errone', true);
+                })->where(function ($query) {
+                    $query->where('lien_sur_site', '=', '')
+                        ->orWhereNull('lien_sur_site');
+                });
+            });
+    }
+
     public function getStatus(): string
     {
         $stepStatusMatrix = [
