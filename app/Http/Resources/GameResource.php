@@ -37,7 +37,7 @@ class GameResource extends JsonResource
             'creation_group' => $game->groupe,
             'logo' => $game->getLogoUrl(),
             'created_at' => $this->formatDateOrNullify($game->date_inscription),
-            'description' => $game->description_jeu,
+            'description' => StringParser::apiRichText($game->description_jeu),
             'download_links' => $this->extractDownloadLinks($game),
             'awards' => GameAwardResource::collection($this->whenLoaded('awards')),
             'authors' => ContributorResource::collection($this->whenLoaded('contributors')),

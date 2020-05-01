@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Word;
 use App\Helpers\BBCode;
+use App\Helpers\StringParser;
 
 use Transliterator;
 use Illuminate\Http\Request;
@@ -36,9 +37,7 @@ class WordController extends Controller
 
         $bbCode = BBCode::construireParserBBCode();
         $words->map(function ($word) use ($bbCode) {
-            $descriptionWithEntites = e($word->description);
-            $descriptionWithBbCode = $bbCode->convertToHtml($descriptionWithEntites);
-            $word->description = nl2br($descriptionWithBbCode);
+            $word->description = StringParser::richText($word->description, $bbCode);
         });
 
         return view('words.index', [

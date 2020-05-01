@@ -14,7 +14,6 @@ class GameApiController extends Controller
 {
     public function index(Request $request)
     {
-        // TODO : Check N+1
         $games = Game::with(['session', 'contributors.member', 'screenshots', 'awards'])
             ->withCount(['nominations as awarded_categories_count' => function ($nominationsQuery) {
                 $nominationsQuery->where('is_vainqueur', '>', '0');

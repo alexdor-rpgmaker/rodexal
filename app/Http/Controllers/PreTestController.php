@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\PreTest;
-use App\Helpers\BBCode;
+use App\Helpers\StringParser;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\RequestException;
@@ -30,10 +30,7 @@ class PreTestController extends Controller
     {
         $game = self::fetchGame($preTest->game_id, $this->client);
 
-        $bbCode = BBCode::construireParserBBCode();
-        $descriptionWithEntites = e($preTest->final_thought_explanation);
-        $descriptionWithBbCode = $bbCode->convertToHtml($descriptionWithEntites);
-        $preTest->final_thought_explanation = nl2br($descriptionWithBbCode);
+        $preTest->final_thought_explanation = StringParser::richText($preTest->final_thought_explanation);
 
         return view('pre-tests.show', [
             'pre_test' => $preTest,
