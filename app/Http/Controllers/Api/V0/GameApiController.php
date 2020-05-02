@@ -15,13 +15,16 @@ class GameApiController extends Controller
 {
     public function index(Request $request)
     {
-        $games = Game::with(['session', 'contributors.member', 'screenshots', 'awards'])
-            ->withCount(['nominations as awarded_categories_count' => function ($nominationsQuery) {
-                $nominationsQuery->where('is_vainqueur', '>', '0');
-            }])
-            ->withCount(['nominations as nominated_categories_count' => function ($nominationsQuery) {
-                $nominationsQuery->where('is_vainqueur', '0');
-            }]);
+        $games = Game::with([
+            'awards',
+            'session',
+            'screenshots',
+            'contributors.member',
+        ])->withCount(['nominations as awarded_categories_count' => function ($nominationsQuery) {
+            $nominationsQuery->where('is_vainqueur', '>', '0');
+        }])->withCount(['nominations as nominated_categories_count' => function ($nominationsQuery) {
+            $nominationsQuery->where('is_vainqueur', '0');
+        }]);
 
         if ($request->session_id) {
             if (!Session::sessionIdExists($request->session_id)) {

@@ -266,6 +266,12 @@ class GameApiRouterTest extends FeatureTest
                 ]
             ]
         ]);
+
+        // Sort authors and screenshots
+        $response->assertJsonPath('data.0.authors.0.username', 'Anita')
+            ->assertJsonPath('data.0.authors.1.username', 'Juan-Pablo')
+            ->assertJsonPath('data.0.screenshots.0.title', 'First screenshot')
+            ->assertJsonPath('data.0.screenshots.1.title', 'Second screenshot');
     }
 
     /**

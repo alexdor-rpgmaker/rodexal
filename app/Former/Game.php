@@ -39,12 +39,12 @@ class Game extends FormerModel
 
     public function contributors()
     {
-        return $this->hasMany('App\Former\Contributor', 'id_jeu')->where('statut_participant', '>', 0);
+        return $this->hasMany('App\Former\Contributor', 'id_jeu')->where('statut_participant', '>', 0)->orderBy('ordre');
     }
 
     public function screenshots()
     {
-        return $this->hasMany('App\Former\Screenshot', 'id_jeu')->where('statut_screenshot', '>', 0);
+        return $this->hasMany('App\Former\Screenshot', 'id_jeu')->where('statut_screenshot', '>', 0)->orderBy('ordre');
     }
 
     public function nominations()
@@ -54,7 +54,7 @@ class Game extends FormerModel
 
     public function awards()
     {
-        return $this->belongsToMany('App\Former\AwardSessionCategory', 'nomines', 'id_jeu', 'id_categorie')->withPivot('is_vainqueur')->where('statut_categorie', '>', 0);
+        return $this->belongsToMany('App\Former\AwardSessionCategory', 'nomines', 'id_jeu', 'id_categorie')->withPivot('is_vainqueur')->where('statut_categorie', '>', 0)->orderBy('niveau_categorie')->orderBy('ordre')->orderBy('is_declinaison');
     }
 
     /**
