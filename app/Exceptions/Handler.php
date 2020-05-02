@@ -2,10 +2,13 @@
 
 namespace App\Exceptions;
 
-use Auth;
 use Throwable;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -31,7 +34,7 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
+     * @param Throwable $exception
      * @return void
      */
     public function report(Throwable $exception)
@@ -42,14 +45,22 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Throwable $exception
+     * @return Response
      */
     public function render($request, Throwable $exception)
     {
         if (!Auth::check() && $exception instanceof AuthorizationException) {
             return redirect(route('oauth'));
+        }
+
+        if ($request->expectsJson() && $exception instanceof HttpException) {
+            $statusCode = $exception->getStatusCode();
+            return response()->json([
+                'code' => $statusCode,
+                'message' => $exception->getMessage()
+            ], $statusCode);
         }
 
         return parent::render($request, $exception);
