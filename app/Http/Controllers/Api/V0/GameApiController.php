@@ -46,11 +46,11 @@ class GameApiController extends Controller
                 $games = $games->withMacDownloadLink();
             }
             if ($request->download_links == 'any') {
-                $games = $games->where(function ($query) {
+                $games = $games->where(fn($query) =>
                     $query->withWindowsDownloadLink()
                         ->orWhere
-                        ->withMacDownloadLink();
-                });
+                        ->withMacDownloadLink()
+                );
             }
             if ($request->download_links == 'none') {
                 $games = $games->withoutDownloadLinks();
@@ -60,14 +60,14 @@ class GameApiController extends Controller
         if ($request->q) {
             $searchedTerm = "%" . $request->q . "%";
 
-            $games = $games->where(function ($query) use ($searchedTerm) {
+            $games = $games->where(fn($query) =>
                 $query->where('nom_jeu', 'like', $searchedTerm)
                     ->orWhere('description_jeu', 'like', $searchedTerm)
                     ->orWhere('genre_jeu', 'like', $searchedTerm)
                     ->orWhere('theme', 'like', $searchedTerm)
                     ->orWhere('support', 'like', $searchedTerm)
-                    ->orWhere('groupe', 'like', $searchedTerm);
-            });
+                    ->orWhere('groupe', 'like', $searchedTerm)
+            );
         }
 
         if ($request->sort) {
