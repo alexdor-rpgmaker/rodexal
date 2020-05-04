@@ -53,9 +53,6 @@ export default {
   },
   computed: {
     awardedCategories() {
-      if(!this.game.awards) {
-        console.log(this.game)
-      }
       return this.game
         .awards
         .filter(award => award.status === "awarded")
@@ -66,7 +63,7 @@ export default {
         .join(", ")
     },
     wasAwarded() {
-      return this.awardedCategoriesList.length > 0
+      return this.awardedCategories.length > 0
     },
     nominatedCategories() {
       return this.game

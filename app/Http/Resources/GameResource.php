@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Former\Game;
+use App\Former\Screenshot;
 use App\Helpers\StringParser;
 
 use Closure;
@@ -49,10 +51,6 @@ class GameResource extends JsonResource
 
     private function extractDownloadLinks($game)
     {
-        if ($game->link_removed_on_author_demand) {
-            return [];
-        }
-
         $downloadLinks = [];
         if ($game->hasWindowsDownloadLink()) {
             $downloadLinks[] = [
@@ -71,12 +69,12 @@ class GameResource extends JsonResource
     }
 
     /**
-     * @param $game
+     * @param Game $game
      * @return Closure
      */
     private function parseScreenshots($game): Closure
     {
-        return function ($screenshot) use ($game) {
+        return function (Screenshot $screenshot) use ($game) {
             return [
                 'title' => StringParser::parseOrNullify($screenshot->nom_screenshot),
                 'url' => $screenshot->getImageUrlForSession($game->session->id_session),

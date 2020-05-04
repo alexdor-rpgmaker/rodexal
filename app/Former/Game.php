@@ -177,14 +177,18 @@ class Game extends FormerModel
 
     public function hasWindowsDownloadLink(): bool
     {
-        return !empty($this->lien_sur_site) ||
-            (!empty($this->lien) && !$this->is_lien_errone);
+        return !$this->link_removed_on_author_demand && (
+                !empty($this->lien_sur_site) ||
+                (!empty($this->lien) && !$this->is_lien_errone)
+            );
     }
 
     public function hasMacDownloadLink(): bool
     {
-        return !empty($this->lien_sur_site_sur_mac) ||
-            (!empty($this->lien_sur_mac) && !$this->is_lien_errone);
+        return !$this->link_removed_on_author_demand && (
+                !empty($this->lien_sur_site_sur_mac) ||
+                (!empty($this->lien_sur_mac) && !$this->is_lien_errone)
+            );
     }
 
     public function getWindowsDownloadLink(): string

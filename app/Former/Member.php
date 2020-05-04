@@ -23,7 +23,8 @@ class Member extends FormerModel
         'sexe' => 0,
     ];
 
-    public function getRankAttribute() {
+    public function getRankAttribute(): string
+    {
         $rankIdToString = [
             0 => "guest",
             1 => "member",

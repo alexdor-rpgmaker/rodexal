@@ -41,18 +41,21 @@
                                     $transliterated_letter = $transliterator->transliterate($letter);
                                     $uppercased_letter = strtoupper($transliterated_letter)
                                 @endphp
-                                    @if($uppercased_letter == $page_letter)
-                                        <li class="page-item active">
-                                            <span>
-                                                {{ $uppercased_letter }}
-                                                <span class="sr-only">(actuelle)</span>
-                                            </span>
-                                        </li>
-                                    @else
-                                        <li class="page-item">
-                                            <a class="page-link bouton" href="{{ route('dictionnaire.index', ['lettre' => $uppercased_letter]) }}">{{ $uppercased_letter }}</a>
-                                        </li>
-                                    @endif
+                                @if($uppercased_letter == $page_letter)
+                                    <li class="page-item active">
+                                        <span>
+                                            {{ $uppercased_letter }}
+                                            <span class="sr-only">(actuelle)</span>
+                                        </span>
+                                    </li>
+                                @else
+                                    <li class="page-item">
+                                        <a class="page-link bouton"
+                                           href="{{ route('dictionnaire.index', ['lettre' => $uppercased_letter]) }}">
+                                            {{ $uppercased_letter }}
+                                        </a>
+                                    </li>
+                                @endif
                             @endforeach
                         </ul>
                     </nav>
@@ -69,7 +72,8 @@
 
                                     <div class="card-options float-right">
                                         @can('delete', $word)
-                                            <form action="{{ route('dictionnaire.destroy', $word) }}" method="POST"  style="display: inline;">
+                                            <form action="{{ route('dictionnaire.destroy', $word) }}" method="POST"
+                                                  style="display: inline;">
                                                 @method('DELETE')
                                                 @csrf
                                                 <button class="delete">
@@ -78,9 +82,14 @@
                                             </form> -
                                         @endcan
                                         @can('update', $word)
-                                            <a href="{{ route('dictionnaire.edit', $word) }}" class="edit">Modifier</a> -
+                                            <a href="{{ route('dictionnaire.edit', $word) }}" class="edit">
+                                                Modifier
+                                            </a> -
                                         @endcan
-                                        <a href="{{ route('dictionnaire.index') }}#{{ $word->slug }}" class="quick-link">Lien</a>
+                                        <a href="{{ route('dictionnaire.index') }}#{{ $word->slug }}"
+                                           class="quick-link">
+                                            Lien
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="card-body">
