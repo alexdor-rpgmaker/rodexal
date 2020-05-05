@@ -32,6 +32,7 @@
 
             Cliquez sur le titre d'un jeu si vous souhaitez en savoir plus le concernant.
         </p>
+
         <div id="games-wrapper">
             <games :session='@json($selectedSession ? $selectedSession->id_session : null)' />
         </div>

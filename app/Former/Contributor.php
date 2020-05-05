@@ -22,4 +22,12 @@ class Contributor extends FormerModel
     {
         return $this->belongsTo('App\Former\Member', 'id_membre');
     }
+
+    public function getLinkOrNameAttribute()
+    {
+        if ($this->member) {
+            return $this->member->getLink();
+        }
+        return $this->nom_membre;
+    }
 }

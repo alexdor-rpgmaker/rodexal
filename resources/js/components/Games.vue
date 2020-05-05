@@ -1,76 +1,69 @@
 <template>
-  <div id="games-list">
-    <div class="container">
-      <div class="justify-content-center">
-        <div id="games-wrapper">
-          <form @submit.prevent="search" class="games-form">
-
-            <div class="row">
-              <div class="col">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="session">Session</label>
-                      <select id="session" name="session" class="custom-select" v-model="selectedSession">
-                        <option :value="null">(Toutes les sessions)</option>
-                        <option
-                                :value="session"
-                                v-for="session in sessions"
-                                :key="session"
-                        >{{ sessionName(session) }}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="software">Logiciels</label>
-                      <select id="software" name="software" class="custom-select" v-model="selectedSoftware">
-                        <option :value="null">(Tous les logiciels)</option>
-                        <option :value="software" v-for="software in softwares" :key="software">{{ software }}</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="query">Recherche</label>
-                      <input
-                              id="query"
-                              name="query"
-                              class="form-control"
-                              type="text"
-                              v-model="query"
-                              placeholder="Aventure, Humour, RuTiPa's Quest, ..."
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col">
-                <div class="form-check form-group pt-4 mb-5">
-                  <input
-                          id="download-links"
-                          name="download-links"
-                          class="form-check-input"
-                          type="checkbox"
-                          v-model="withDownloadLinks"
-                  />
-                  <label for="download-links" class="form-check-label">Avec lien de téléchargement</label>
-                </div>
-
-                <button class="bouton" type="submit">Rechercher</button>
+  <div id="games-list" class="container">
+    <form @submit.prevent="search" class="games-form">
+      <div class="row">
+        <div class="col">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="session">Session</label>
+                <select id="session" name="session" class="custom-select" v-model="selectedSession">
+                  <option :value="null">(Toutes les sessions)</option>
+                  <option
+                          :value="session"
+                          v-for="session in sessions"
+                          :key="session"
+                  >{{ sessionName(session) }}
+                  </option>
+                </select>
               </div>
             </div>
-          </form>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="software">Logiciels</label>
+                <select id="software" name="software" class="custom-select" v-model="selectedSoftware">
+                  <option :value="null">(Tous les logiciels)</option>
+                  <option :value="software" v-for="software in softwares" :key="software">{{ software }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="query">Recherche</label>
+                <input
+                        id="query"
+                        name="query"
+                        class="form-control"
+                        type="text"
+                        v-model="query"
+                        placeholder="Aventure, Humour, RuTiPa's Quest, ..."
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-check form-group pt-4 mb-5">
+            <input
+                    id="download-links"
+                    name="download-links"
+                    class="form-check-input"
+                    type="checkbox"
+                    v-model="withDownloadLinks"
+            />
+            <label for="download-links" class="form-check-label">Avec lien de téléchargement</label>
+          </div>
+
+          <button class="bouton" type="submit">Rechercher</button>
         </div>
       </div>
+    </form>
 
-      <p class="mb-4">Nombre de jeux : <strong>{{ gamesCount }}</strong>.</p>
-    </div>
+    <p class="mb-4">Nombre de jeux : <strong>{{ gamesCount }}</strong>.</p>
     <table class="table">
       <tr class="tableau_legend">
         <th></th>
@@ -333,7 +326,6 @@
           }
         }
       }
-
     }
   }
 </style>

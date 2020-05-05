@@ -9,26 +9,39 @@
         <div class="row justify-content-center">
             <div id="qcm" class="col-md-8">
                 <div id="titre_corps">QCM : {{ $game->title }}</div>
-                <div id="sous_titre_corps">Par <a href="{{ env('FORMER_APP_URL') }}?p=profil&membre={{ $pre_test->user_id }}">{{ $pre_test->user->name }}</a></div>
+                <div id="sous_titre_corps">
+                    Par
+                    <a href="{{ env('FORMER_APP_URL') }}?p=profil&membre={{ $pre_test->user_id }}">
+                        {{ $pre_test->user->name }}
+                    </a>
+                </div>
                 <div class="barre_boutons">
                     <span class="bordure_boutons">
-                        <a class="bouton voir-jeu" href="{{ env('FORMER_APP_URL') }}?p=jeu&id={{ $game->id }}">Voir la fiche du jeu</a>
-                        <a class="bouton modifier-pre-test" href="{{ route('qcm.edit', ['pre_test' => $pre_test->id]) }}" class="bouton">Modifier</a>
+                        {{-- TODO : Change for $game->getUrl() when $game is instance of Game class --}}
+                        <a class="bouton voir-jeu" href="{{ env('FORMER_APP_URL') }}?p=jeu&id={{ $game->id }}">
+                            Voir la fiche du jeu
+                        </a>
+                        <a class="bouton modifier-pre-test"
+                           href="{{ route('qcm.edit', ['pre_test' => $pre_test->id]) }}">
+                            Modifier
+                        </a>
                     </span>
                 </div>
                 <div class="card">
                     <div class="card-body">
                         @foreach (App\PreTest::FIELDS as $field)
                             @if ($pre_test->questionnaire[$field['id']]['activated'])
-                                <div class="questionnaire-group">    
+                                <div class="questionnaire-group">
                                     <p><strong>{{ $field['label'] }}</strong></p>
-                                    <div class="explanation">{{ $pre_test->questionnaire[$field['id']]['explanation'] }}</div>
+                                    <div class="explanation">
+                                        {{ $pre_test->questionnaire[$field['id']]['explanation'] }}
+                                    </div>
                                 </div>
                             @endif
                         @endforeach
 
                         @if($pre_test->questionnaireHasActivatedFields())
-                            <hr />
+                            <hr/>
                         @endunless
 
                         <div id="final-thought">

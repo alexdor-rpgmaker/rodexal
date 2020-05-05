@@ -25,7 +25,7 @@ class Session extends FormerModel
         'date_cloture_inscriptions',
     ];
 
-    public static function nameFromId($sessionId)
+    public static function nameFromId($sessionId): string
     {
         $sessionName = ($sessionId < 10) ? '0' . $sessionId : $sessionId;
         if ($sessionId == 3) {
@@ -43,7 +43,7 @@ class Session extends FormerModel
         return "20" . $sessionName;
     }
 
-    public static function sessionIdExists($sessionId, $options = ['include_abandonned_sessions' => true]): bool
+    public static function sessionIdExists($sessionId, $options = ['include_abandoned_sessions' => true]): bool
     {
         if (
             $sessionId < 1 ||
@@ -54,7 +54,7 @@ class Session extends FormerModel
             return false;
         }
 
-        if (!$options['include_abandonned_sessions'] && $sessionId == 8) {
+        if (!$options['include_abandoned_sessions'] && $sessionId == 8) {
             return false;
         }
 

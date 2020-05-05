@@ -38,4 +38,14 @@ class Member extends FormerModel
 
         return $rankIdToString[$this->rang];
     }
+
+    public function getLink()
+    {
+        $formerAppUrl = env('FORMER_APP_URL');
+
+        return "<a " .
+            "href=\"$formerAppUrl/?p=profil&membre=$this->id_membre\" " .
+            "class=\"color-$this->rank\"" .
+            ">$this->pseudo</a>";
+    }
 }

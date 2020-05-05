@@ -216,4 +216,10 @@ class Game extends FormerModel
         $downloadUrl .= '/jeux/' . StringParser::html($this->{$downloadColumn});
         return $downloadUrl;
     }
+
+    public function getUrl()
+    {
+        $formerAppUrl = env('FORMER_APP_URL');
+        return "$formerAppUrl/?p=jeu&id=$this->id_jeu";
+    }
 }
