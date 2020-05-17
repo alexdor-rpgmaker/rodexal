@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api\V0;
 
-use App\Http\Controllers\Controller;
 use App\PreTest;
-use Illuminate\Support\Arr;
+use App\Http\Controllers\Controller;
+
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 
 class PreTestApiController extends Controller
 {
@@ -14,7 +16,7 @@ class PreTestApiController extends Controller
         $this->authorizeResource(PreTest::class, 'pre_test');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $preTests = PreTest::select(
             'id',
@@ -24,16 +26,37 @@ class PreTestApiController extends Controller
             'final_thought',
             'created_at',
             'updated_at'
-        )->get()->toArray();
+        );
+
+        // TODO : Fetch from database
+        // Begin dirty way to choose session
+        $minGameId = null;
+        $maxGameId = null;
+        $sessionId = $request->session_id ? (int) $request->session_id : 20;
+        if ($sessionId == 20) {
+            $minGameId = 975;
+            $maxGameId = 1007;
+        } else if ($sessionId == 19) {
+            $maxGameId = 974;
+        }
+        if ($minGameId) {
+            $preTests = $preTests->where('game_id', '>=', $minGameId);
+        }
+        if ($maxGameId) {
+            $preTests = $preTests->where('game_id', '<=', $maxGameId);
+        }
+        // End dirty way to choose session
+
+        $preTests = $preTests->get();
 
         $fields = Arr::pluck(PreTest::FIELDS, 'id');
-        $preTests = array_map(function ($preTest) use ($fields) {
+        $preTests->map(function ($preTest) use ($fields) {
             foreach ($fields as $field) {
                 $preTest[Str::snake($field)] = Arr::get($preTest, "questionnaire.$field.activated");
             }
             Arr::forget($preTest, 'questionnaire');
             return $preTest;
-        }, $preTests);
+        });
 
         return response()->json($preTests, 200);
     }
