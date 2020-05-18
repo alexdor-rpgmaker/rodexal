@@ -12,20 +12,6 @@ class GameController extends Controller
 {
     public function index(Request $request)
     {
-        $session = null;
-        if ($request->query('session_id')) {
-            $session = Session::find($request->query('session_id'));
-        }
-        $currentSession = Session::orderBy('id_session', 'desc')->first();
-
-        return view('games.index', [
-            'selectedSession' => $session,
-            'currentSession' => $currentSession
-        ]);
-    }
-
-    public function vanilla(Request $request)
-    {
         $sessions = Session::orderBy('id_session')->get();
 
         $selectedSession = null;
@@ -105,12 +91,26 @@ class GameController extends Controller
         $softwares = Game::select("support")->distinct()->where('support', '!=', '')->orderBy('support')->pluck("support");
 
         $request->flash();
-        return view('games.vanilla', [
+        return view('games.index', [
             'games' => $games,
             'sessions' => $sessions,
             'softwares' => $softwares,
             'currentSession' => $currentSession,
             'selectedSession' => $selectedSession
+        ]);
+    }
+
+    public function vue(Request $request)
+    {
+        $session = null;
+        if ($request->query('session_id')) {
+            $session = Session::find($request->query('session_id'));
+        }
+        $currentSession = Session::orderBy('id_session', 'desc')->first();
+
+        return view('games.vue', [
+            'selectedSession' => $session,
+            'currentSession' => $currentSession
         ]);
     }
 

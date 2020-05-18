@@ -33,7 +33,7 @@ Route::resource('jukebox', 'MusicController')->only([
 Route::resource('jeux', 'GameController')->only([
     'index'
 ]);
-Route::get('/jeux/vanilla', 'GameController@vanilla')->name('games-list-vanilla');
+Route::get('/jeux/vue', 'GameController@vue')->name('games-list-vue');
 
 Route::resource('dictionnaire', 'WordController')->except([
     'show'

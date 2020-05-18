@@ -23,16 +23,17 @@ class GamesRouterTest extends FeatureTest
     // Index
 
     /**
+     * @test
      * @testdox On peut accéder à la liste des jeux
      */
-    public function testListeDesJeuxSansParams()
+    public function listeDesJeuxSansParams()
     {
         $currentSession = factory(Session::class)->create([
             'id_session' => 20,
             'nom_session' => 'Session 2020',
         ]);
 
-        $response = $this->get('/jeux');
+        $response = $this->get('/jeux/vue');
 
         $response->assertOk();
         $response->assertViewHas('selectedSession', null);
@@ -40,9 +41,10 @@ class GamesRouterTest extends FeatureTest
     }
 
     /**
+     * @test
      * @testdox On peut accéder à la liste des jeux pour une session en particulier
      */
-    public function testListeDesJeuxDUneSession()
+    public function listeDesJeuxDUneSession()
     {
         $session = factory(Session::class)->create([
             'id_session' => 11,
@@ -52,7 +54,7 @@ class GamesRouterTest extends FeatureTest
         $queryParameters = [
             'session_id' => '11',
         ];
-        $response = $this->call('GET', '/jeux', $queryParameters);
+        $response = $this->call('GET', '/jeux/vue', $queryParameters);
 
         $response->assertOk();
         $response->assertViewHas('selectedSession', $session);
@@ -60,14 +62,15 @@ class GamesRouterTest extends FeatureTest
     }
 
     /**
+     * @test
      * @testdox On peut accéder à la liste des jeux en demandant une fausse session
      */
-    public function testListeDesJeuxAvecFauxParamSession()
+    public function listeDesJeuxAvecFauxParamSession()
     {
         $queryParameters = [
             'session_id' => 'not-existing-session',
         ];
-        $response = $this->call('GET', '/jeux', $queryParameters);
+        $response = $this->call('GET', '/jeux/vue', $queryParameters);
 
         $response->assertOk();
         $response->assertViewHas('selectedSession', null);

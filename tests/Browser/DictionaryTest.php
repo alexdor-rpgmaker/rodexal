@@ -4,8 +4,8 @@ namespace Tests\Browser;
 
 use App\User;
 
-use Laravel\Dusk\Browser;
 use Throwable;
+use Laravel\Dusk\Browser;
 
 class DictionaryTest extends BrowserTest
 {
