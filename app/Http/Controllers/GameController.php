@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Pagination;
 use App\Former\Game;
 use App\Former\Session;
 use App\UseCases\FetchGamesWithParameters;
@@ -22,13 +23,10 @@ class GameController extends Controller
 
         $games = FetchGamesWithParameters::perform($request);
 
-        $PER_PAGE_DEFAULT = 50;
-        $perPage = isset($request->per_page) && $this->between1And50($request->per_page) ? (int)$request->per_page : $PER_PAGE_DEFAULT;
-
         $games = $games->orderBy('awarded_categories_count', 'desc')
             ->orderBy('nominated_categories_count', 'desc')
             ->orderBy('id_jeu')
-            ->paginate($perPage);
+            ->paginate(Pagination::perPage($request->per_page));
 
         // TODO : Group 1-game software in "other" category
         $softwares = Game::select("support")->distinct()->where('support', '!=', '')->orderBy('support')->pluck("support");
@@ -55,10 +53,5 @@ class GameController extends Controller
             'selectedSession' => $session,
             'currentSession' => $currentSession
         ]);
-    }
-
-    private function between1And50($number)
-    {
-        return in_array(intval($number), range(1, 50));
     }
 }
