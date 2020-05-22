@@ -72,6 +72,7 @@ class FetchGamesWithParameters
         if ($request->sort) {
             $games = self::sortGamesFromQuery($games, $request->sort);
         }
+
         return $games;
     }
 

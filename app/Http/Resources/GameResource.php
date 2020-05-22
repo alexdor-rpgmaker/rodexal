@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Former\Game;
 use App\Former\Screenshot;
 use App\Helpers\StringParser;
+use App\UseCases\CleanGameAttributes;
 
 use Closure;
 use Carbon\Carbon;
@@ -19,9 +20,7 @@ class GameResource extends JsonResource
      */
     public function toArray($request)
     {
-        $game = $this->cleanAttributes($this, [
-            'nom_jeu', 'taille', 'genre_jeu', 'theme', 'duree', 'support', 'site_officiel', 'groupe'
-        ]);
+        $game = CleanGameAttributes::perform($this);
 
         return [
             'id' => $game->id_jeu,
@@ -89,13 +88,5 @@ class GameResource extends JsonResource
     private function formatDateOrNullify($date)
     {
         return empty($date) ? null : $date->format('c');
-    }
-
-    private function cleanAttributes($object, $attributes)
-    {
-        foreach ($attributes as $attribute) {
-            $object->{$attribute} = StringParser::parseOrNullify($object->{$attribute});
-        }
-        return $object;
     }
 }

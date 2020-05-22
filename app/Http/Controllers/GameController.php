@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Pagination;
 use App\Former\Game;
 use App\Former\Session;
+use App\UseCases\CleanGameAttributes;
 use App\UseCases\FetchGamesWithParameters;
 
 use Illuminate\Http\Request;
@@ -27,6 +28,8 @@ class GameController extends Controller
             ->orderBy('nominated_categories_count', 'desc')
             ->orderBy('id_jeu')
             ->paginate(Pagination::perPage($request->per_page));
+
+        $games->getCollection()->transform(fn($game) => CleanGameAttributes::perform($game, true));
 
         // TODO : Group 1-game software in "other" category
         $softwares = Game::select("support")->distinct()->where('support', '!=', '')->orderBy('support')->pluck("support");

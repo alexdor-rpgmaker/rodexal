@@ -32,7 +32,7 @@ class GameAwardResource extends JsonResource
         return [
             'status' => $this->pivot->is_vainqueur > 0 ? 'awarded' : 'nominated',
             'award_level' => $awardLevel,
-            'category_name' => StringParser::html($this->nom_categorie)
+            'category_name' => StringParser::html($this->nom_categorie) // TODO: Change for parseOrNull instead?
         ];
     }
 }
