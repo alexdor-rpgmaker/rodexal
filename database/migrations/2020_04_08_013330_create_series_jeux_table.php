@@ -21,7 +21,7 @@ class CreateSeriesJeuxTable extends Migration
 			$table->boolean('is_serie')->comment('Une série de jeux différents');
 			$table->boolean('is_meme_jeu')->comment('Un même jeu qui a évolué');
 			$table->boolean('is_repost')->comment('Un même jeu qui a été re-proposé à l\'identique');
-			$table->boolean('is_pourri')->comment('Trop peu de données pour en faire une série intéressante');
+			$table->boolean('trop_peu_donnees')->comment('Trop peu de données pour en faire une série intéressante');
 		});
 	}
 

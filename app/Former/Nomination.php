@@ -13,6 +13,7 @@ class Nomination extends FormerModel
     {
         return $this->belongsTo('App\Former\Game', 'id_jeu');
     }
+
     public function category()
     {
         return $this->belongsTo('App\Former\AwardSessionCategory', 'id_categorie');

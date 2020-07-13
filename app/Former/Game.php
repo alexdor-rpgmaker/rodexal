@@ -37,6 +37,11 @@ class Game extends FormerModel
         return $this->belongsTo('App\Former\Session', 'id_session');
     }
 
+    public function series()
+    {
+        return $this->belongsTo('App\Former\GameSeries', 'id_serie_jeu');
+    }
+
     public function contributors()
     {
         return $this->hasMany('App\Former\Contributor', 'id_jeu')->where('statut_participant', '>', 0)->orderBy('ordre');
