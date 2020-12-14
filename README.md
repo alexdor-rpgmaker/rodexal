@@ -1,10 +1,12 @@
-# Alex d'or 2020
+# Alex d'or 2019-2020
 
 Construire collaborativement le nouveau site des [Alex d'or](https://www.alexdor.info).
 
 Ce projet utilise les frameworks [Laravel](https://laravel.com) et [Vue](https://vuejs.org).
 
 # Installation
+
+(A déplacer dans [INSTALLATION.md](INSTALLATION.md).)
 
 ```bash
 # Cloner le dépot
@@ -30,6 +32,8 @@ php artisan db:seed
 ```
 
 # Développement
+
+(A déplacer dans [CONTRIBUTING.md](CONTRIBUTING.md).)
 
 ## Lancement du serveur
 
@@ -88,3 +92,11 @@ php artisan dusk:chrome-driver
 ```
 
 S'il y a une erreur de type `session not created: This version of ChromeDriver only supports Chrome version XX`, il faut mettre à jour votre Chrome à la version XX. :) (Et parfois relancer la commande ci-dessus.)
+
+## Politique de Contribution
+
+Voir [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Mise en production
+
+Voir [DEPLOY.md](DEPLOY.md).
