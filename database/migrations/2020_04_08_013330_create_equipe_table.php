@@ -18,6 +18,8 @@ class CreateEquipeTable extends Migration
 			$table->integer('id_equipe', true);
 			$table->integer('id_membre');
 			$table->string('pseudo');
+			$table->text('description');
+            $table->boolean('display_on_team_page')->nullable(false)->default(true);
 			$table->smallInteger('id_session');
 			$table->string('role');
 			$table->smallInteger('type_role')->comment('1:president;2:chef jure;3:respo site web;4:communication-externe;5:ambassadeur;6:illustrateur;7:aide;8:meilleur-jure');

@@ -67,6 +67,8 @@ class FixDefaultValues extends Migration
             $table->date('date_annonce_nomines')->nullable()->change();
             $table->date('date_ceremonie')->nullable()->change();
             $table->text('description_session')->nullable()->change();
+            $table->text('team_top_text')->nullable()->change();
+            $table->text('team_bottom_text')->nullable()->change();
             $table->boolean('public_can_rank')->nullable(false)->default(false)->change();
         });
 
@@ -194,6 +196,7 @@ class FixDefaultValues extends Migration
             $table->string('lien_sur_site_sur_mac')->nullable()->change();
             $table->boolean('is_lien_errone')->nullable(false)->default(false)->change();
             $table->boolean('link_removed_on_author_demand')->nullable(false)->default(false)->change();
+            $table->string('nouveau_lien_apres_session')->nullable()->change();
             $table->text('informations')->nullable()->change();
             $table->dateTime('date_inscription')->nullable()->change();
             $table->integer('eligible')->nullable()->change();
@@ -462,6 +465,7 @@ class FixDefaultValues extends Migration
             $table->string('role')->nullable()->change();
             $table->smallInteger('type_role')->nullable(false)->change()->comment('1: président; 2: chef jurés; 3: respo site web; 4: communication externe; 5: ambassadeur; 6: illustrateur; 7: aide; 8: meilleur juré');
             $table->smallInteger('ordre')->nullable(false)->change();
+            $table->boolean('display_on_team_page')->nullable(false)->default(true)->change();
             $table->integer('id_membre')->nullable()->change();
             $table->integer('id_session')->change();
 

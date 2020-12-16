@@ -25,6 +25,8 @@ class CreateSessionsTable extends Migration
 			$table->date('date_annonce_nomines');
 			$table->date('date_ceremonie');
 			$table->text('description_session');
+			$table->text('team_top_text');
+			$table->text('team_bottom_text');
 			$table->boolean('public_can_rank');
 		});
 	}

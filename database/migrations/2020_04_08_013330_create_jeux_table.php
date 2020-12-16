@@ -38,6 +38,7 @@ class CreateJeuxTable extends Migration
 			$table->string('lien_sur_site_sur_mac');
 			$table->boolean('is_lien_errone');
 			$table->boolean('link_removed_on_author_demand');
+			$table->string('nouveau_lien_apres_session');
 			$table->text('informations');
 			$table->dateTime('date_inscription');
 			$table->integer('eligible');
