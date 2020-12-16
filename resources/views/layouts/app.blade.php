@@ -149,7 +149,7 @@
             </li>
 
             <li class="has-dropdown">
-              <a href="{{ "http://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Session 2020</a>
+              <a href="{{ "http://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Session 2021</a>
               <ul class="dropdown">
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=reglement">Règlement</a></li>
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=liste-jeux">Jeux en lice</a></li>

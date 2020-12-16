@@ -49,7 +49,7 @@ class Session extends FormerModel
             $sessionId < 1 ||
             $sessionId == 4 ||
             $sessionId == 18 ||
-            $sessionId > 20 # TODO : Make variable?
+            $sessionId > 21 # TODO : Make variable?
         ) {
             return false;
         }
