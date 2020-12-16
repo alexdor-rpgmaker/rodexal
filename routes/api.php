@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix('v0')
     ->namespace('Api\V0')
     ->group(function () {
-        Route::get('/qcm', 'PreTestApiController@index');
+        Route::get('/qcm', [PreTestApiController::class, 'index']);
 
-        Route::get('/games', 'GameApiController@index');
+        Route::get('/games', [GameApiController::class, 'index']);
     });

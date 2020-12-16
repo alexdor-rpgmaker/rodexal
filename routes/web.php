@@ -12,36 +12,36 @@
 */
 
 // Auth::routes();
-Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+Route::post('logout', [Auth\LoginController::class, 'logout'])->name('logout');
 
 Route::get('/', function () {
     return redirect(env('FORMER_APP_URL'));
 });
 
-Route::get('/accueil', 'HomeController@index')->name('home');
+Route::get('/accueil', [HomeController::class, 'index'])->name('home');
 
-Route::get('/oauth/callback', 'UserController@callback')->name('oauth');
+Route::get('/oauth/callback', [UserController::class, 'callback'])->name('oauth');
 
 // Route::get('/liste-des-membres', 'UserController@index')->name('users');
 
-Route::resource('jukebox', 'MusicController')->only([
+Route::resource('jukebox', MusicController::class)->only([
     'index'
 ])->parameters([
     'jukebox' => 'music'
 ]);
 
-Route::resource('jeux', 'GameController')->only([
+Route::resource('jeux', GameController::class)->only([
     'index'
 ]);
-Route::get('/jeux/vue', 'GameController@vue')->name('games-list-vue');
+Route::get('/jeux/vue', [GameController::class, 'vue'])->name('games-list-vue');
 
-Route::resource('dictionnaire', 'WordController')->except([
+Route::resource('dictionnaire', WordController::class)->except([
     'show'
 ])->parameters([
     'dictionnaire' => 'word'
 ]);
 
-Route::resource('qcm', 'PreTestController')->except([
+Route::resource('qcm', PreTestController::class)->except([
     'index', 'destroy'
 ])->parameters([
     'qcm' => 'pre_test'
