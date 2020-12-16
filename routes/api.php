@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 |
  */
 
+use App\Http\Controllers\Api\V0\GameApiController;
+use App\Http\Controllers\Api\V0\PreTestApiController;
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

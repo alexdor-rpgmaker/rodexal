@@ -11,8 +11,17 @@
 |
 */
 
+use App\Http\Controllers\Auth\LoginController;
+
+use App\Http\Controllers\GameController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MusicController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\PreTestController;
+use App\Http\Controllers\WordController;
+
 // Auth::routes();
-Route::post('logout', [Auth\LoginController::class, 'logout'])->name('logout');
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/', function () {
     return redirect(env('FORMER_APP_URL'));
