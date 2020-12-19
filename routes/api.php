@@ -16,21 +16,19 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Api\V0\GameApiController;
 use App\Http\Controllers\Api\V0\PreTestApiController;
 
-Route::group(['https'], function () {
-    // Cf https://laravel.com/docs/8.x/passport
-    // Validate access tokens on incoming requests
-    // Routes that should require a valid access token
-    // Route::middleware('auth:api')
-    //     ->get('/user', function (Request $request) {
-    //         return $request->user();
-    //     });
+// Cf https://laravel.com/docs/8.x/passport
+// Validate access tokens on incoming requests
+// Routes that should require a valid access token
+// Route::middleware('auth:api')
+//     ->get('/user', function (Request $request) {
+//         return $request->user();
+//     });
 
-    // No security
-    Route::prefix('v0')
-        ->namespace('Api\V0')
-        ->group(function () {
-            Route::get('/qcm', [PreTestApiController::class, 'index']);
+// No security
+Route::prefix('v0')
+    ->namespace('Api\V0')
+    ->group(function () {
+        Route::get('/qcm', [PreTestApiController::class, 'index']);
 
-            Route::get('/games', [GameApiController::class, 'index']);
-        });
-});
+        Route::get('/games', [GameApiController::class, 'index']);
+    });
