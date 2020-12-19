@@ -132,7 +132,8 @@
             </a>
           </li>
           <li class="toggle-topbar menu-icon">
-            <a href="{{ "http://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#"><span>menu</span></a>
+{{--            TODO : Remove Request::server('HTTP_HOST').Request::server('REQUEST_URI') ?--}}
+            <a href="{{ "https://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#"><span>menu</span></a>
           </li>
         </ul>
 
@@ -140,7 +141,7 @@
           <!-- Right Nav Section -->
           <ul class="left">
             <li class="has-dropdown">
-              <a href="{{ "http://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Actualités</a>
+              <a href="{{ "https://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Actualités</a>
               <ul class="dropdown">
                 <!-- <li><a href="{{ env('FORMER_APP_URL') }}/">Accueil</a></li> -->
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=news">News</a></li>
@@ -149,7 +150,7 @@
             </li>
 
             <li class="has-dropdown">
-              <a href="{{ "http://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Session 2021</a>
+              <a href="{{ "https://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Session 2021</a>
               <ul class="dropdown">
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=reglement">Règlement</a></li>
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=liste-jeux">Jeux en lice</a></li>
@@ -158,7 +159,7 @@
             </li>
 
             <li class="has-dropdown">
-              <a href="{{ "http://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Archives</a>
+              <a href="{{ "https://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Archives</a>
               <ul class="dropdown">
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=archives">Toutes les archives</a></li>
                 <li class="divider"></li>
@@ -170,7 +171,7 @@
             </li>
 
             <li class="has-dropdown">
-              <a href="{{ "http://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Forum</a>
+              <a href="{{ "https://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Forum</a>
               <ul class="dropdown">
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=forum-categories">Index du forum</a></li>
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=sujets&amp;nouveau">Nouveaux messages</a></li>
@@ -178,7 +179,7 @@
             </li>
 
             <li class="has-dropdown">
-              <a href="{{ "http://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Communauté</a>
+              <a href="{{ "https://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Communauté</a>
               <ul class="dropdown">
                 <li><a href="{{ route('dictionnaire.index') }}">Dictionnaire</a></li>
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=liste-membres">Liste des membres</a></li>
@@ -190,7 +191,7 @@
 
             @if (Auth::user() && Auth::user()->isAdmin())
               <li class="has-dropdown">
-                <a href="{{ "http://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Admin</a>
+                <a href="{{ "https://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#">Admin</a>
                 <ul class="dropdown">
                   <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-general">Général</a></li>
                   <li><a href="{{ env('FORMER_APP_URL') }}?p=panneau-news">News</a></li>
@@ -247,7 +248,7 @@
                         <li><a href="{{ env('FORMER_APP_URL') }}?p=mon-classement">Mon Classement</a></li>
                         <li><a href="{{ env('FORMER_APP_URL') }}?p=mes-videos">Mes Vidéos</a></li>
                         <li class="has-dropdown">
-                            <a href="{{ "http://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#" class="">Mon Design</a>
+                            <a href="{{ "https://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#" class="">Mon Design</a>
                             <ul class="dropdown">
                                 <li><a href="{{ env('FORMER_APP_URL') }}?changement-design=5">Nouveau (2013)</a></li>
                                 <li><a href="{{ env('FORMER_APP_URL') }}?changement-design=0">Lifaen</a></li>
@@ -331,7 +332,7 @@
                   <a
                     onclick="window.open('{{ env('FORMER_APP_URL') }}/jkbx.php', 'alexdor_jkbx', 'toolbar=no, status=no, scrollbars=no, resizable=no, width=370, height=450');return(false)%22"
                     title="Clique ici pour écouter !"
-                    href="{{ "http://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#"
+                    href="{{ "https://".Request::server('HTTP_HOST').Request::server('REQUEST_URI') }}#"
                     >Jukebox</a
                   >
                 </li>
