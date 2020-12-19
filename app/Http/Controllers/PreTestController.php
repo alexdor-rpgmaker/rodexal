@@ -140,7 +140,8 @@ class PreTestController extends Controller
         $gameInAssignment = current(array_filter($assignments, function ($assignment) use ($gameId) {
             return $assignment->game_id == $gameId;
         }));
-        return abort_unless($gameInAssignment, 403, "Ce jeu ne vous est pas attribué !");
+
+        abort_unless($gameInAssignment, 403, "Ce jeu ne vous est pas attribué !");
     }
 
     private static function fetchUserAssignments($userId, GuzzleClient $client)
@@ -157,7 +158,7 @@ class PreTestController extends Controller
             return json_decode($response->getBody());
         } catch (RequestException $e) {
             Log::warning($e);
-            return abort($e->getResponse()->getStatusCode());
+            abort($e->getResponse()->getStatusCode());
         }
     }
 
@@ -171,7 +172,7 @@ class PreTestController extends Controller
             return json_decode($response->getBody());
         } catch (RequestException $e) {
             Log::warning($e);
-            return abort($e->getResponse()->getStatusCode());
+            abort($e->getResponse()->getStatusCode());
         }
     }
 

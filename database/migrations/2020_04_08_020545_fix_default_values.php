@@ -1178,7 +1178,7 @@ class FixDefaultValues extends Migration
         );
 
         DB::connection(self::FORMER_APP_DATABASE)->delete(
-            'DELETE FROM telechargements WHERE id_membre NOT IN (SELECT id_membre FROM membres)'
+            'DELETE FROM telechargements WHERE id_membre > 0 AND id_membre NOT IN (SELECT id_membre FROM membres)'
         );
 
         Schema::connection(self::FORMER_APP_DATABASE)->table('telechargements', function (Blueprint $table) {
