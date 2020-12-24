@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\PreTest;
+use App\Former\Session;
 use App\Helpers\StringParser;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
 
 class PreTestController extends Controller
 {
@@ -43,7 +47,7 @@ class PreTestController extends Controller
         $gameId = $request->query('game_id');
         self::checkGameIsInUserAssignments($gameId, Auth::id(), $this->client);
         $alreadyFilledPreTest = PreTest::where('game_id', $gameId)->where('user_id', Auth::id())->first();
-        abort_if($alreadyFilledPreTest, 400, "Un QCM a déjà été remplir pour ce jeu");
+        abort_if($alreadyFilledPreTest, Response::HTTP_BAD_REQUEST, "Un QCM a déjà été remplir pour ce jeu");
 
         $game = self::fetchGame($gameId, $this->client);
         return view('pre-tests.form', [
@@ -91,7 +95,7 @@ class PreTestController extends Controller
             self::assignTestToUser($request->gameId, Auth::id(), $this->client);
         }
 
-        return response()->json($preTest, 200);
+        return response()->json($preTest, Response::HTTP_OK);
     }
 
     public function edit(PreTest $preTest)
@@ -109,7 +113,7 @@ class PreTestController extends Controller
         ]);
     }
 
-    public function update(Request $request, PreTest $preTest)
+    public function update(Request $request, PreTest $preTest): JsonResponse
     {
         $validator_array = [
             'finalThought' => 'required|boolean',
@@ -126,39 +130,41 @@ class PreTestController extends Controller
         $preTest->questionnaire = $request->questionnaire;
         $preTest->save();
 
-        return response()->json($preTest, 200);
+        return response()->json($preTest, Response::HTTP_OK);
     }
 
     // Helper
 
-    private static function checkGameIsInUserAssignments($gameId, $userId, GuzzleClient $client)
+    private static function checkGameIsInUserAssignments($gameId, $userId, GuzzleClient $client): void
     {
         if (env('DUSK', false)) {
-            return true;
+            return;
         }
         $assignments = self::fetchUserAssignments($userId, $client);
         $gameInAssignment = current(array_filter($assignments, function ($assignment) use ($gameId) {
             return $assignment->game_id == $gameId;
         }));
 
-        abort_unless($gameInAssignment, 403, "Ce jeu ne vous est pas attribué !");
+        // TODO : Mettre un meilleur message d'erreur si jeu attribué mais d'une session passée
+        abort_unless($gameInAssignment, Response::HTTP_FORBIDDEN, "Ce jeu ne vous est pas attribué !");
     }
 
     private static function fetchUserAssignments($userId, GuzzleClient $client)
     {
         try {
+            $currentSession = Session::orderBy('id_session', 'desc')->first();
             $response = $client->request('GET', '/api/v0/attributions.php', [
                 'base_uri' => env('FORMER_APP_URL'),
                 'query' => [
                     'id_membre' => intval($userId),
-                    'id_session' => 21, // TODO: Make this variable
+                    'id_session' => $currentSession->id_session,
                 ],
+                'verify' => App::environment('development') !== true
             ]);
 
             return json_decode($response->getBody());
         } catch (RequestException $e) {
-            Log::warning($e);
-            abort($e->getResponse()->getStatusCode());
+            return self::formerAppApiError($e);
         }
     }
 
@@ -168,18 +174,18 @@ class PreTestController extends Controller
             $response = $client->request('GET', '/api/v0/jeu.php', [
                 'base_uri' => env('FORMER_APP_URL'),
                 'query' => ['id' => intval($id)],
+                'verify' => App::environment('development') !== true
             ]);
             return json_decode($response->getBody());
         } catch (RequestException $e) {
-            Log::warning($e);
-            abort($e->getResponse()->getStatusCode());
+            return self::formerAppApiError($e);
         }
     }
 
-    private static function assignTestToUser($game_id, $user_id, GuzzleClient $client)
+    private static function assignTestToUser($game_id, $user_id, GuzzleClient $client): void
     {
         if (env('DUSK', false)) {
-            return null;
+            return;
         }
         try {
             $client->request('POST', '/api/v0/attribution.php', [
@@ -189,10 +195,22 @@ class PreTestController extends Controller
                     'id_membre' => $user_id,
                 ],
                 'headers' => ['X-Api-Key' => env('FORMER_APP_API_KEY')],
+                'verify' => App::environment('development') !== true
             ]);
         } catch (RequestException $e) {
-            // On logue et on ignore
-            Log::warning($e);
+            self::formerAppApiError($e);
+            return;
         }
+    }
+
+    /**
+     * @param RequestException $e
+     * @return null
+     */
+    private static function formerAppApiError(RequestException $e)
+    {
+        Log::error($e);
+        abort(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
+        return null;
     }
 }
