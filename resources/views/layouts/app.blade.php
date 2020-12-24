@@ -8,7 +8,13 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', "Alex d'or") }}</title>
+    <title>
+      @hasSection('title')
+        @yield('title') - {{ config('app.name', "Alex d'or") }}
+      @else
+        {{ config('app.name', "Alex d'or") }}
+      @endif
+    </title>
 
     <script type="text/javascript">
       window.debug = @json(env('APP_DEBUG'));

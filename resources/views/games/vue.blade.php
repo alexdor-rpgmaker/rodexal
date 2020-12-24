@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Liste des jeux')
+
 @push('scripts')
     <script type="text/javascript" src="{{ asset('js/games.js') }}" defer></script>
 @endpush

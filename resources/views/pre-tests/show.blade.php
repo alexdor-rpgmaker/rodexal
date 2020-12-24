@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Pré-test')
+
 @push('stylesheets')
     <link href="{{ asset('css/pre_tests.css') }}" rel="stylesheet">
 @endpush

@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Dictionnaire')
+
 @push('stylesheets')
     <link href="{{ asset('css/dictionary.css') }}" rel="stylesheet">
 @endpush

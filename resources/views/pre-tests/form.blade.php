@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', $title)
+
 @push('scripts')
     <script type="text/javascript" src="{{ asset('js/pre-tests.js') }}" defer></script>
 @endpush
