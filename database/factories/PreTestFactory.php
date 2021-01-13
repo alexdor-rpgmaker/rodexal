@@ -43,6 +43,10 @@ $factory->define(PreTest::class, function (Faker $faker) {
             'unplayableAlone' => [
                 'activated' => $faker->boolean,
                 'explanation' => $faker->text
+            ],
+            'languageUnknown' => [
+                'activated' => $faker->boolean,
+                'explanation' => $faker->text
             ]
         ],
         'final_thought' => $faker->boolean,

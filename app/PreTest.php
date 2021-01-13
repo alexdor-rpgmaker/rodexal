@@ -58,6 +58,11 @@ class PreTest extends MainModel
             'id' => 'unplayableAlone',
             'label' => "Impossible d'apprécier seul la majeure partie du jeu",
             'fieldDescription' => 'Le multijoueur est nécessaire'
+        ],
+        [
+            'id' => 'languageUnknown',
+            'label' => "Langue inconnue",
+            'fieldDescription' => 'Le jeu n\'est pas dans une langue connue du juré'
         ]
     ];
 
