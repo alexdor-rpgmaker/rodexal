@@ -16,7 +16,7 @@
                     <div class="card-body">
                         @include('common.errors')
 
-                        <p>Après avoir joué 30 minutes au jeu, remplissez ce questionnaire avant d'aller plus loin.</p>
+                        <p>Après avoir joué 20 minutes au jeu, remplissez ce questionnaire avant d'aller plus loin.</p>
                         <pre-tests-form
                             :questions='@json(App\PreTest::FIELDS)'
                             :game-id=@json($game_id)
