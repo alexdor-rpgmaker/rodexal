@@ -52,7 +52,7 @@ class PreTest extends MainModel
             'id' => 'tooShort',
             'label' => 'Jeu trop court',
             'fieldDescription' =>
-            'La totalité du jeu est observable en moins de 30 minutes'
+            'La totalité du jeu est observable en moins de 20 minutes'
         ],
         [
             'id' => 'unplayableAlone',
