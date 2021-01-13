@@ -217,7 +217,7 @@ class FixDefaultValues extends Migration
         });
 
         DB::connection(self::FORMER_APP_DATABASE)->update(
-            'UPDATE membres SET date_inscription = NULL WHERE date_inscription = "1901-03-21 23:59:11"'
+            'UPDATE jeux SET date_inscription = NULL WHERE date_inscription = "1901-03-21 23:59:11"'
         );
 
         // Participants & other tables

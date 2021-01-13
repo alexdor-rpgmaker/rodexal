@@ -23,11 +23,11 @@ class UserController extends Controller
     public function callback(Request $request)
     {
         $provider = new GenericOAuth2Provider([
-            'clientId'                => env('FORMER_APP_CLIENT_ID'),
-            'clientSecret'            => env('FORMER_APP_CLIENT_SECRET'),
-            'redirectUri'             => env('APP_URL') . env('APP_OAUTH_URL'),
-            'urlAuthorize'            => env('FORMER_APP_URL') . env('FORMER_APP_AUTHORIZATION_URL_SUFFIX'),
-            'urlAccessToken'          => env('FORMER_APP_URL') . env('FORMER_APP_TOKEN_URL_SUFFIX'),
+            'clientId' => env('FORMER_APP_CLIENT_ID'),
+            'clientSecret' => env('FORMER_APP_CLIENT_SECRET'),
+            'redirectUri' => env('APP_URL') . env('APP_OAUTH_URL'),
+            'urlAuthorize' => env('FORMER_APP_URL') . env('FORMER_APP_AUTHORIZATION_URL_SUFFIX'),
+            'urlAccessToken' => env('FORMER_APP_URL') . env('FORMER_APP_TOKEN_URL_SUFFIX'),
             'urlResourceOwnerDetails' => env('FORMER_APP_URL') . env('FORMER_APP_RESOURCE_OWNER_URL_SUFFIX')
         ]);
 
@@ -52,14 +52,17 @@ class UserController extends Controller
 
                 $user = User::where('id', $resourceOwnerArray['id'])->first();
                 if (!$user) {
-                    $user = new User;
-                    $user->id = $resourceOwnerArray['id'];
-                    $user->name = $resourceOwnerArray['username'];
-                    $user->email = $resourceOwnerArray['email'];
-                    $user->rank = $resourceOwnerArray['rank'];
-                    $user->password = bcrypt(Str::random(10));
-                    $user->save();
+                    $user = new User([
+                        'id' => $resourceOwnerArray['id'],
+                        'password' => bcrypt(Str::random(10))
+                    ]);
                 }
+                $user->fill([
+                    'name' => $resourceOwnerArray['username'],
+                    'email' => $resourceOwnerArray['email'],
+                    'rank' => $resourceOwnerArray['rank']
+                ]);
+                $user->save();
 
                 Auth::login($user, true); // true = "Remember"
 
