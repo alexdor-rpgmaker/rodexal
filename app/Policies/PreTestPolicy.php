@@ -50,7 +50,7 @@ class PreTestPolicy
 
     public function restore(User $user, PreTest $preTest)
     {
-        return $this->deny("Vous devez être un admin pour restorer un QCM !");
+        return $this->deny("Vous devez être un admin pour récupérer un QCM !");
     }
 
     public function forceDelete(User $user, PreTest $preTest)

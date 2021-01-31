@@ -1,13 +1,33 @@
-<?php /** @noinspection PhpUndefinedVariableInspection */
+<?php
+
+namespace Database\Factories;
 
 use App\Former\Member;
-use Faker\Generator as Faker;
+use App\Former\NewsPost;
 
-$factory->define(App\Former\NewsPost::class, function (Faker $faker) {
-    return [
-        'nom_news' => $faker->words(3, true),
-        'contenu_news' => $faker->paragraphs(2, true),
-        'id_membre' => factory(Member::class),
-        'date_creation_news' => now()
-    ];
-});
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class NewsPostFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = NewsPost::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'nom_news' => $this->faker->words(3, true),
+            'contenu_news' => $this->faker->paragraphs(2, true),
+            'id_membre' => Member::factory(),
+            'date_creation_news' => now(),
+        ];
+    }
+}

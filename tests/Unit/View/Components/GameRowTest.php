@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit\View\Components;
 
 use Mockery;
@@ -21,7 +22,7 @@ class GameRowTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->game = factory(Game::class)->create();
+        $this->game = Game::factory()->create();
         $this->gameRow = new GameRow($this->game);
     }
 
@@ -39,26 +40,26 @@ class GameRowTest extends TestCase
     {
         $contributor1 = $this->mock(
             Contributor::class,
-            fn($mock) => $mock->shouldReceive('getAttribute')
+            fn ($mock) => $mock->shouldReceive('getAttribute')
                 ->with('linkOrName')
                 ->andReturn('<a href="jp">Juan-Pablo</a>')
         );
         $contributor2 = $this->mock(
             Contributor::class,
-            fn($mock) => $mock->shouldReceive('getAttribute')
+            fn ($mock) => $mock->shouldReceive('getAttribute')
                 ->with('linkOrName')
                 ->andReturn('Juanita')
         );
         $mockGame = $this->mock(
             Game::class,
-            fn($mock) => $mock->shouldReceive('getAttribute')
+            fn ($mock) => $mock->shouldReceive('getAttribute')
                 ->with('contributors')
                 ->andReturn(collect([$contributor1, $contributor2]))
         );
 
         $gameRow = new GameRow($mockGame);
 
-        $this->assertEquals("<a href=\"jp\">Juan-Pablo</a>, Juanita", $gameRow->contributors());
+        $this->assertEquals('<a href="jp">Juan-Pablo</a>, Juanita', $gameRow->contributors());
     }
 
     /**
@@ -68,31 +69,31 @@ class GameRowTest extends TestCase
      */
     public function awardedCategoriesList()
     {
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $this->game->id_jeu,
             'is_vainqueur' => 0,
-            'id_categorie' => factory(AwardSessionCategory::class),
+            'id_categorie' => AwardSessionCategory::factory(),
         ]);
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $this->game->id_jeu,
             'is_vainqueur' => 1,
-            'id_categorie' => factory(AwardSessionCategory::class)->create([
+            'id_categorie' => AwardSessionCategory::factory()->create([
                 'nom_categorie' => 'Gameplay',
                 'niveau_categorie' => 1,
                 'is_declinaison' => true
             ]),
         ]);
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $this->game->id_jeu,
             'is_vainqueur' => 1,
-            'id_categorie' => factory(AwardSessionCategory::class)->create([
+            'id_categorie' => AwardSessionCategory::factory()->create([
                 'nom_categorie' => 'Level design',
                 'niveau_categorie' => 2,
                 'is_declinaison' => false
             ]),
         ]);
 
-        $this->assertEquals("Gameplay (or), Level design", $this->gameRow->awardedCategoriesList());
+        $this->assertEquals('Gameplay (or), Level design', $this->gameRow->awardedCategoriesList());
     }
 
     /**
@@ -102,29 +103,29 @@ class GameRowTest extends TestCase
      */
     public function nominatedCategoriesList()
     {
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $this->game->id_jeu,
             'is_vainqueur' => 0,
-            'id_categorie' => factory(AwardSessionCategory::class)->create([
+            'id_categorie' => AwardSessionCategory::factory()->create([
                 'nom_categorie' => 'Gameplay',
                 'niveau_categorie' => 1,
             ]),
         ]);
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $this->game->id_jeu,
             'is_vainqueur' => 0,
-            'id_categorie' => factory(AwardSessionCategory::class)->create([
+            'id_categorie' => AwardSessionCategory::factory()->create([
                 'nom_categorie' => 'Level design',
                 'niveau_categorie' => 2,
             ]),
         ]);
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $this->game->id_jeu,
             'is_vainqueur' => 1,
-            'id_categorie' => factory(AwardSessionCategory::class),
+            'id_categorie' => AwardSessionCategory::factory(),
         ]);
 
-        $this->assertEquals("Gameplay, Level design", $this->gameRow->nominatedCategoriesList());
+        $this->assertEquals('Gameplay, Level design', $this->gameRow->nominatedCategoriesList());
     }
 
     /**
@@ -134,7 +135,7 @@ class GameRowTest extends TestCase
      */
     public function wasAwardedTrue()
     {
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $this->game->id_jeu,
             'is_vainqueur' => 2,
         ]);
@@ -149,7 +150,7 @@ class GameRowTest extends TestCase
      */
     public function wasAwardedFalse()
     {
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $this->game->id_jeu,
             'is_vainqueur' => 0,
         ]);
@@ -164,7 +165,7 @@ class GameRowTest extends TestCase
      */
     public function wasNominatedTrue()
     {
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $this->game->id_jeu,
             'is_vainqueur' => 2,
         ]);
@@ -179,7 +180,7 @@ class GameRowTest extends TestCase
      */
     public function wasNominatedFalse()
     {
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $this->game->id_jeu,
             'is_vainqueur' => 0,
         ]);

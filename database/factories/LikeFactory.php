@@ -1,14 +1,33 @@
-<?php /** @noinspection PhpUndefinedVariableInspection */
+<?php
+
+namespace Database\Factories;
 
 use App\Former\Game;
+use App\Former\Like;
 use App\Former\Member;
 
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(App\Former\Like::class, function (Faker $faker) {
-    return [
-        'id_jeu' => factory(Game::class),
-        'id_membre' => factory(Member::class),
-        'date_modification' => now(),
-    ];
-});
+class LikeFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Like::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'id_jeu' => Game::factory(),
+            'id_membre' => Member::factory(),
+            'date_modification' => now(),
+        ];
+    }
+}

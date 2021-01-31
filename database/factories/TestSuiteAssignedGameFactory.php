@@ -1,12 +1,32 @@
-<?php /** @noinspection PhpUndefinedVariableInspection */
+<?php
+
+namespace Database\Factories;
 
 use App\Former\Game;
 use App\Former\TestSuite;
-use Faker\Generator as Faker;
+use App\Former\TestSuiteAssignedGame;
 
-$factory->define(App\Former\TestSuiteAssignedGame::class, function (Faker $faker) {
-    return [
-        'id_jeu' => factory(Game::class),
-        'id_serie' => factory(TestSuite::class),
-    ];
-});
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class TestSuiteAssignedGameFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = TestSuiteAssignedGame::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'id_jeu' => Game::factory(),
+            'id_serie' => TestSuite::factory(),
+        ];
+    }
+}

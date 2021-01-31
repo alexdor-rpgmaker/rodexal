@@ -123,7 +123,7 @@ describe('Games', () => {
   })
 
   describe('.fetchGames()', () => {
-    function createWrapperWithParams(params) {
+    function createWrapperWithParams (params) {
       const wrapper = shallowMount(Games, params)
       const apiResponseBody = {
         meta: {
@@ -356,14 +356,14 @@ describe('Games', () => {
         download_links: [{ url: 'img.jpg', platform: 'windows' }],
         awards: [
           {
-            status: "awarded",
+            status: 'awarded',
             award_level: null,
             category_name: "Alex d'or"
           },
           {
-            status: "nominated",
+            status: 'nominated',
             award_level: null,
-            category_name: "Alex du gameplay"
+            category_name: 'Alex du gameplay'
           }
         ]
       }
@@ -394,14 +394,14 @@ describe('Games', () => {
         downloadLinks: [{ url: 'img.jpg', platform: 'windows' }],
         awards: [
           {
-            status: "awarded",
+            status: 'awarded',
             award_level: null,
             category_name: "Alex d'or"
           },
           {
-            status: "nominated",
+            status: 'nominated',
             award_level: null,
-            category_name: "Alex du gameplay"
+            category_name: 'Alex du gameplay'
           }
         ]
       })

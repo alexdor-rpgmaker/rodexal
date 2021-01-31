@@ -3,9 +3,9 @@
 namespace Tests\Unit\Former;
 
 use App\Former\Member;
-use Tests\TestCase;
-
 use App\Former\Contributor;
+
+use Tests\TestCase;
 
 /**
  * @testdox Contributor
@@ -21,12 +21,12 @@ class ContributorTest extends TestCase
     {
         $membre = $this->partialMock(
             Member::class,
-            fn($mock) => $mock->shouldReceive('getLink')
+            fn ($mock) => $mock->shouldReceive('getLink')
                 ->andReturn('<a href="jp">Juan-Pablo</a>')
         );
         $contributor = $this->partialMock(
             Contributor::class,
-            fn($mock) => $mock->shouldReceive('getAttribute')
+            fn ($mock) => $mock->shouldReceive('getAttribute')
                 ->with('member')
                 ->andReturn($membre)
         );
@@ -44,7 +44,7 @@ class ContributorTest extends TestCase
      */
     public function linkOrName_ifThereIsNoMember()
     {
-        $contributor = factory(Contributor::class)->make([
+        $contributor = Contributor::factory()->make([
             'nom_membre' => 'Juanita',
         ]);
 

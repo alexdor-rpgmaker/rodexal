@@ -28,12 +28,12 @@ class GameApiRouterTest extends FeatureTest
      */
     public function testListGamesWithPagination()
     {
-        $session = factory(Session::class)->create([
+        $session = Session::factory()->create([
             'id_session' => 1,
             'etape' => 3,
             'nom_session' => 'Session 2001',
         ]);
-        $firstGame = factory(Game::class)->create([
+        $firstGame = Game::factory()->create([
             'id_jeu' => 1,
             'id_session' => $session->id_session,
             'statut_jeu' => 2,
@@ -50,80 +50,80 @@ class GameApiRouterTest extends FeatureTest
             'logo_distant' => 'https://fake-game.com/logo.png',
             'date_inscription' => '2020-04-01 12:00:00',
             'lien' => 'https://www.fake-downloads.com/8764789.zip',
-            'lien_sur_site' => 'fake_game.zip'
+            'lien_sur_site' => 'fake_game.zip',
         ]);
-        $membre = factory(Member::class)->create([
+        $membre = Member::factory()->create([
             'id_membre' => 3,
             'pseudo' => 'Juan-Pablo',
-            'rang' => 4
+            'rang' => 4,
         ]);
-        factory(Contributor::class)->create([
+        Contributor::factory()->create([
             'id_jeu' => $firstGame->id_jeu,
             'id_membre' => $membre->id_membre,
             'nom_membre' => null,
             'role' => 'Programmer',
-            'ordre' => 2
+            'ordre' => 2,
         ]);
-        factory(Contributor::class)->create([
+        Contributor::factory()->create([
             'id_jeu' => $firstGame->id_jeu,
             'nom_membre' => 'Anita',
             'role' => 'Game designer',
-            'ordre' => 1
+            'ordre' => 1,
         ]);
-        factory(Contributor::class)->create([
+        Contributor::factory()->create([
             'id_jeu' => $firstGame->id_jeu,
             'nom_membre' => 'León',
             'role' => 'Debugger',
             'ordre' => 3,
-            'statut_participant' => 0
+            'statut_participant' => 0,
         ]);
-        factory(Screenshot::class)->create([
+        Screenshot::factory()->create([
             'id_jeu' => $firstGame->id_jeu,
             'nom_screenshot' => 'Second screenshot',
             'local' => 'screenshot-2.jpg',
-            'ordre' => 2
+            'ordre' => 2,
         ]);
-        factory(Screenshot::class)->create([
+        Screenshot::factory()->create([
             'id_jeu' => $firstGame->id_jeu,
             'nom_screenshot' => 'First screenshot',
             'local' => 'screenshot-1.jpg',
-            'ordre' => 1
+            'ordre' => 1,
         ]);
-        factory(Screenshot::class)->create([
+        Screenshot::factory()->create([
             'id_jeu' => $firstGame->id_jeu,
             'nom_screenshot' => 'Deleted screenshot',
             'local' => 'screenshot-x.jpg',
             'ordre' => 3,
-            'statut_screenshot' => 0
+            'statut_screenshot' => 0,
         ]);
 
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $firstGame->id_jeu,
             'is_vainqueur' => 1,
-            'id_categorie' => factory(AwardSessionCategory::class)->create([
+            'id_categorie' => AwardSessionCategory::factory()->create([
                 'nom_categorie' => 'Gameplay',
-                'is_declinaison' => true
+                'is_declinaison' => true,
             ]),
         ]);
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $firstGame->id_jeu,
             'is_vainqueur' => 0,
-            'id_categorie' => factory(AwardSessionCategory::class)->create([
+            'id_categorie' => AwardSessionCategory::factory()->create([
                 'nom_categorie' => 'Atmosphere',
-                'is_declinaison' => true
-            ])
+                'is_declinaison' => true,
+            ]),
         ]);
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $firstGame->id_jeu,
             'is_vainqueur' => 1,
-            'id_categorie' => factory(AwardSessionCategory::class)->create([
+            'id_categorie' => AwardSessionCategory::factory()->create([
                 'nom_categorie' => 'Deleted category',
                 'is_declinaison' => false,
-                'statut_categorie' => 0
-            ])
+                'statut_categorie' => 0,
+            ]),
         ]);
 
-        $secondGame = factory(Game::class)->create([
+        $secondGame = Game::factory()->create([
             'id_jeu' => 2,
             'id_session' => $session->id_session,
             'statut_jeu' => 1,
@@ -141,15 +141,15 @@ class GameApiRouterTest extends FeatureTest
             'date_inscription' => null, // Null date
         ]);
 
-        factory(Contributor::class)->create([
+        Contributor::factory()->create([
             'id_jeu' => $secondGame,
             'nom_membre' => 'Paul',
             'role' => '',
             'ordre' => 3,
-            'statut_participant' => 0
+            'statut_participant' => 0,
         ]);
 
-        factory(Game::class)->states('deleted')->create();
+        Game::factory()->states('deleted')->create();
 
         $response = $this->get('/api/v0/games', ['query' => ['page' => 1]]);
 
@@ -160,21 +160,21 @@ class GameApiRouterTest extends FeatureTest
 
         // Pagination
         $response->assertJsonFragment([
-            "meta" => [
-                "current_page" => 1,
-                "from" => 1,
-                "last_page" => 1,
-                "per_page" => 50,
-                "to" => 2,
-                "total" => 2,
-                "path" => "http://rodexal.test/api/v0/games",
+            'meta' => [
+                'current_page' => 1,
+                'from' => 1,
+                'last_page' => 1,
+                'per_page' => 50,
+                'to' => 2,
+                'total' => 2,
+                'path' => 'http://rodexal.test/api/v0/games',
             ],
-            "links" => [
-                "first" => "http://rodexal.test/api/v0/games?page=1",
-                "last" => "http://rodexal.test/api/v0/games?page=1",
-                "prev" => null,
-                "next" => null,
-            ]
+            'links' => [
+                'first' => 'http://rodexal.test/api/v0/games?page=1',
+                'last' => 'http://rodexal.test/api/v0/games?page=1',
+                'prev' => null,
+                'next' => null,
+            ],
         ]);
 
         // Data
@@ -201,8 +201,8 @@ class GameApiRouterTest extends FeatureTest
                     'download_links' => [
                         [
                             'platform' => 'windows',
-                            'url' => 'http://alex-dor.test/archives/2001/jeux/fake_game.zip'
-                        ]
+                            'url' => 'http://alex-dor.test/archives/2001/jeux/fake_game.zip',
+                        ],
                     ],
                     'authors' => [
                         [
@@ -216,30 +216,30 @@ class GameApiRouterTest extends FeatureTest
                             'rank' => 'juror',
                             'username' => 'Juan-Pablo',
                             'role' => 'Programmer',
-                        ]
+                        ],
                     ],
                     'screenshots' => [
                         [
                             'title' => 'First screenshot',
-                            'url' => 'http://alex-dor.test/uploads/screenshots/2001/screenshot-1.jpg'
+                            'url' => 'http://alex-dor.test/uploads/screenshots/2001/screenshot-1.jpg',
                         ],
                         [
                             'title' => 'Second screenshot',
-                            'url' => 'http://alex-dor.test/uploads/screenshots/2001/screenshot-2.jpg'
-                        ]
+                            'url' => 'http://alex-dor.test/uploads/screenshots/2001/screenshot-2.jpg',
+                        ],
                     ],
                     'awards' => [
                         [
                             'status' => 'awarded',
                             'award_level' => 'gold',
-                            'category_name' => 'Gameplay'
+                            'category_name' => 'Gameplay',
                         ],
                         [
                             'status' => 'nominated',
                             'award_level' => null,
-                            'category_name' => 'Atmosphere'
-                        ]
-                    ]
+                            'category_name' => 'Atmosphere',
+                        ],
+                    ],
                 ],
                 [
                     'id' => 2,
@@ -279,14 +279,14 @@ class GameApiRouterTest extends FeatureTest
      */
     public function testListGamesWithFilters()
     {
-        $session = factory(Session::class)->create([
+        $session = Session::factory()->create([
             'id_session' => 1,
             'nom_session' => 'Session 2001',
         ]);
 
         // 5 relevant games
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'nom_jeu' => 'Game with search query in genre',
             'genre_jeu' => '--My amazing search query--',
             'support' => 'RPG Maker 2003',
@@ -296,7 +296,7 @@ class GameApiRouterTest extends FeatureTest
             'id_session' => $session
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'nom_jeu' => '--My amazing search query--',
             'genre_jeu' => 'Adventure game',
             'support' => 'RPG Maker 2003',
@@ -306,7 +306,7 @@ class GameApiRouterTest extends FeatureTest
             'id_session' => $session
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'nom_jeu' => 'Game with search query in description',
             'genre_jeu' => 'Adventure game',
             'support' => 'RPG Maker 2003',
@@ -316,7 +316,7 @@ class GameApiRouterTest extends FeatureTest
             'id_session' => $session
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'nom_jeu' => 'Game with search query in theme',
             'genre_jeu' => 'Adventure game',
             'support' => 'RPG Maker 2003',
@@ -326,7 +326,7 @@ class GameApiRouterTest extends FeatureTest
             'id_session' => $session
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'nom_jeu' => 'Game with search query in group',
             'genre_jeu' => 'Adventure game',
             'support' => 'RPG Maker 2003',
@@ -338,20 +338,20 @@ class GameApiRouterTest extends FeatureTest
 
         // Irrelevant games
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'nom_jeu' => 'Game with wrong session',
             'genre_jeu' => 'My amazing search query',
             'support' => 'RPG Maker 2003',
             'theme' => 'Fake theme',
             'description_jeu' => 'Just a sample game in order to test',
             'groupe' => 'Faking Games Software',
-            'id_session' => factory(Session::class)->create([
+            'id_session' => Session::factory()->create([
                 'id_session' => 2,
                 'nom_session' => 'Session 2002',
             ])
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'nom_jeu' => 'Game with wrong support/software',
             'genre_jeu' => 'My amazing search query',
             'support' => 'RPG Maker XP',
@@ -361,7 +361,7 @@ class GameApiRouterTest extends FeatureTest
             'id_session' => $session
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'nom_jeu' => 'Game without search query',
             'genre_jeu' => 'Adventure game',
             'support' => 'RPG Maker 2003',
@@ -392,43 +392,43 @@ class GameApiRouterTest extends FeatureTest
      */
     public function testListGamesFilteredByDownloadLink()
     {
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 1,
             'nom_jeu' => 'Game without download links',
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 2,
             'nom_jeu' => 'Game with Windows link',
             'lien' => 'https://windows-link',
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 3,
             'nom_jeu' => 'Game with Mac link',
             'lien_sur_mac' => 'https://mac-link',
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 4,
             'nom_jeu' => 'Game with Windows link',
             'lien_sur_site' => 'https://windows-link',
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 5,
             'nom_jeu' => 'Game with Mac link',
             'lien_sur_site_sur_mac' => 'https://mac-link',
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 6,
             'nom_jeu' => 'Game with both platform links',
             'lien' => 'https://windows-link',
             'lien_sur_mac' => 'https://mac-link',
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 7,
             'nom_jeu' => 'Game with link removed by author',
             'lien' => 'https://windows-link',
@@ -436,7 +436,7 @@ class GameApiRouterTest extends FeatureTest
             'link_removed_on_author_demand' => true,
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 8,
             'nom_jeu' => 'Game with unavailable link',
             'lien' => 'https://windows-link',
@@ -491,36 +491,36 @@ class GameApiRouterTest extends FeatureTest
      */
     public function testListGamesWithSorting()
     {
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 1,
             'nom_jeu' => 'Game in old session (2001)',
             'support' => 'RPG Maker XP',
-            'id_session' => factory(Session::class)->create([
+            'id_session' => Session::factory()->create([
                 'id_session' => 1,
                 'nom_session' => 'Session 2001',
             ])
         ]);
 
-        $session = factory(Session::class)->create([
+        $session = Session::factory()->create([
             'id_session' => 20,
             'nom_session' => 'Session 2020',
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 2,
             'nom_jeu' => 'AAAA',
             'support' => 'ZZZZ',
             'id_session' => $session
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 3,
             'nom_jeu' => 'BBBB',
             'support' => 'ZZZZ',
             'id_session' => $session
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 4,
             'nom_jeu' => 'CCCC',
             'support' => 'YYYY',
@@ -556,50 +556,50 @@ class GameApiRouterTest extends FeatureTest
      */
     public function testListGamesWithSortingOnAwardsCount()
     {
-        $firstGame = factory(Game::class)->create([
+        $firstGame = Game::factory()->create([
             'id_jeu' => 1,
         ]);
 
-        $secondGame = factory(Game::class)->create([
+        $secondGame = Game::factory()->create([
             'id_jeu' => 2,
         ]);
 
-        $thirdGame = factory(Game::class)->create([
+        $thirdGame = Game::factory()->create([
             'id_jeu' => 3,
         ]);
 
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 4,
         ]);
 
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $thirdGame->id_jeu,
             'is_vainqueur' => 1,
-            'id_categorie' => factory(AwardSessionCategory::class)->create(),
+            'id_categorie' => AwardSessionCategory::factory()->create(),
         ]);
 
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $thirdGame->id_jeu,
             'is_vainqueur' => 1,
-            'id_categorie' => factory(AwardSessionCategory::class)->create()
+            'id_categorie' => AwardSessionCategory::factory()->create(),
         ]);
 
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $secondGame->id_jeu,
             'is_vainqueur' => 1,
-            'id_categorie' => factory(AwardSessionCategory::class)->create()
+            'id_categorie' => AwardSessionCategory::factory()->create(),
         ]);
 
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $secondGame->id_jeu,
             'is_vainqueur' => 0,
-            'id_categorie' => factory(AwardSessionCategory::class)->create()
+            'id_categorie' => AwardSessionCategory::factory()->create(),
         ]);
 
-        factory(Nomination::class)->create([
+        Nomination::factory()->create([
             'id_jeu' => $firstGame->id_jeu,
             'is_vainqueur' => 0,
-            'id_categorie' => factory(AwardSessionCategory::class)->create()
+            'id_categorie' => AwardSessionCategory::factory()->create(),
         ]);
 
         $queryParameters = [

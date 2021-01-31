@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Former;
 
-use Tests\TestCase;
-
 use App\Former\Game;
 use App\Former\Session;
+
+use Tests\TestCase;
 
 /**
  * @testdox Game
@@ -14,8 +14,8 @@ class GameTest extends TestCase
 {
     /**
      * @test
-     * @param int $sessionStep
-     * @param int $gameStatusNumber
+     * @param int    $sessionStep
+     * @param int    $gameStatusNumber
      * @param string $gameStatus
      * @testdox getStatus - If session's step is $sessionStep and game status number is $gameStatusNumber, the status is $gameStatus
      * Si la session est à l'étape $sessionStep et que le jeu a le statut numéro $gameStatusNumber, son statut est $gameStatus
@@ -30,11 +30,11 @@ class GameTest extends TestCase
      */
     public function getStatus_severalCases($sessionStep, $gameStatusNumber, $gameStatus)
     {
-        $game = factory(Game::class)->create([
+        $game = Game::factory()->create([
             'statut_jeu' => $gameStatusNumber,
-            'id_session' => factory(Session::class)->create([
-                'etape' => $sessionStep
-            ])
+            'id_session' => Session::factory()->create([
+                'etape' => $sessionStep,
+            ]),
         ]);
 
         $this->assertEquals($gameStatus, $game->getStatus());
@@ -53,7 +53,7 @@ class GameTest extends TestCase
      */
     public function getLogoUrl_severalCases($distantLink, $localLink, $expected)
     {
-        $game = factory(Game::class)->make([
+        $game = Game::factory()->make([
             'logo' => $localLink,
             'logo_distant' => $distantLink
         ]);
@@ -65,9 +65,9 @@ class GameTest extends TestCase
      * @test
      * @param string $distantLink
      * @param string $localLink
-     * @param bool $badLink
-     * @param bool $removedLink
-     * @param bool $expected
+     * @param bool   $badLink
+     * @param bool   $removedLink
+     * @param bool   $expected
      * @testdox hasWindowsDownloadLink - If game's distant link is $distantLink, local link is $localLink, distant link is bad is $badLink and link is removed is $removedLink, returns $expected
      * Si le le jeu a pour lien distant $distantLink, pour lien local $localLink, mauvais lien distant est $badLink et lien retiré est $removedLink, retourne $expected
      * @testWith        ["http://dl.com/jeu.rar", "jeu-local.rar", false, false, true]
@@ -80,7 +80,7 @@ class GameTest extends TestCase
      */
     public function hasWindowsDownloadLink_severalCases($distantLink, $localLink, $badLink, $removedLink, $expected)
     {
-        $game = factory(Game::class)->make([
+        $game = Game::factory()->make([
             'lien' => $distantLink,
             'lien_sur_site' => $localLink,
             'is_lien_errone' => $badLink,
@@ -94,9 +94,9 @@ class GameTest extends TestCase
      * @test
      * @param string $distantLink
      * @param string $localLink
-     * @param bool $badLink
-     * @param bool $removedLink
-     * @param bool $expected
+     * @param bool   $badLink
+     * @param bool   $removedLink
+     * @param bool   $expected
      * @testdox hasMacDownloadLink - If game's distant link is $distantLink, local link is $localLink, distant link is bad is $badLink and link is removed is $removedLink, returns $expected
      * Si le le jeu a pour lien distant $distantLink, pour lien local $localLink, mauvais lien distant est $badLink et lien retiré est $removedLink, retourne $expected
      * @testWith        ["http://dl.com/jeu.rar", "jeu-local.rar", false, false, true]
@@ -109,7 +109,7 @@ class GameTest extends TestCase
      */
     public function hasMacDownloadLink_severalCases($distantLink, $localLink, $badLink, $removedLink, $expected)
     {
-        $game = factory(Game::class)->make([
+        $game = Game::factory()->make([
             'lien_sur_mac' => $distantLink,
             'lien_sur_site_sur_mac' => $localLink,
             'is_lien_errone' => $badLink,
@@ -132,7 +132,7 @@ class GameTest extends TestCase
      */
     public function getWindowsDownloadLink_severalCases($distantLink, $localLink, $expected)
     {
-        $game = factory(Game::class)->make([
+        $game = Game::factory()->make([
             'id_session' => 19,
             'lien' => $distantLink,
             'lien_sur_site' => $localLink
@@ -154,7 +154,7 @@ class GameTest extends TestCase
      */
     public function getMacDownloadLink_severalCases($distantLink, $localLink, $expected)
     {
-        $game = factory(Game::class)->make([
+        $game = Game::factory()->make([
             'id_session' => 19,
             'lien_sur_mac' => $distantLink,
             'lien_sur_site_sur_mac' => $localLink

@@ -16,11 +16,11 @@ class GamesBrowserTest extends BrowserTest
 
         $this->artisan('migrate:refresh');
 
-        $session = factory(Session::class)->create([
-                'id_session' => 17
+        $session = Session::factory()->create([
+                'id_session' => 17,
         ]);
         // Create 51 games
-        factory(Game::class, 51)->create([
+        Game::factory()->count(51)->create([
             'support' => 'RPG Maker 2003',
             'id_session' => $session
         ]);

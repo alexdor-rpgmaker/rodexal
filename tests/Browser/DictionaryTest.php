@@ -28,8 +28,7 @@ class DictionaryTest extends BrowserTest
      */
     public function testRemplirDictionnaireSiConnecte()
     {
-
-        $user = factory(User::class)->state('admin')->create();
+        $user = User::factory()->state('admin')->create();
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)

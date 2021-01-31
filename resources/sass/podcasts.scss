@@ -1,0 +1,16 @@
+#podcast {
+  h1 {
+    font-size: 2em;
+    font-weight: normal;
+    margin-bottom: 10px;
+  }
+
+  audio {
+    width: 100%;
+    margin: 14px auto 22px;
+
+    &::-webkit-media-controls-panel {
+      background-color: #fff6ef;
+    }
+  }
+}

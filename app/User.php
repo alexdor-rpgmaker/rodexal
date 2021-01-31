@@ -2,18 +2,19 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
+    use HasFactory;
     use Notifiable;
 
     public function isJury()
     {
         return $this->rank >= 4;
     }
-
 
     public function isAdmin()
     {

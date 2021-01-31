@@ -2,8 +2,12 @@
 
 namespace App\Former;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class Member extends FormerModel
 {
+    use HasFactory;
+
     /**
      * @var string
      */

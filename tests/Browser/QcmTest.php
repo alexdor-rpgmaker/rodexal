@@ -29,7 +29,7 @@ class QcmTest extends BrowserTest
      */
     public function testCreerEtModifierQcmSiJury()
     {
-        $user = factory(User::class)->state('jury')->create();
+        $user = User::factory()->state('jury')->create();
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)

@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Former;
 
-use Tests\TestCase;
-
 use App\Former\Member;
+
+use Tests\TestCase;
 
 /**
  * @testdox Member
@@ -13,7 +13,7 @@ class MemberTest extends TestCase
 {
     /**
      * @test
-     * @param int $rank
+     * @param int    $rank
      * @param string $expected
      * @testdox Rank - If rank is $rank, returns $expected
      * Si le rang est $rank, renvoie $expected
@@ -25,8 +25,8 @@ class MemberTest extends TestCase
      */
     public function rankJuror($rank, $expected)
     {
-        $member = factory(Member::class)->make([
-            'rang' => $rank
+        $member = Member::factory()->make([
+            'rang' => $rank,
         ]);
 
         $this->assertEquals($expected, $member->rank);
@@ -39,7 +39,7 @@ class MemberTest extends TestCase
      */
     public function getLink()
     {
-        $member = factory(Member::class)->make([
+        $member = Member::factory()->make([
             'id_membre' => 3,
             'pseudo' => 'Juan-Pablo',
             'rang' => 4

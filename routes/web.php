@@ -17,8 +17,11 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MusicController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PodcastEpisodeController;
 use App\Http\Controllers\PreTestController;
 use App\Http\Controllers\WordController;
+
+Route::feeds();
 
 // Auth::routes();
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
@@ -54,4 +57,10 @@ Route::resource('qcm', PreTestController::class)->except([
     'index', 'destroy'
 ])->parameters([
     'qcm' => 'pre_test'
+]);
+
+Route::resource('podcast', PodcastEpisodeController::class)->only([
+    'index', 'show'
+])->parameters([
+    'podcast' => 'podcast_episode'
 ]);

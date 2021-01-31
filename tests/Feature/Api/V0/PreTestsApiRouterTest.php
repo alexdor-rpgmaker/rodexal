@@ -15,7 +15,7 @@ class PreTestsApiRouterTest extends FeatureTest
      */
     public function testQcmApiIndex()
     {
-        factory(PreTest::class, 3)->create();
+        PreTest::factory()->count(3)->create();
 
         $response = $this->get('/api/v0/qcm');
 

@@ -19,3 +19,4 @@ mix
   .sass('resources/sass/app.scss', 'public/css')
   .sass('resources/sass/dictionary.scss', 'public/css')
   .sass('resources/sass/pre_tests.scss', 'public/css')
+  .sass('resources/sass/podcasts.scss', 'public/css')

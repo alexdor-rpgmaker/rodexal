@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PreTest extends MainModel
 {
+    use HasFactory;
+
     protected $table = 'pre_tests';
 
     protected $casts = [

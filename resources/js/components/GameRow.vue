@@ -52,41 +52,41 @@ export default {
     }
   },
   computed: {
-    awardedCategories() {
+    awardedCategories () {
       return this.game
         .awards
-        .filter(award => award.status === "awarded")
+        .filter(award => award.status === 'awarded')
     },
-    awardedCategoriesList() {
+    awardedCategoriesList () {
       return this.awardedCategories
         .map(this.awardName)
-        .join(", ")
+        .join(', ')
     },
-    wasAwarded() {
+    wasAwarded () {
       return this.awardedCategories.length > 0
     },
-    nominatedCategories() {
+    nominatedCategories () {
       return this.game
         .awards
-        .filter(award => award.status === "nominated")
+        .filter(award => award.status === 'nominated')
     },
-    nominatedCategoriesList() {
+    nominatedCategoriesList () {
       return this.nominatedCategories
         .map(award => award.category_name)
-        .join(", ")
+        .join(', ')
     },
-    wasNominated() {
+    wasNominated () {
       return this.nominatedCategories.length > 0
     }
   },
   methods: {
-    awardName(award) {
+    awardName (award) {
       let awardName = award.category_name
-      switch(award.award_level) {
-        case 'gold': awardName += ' (or)';  break;
-        case 'silver': awardName += ' (argent)';  break;
-        case 'bronze': awardName += ' (bronze)';  break;
-        default: break;
+      switch (award.award_level) {
+        case 'gold': awardName += ' (or)'; break
+        case 'silver': awardName += ' (argent)'; break
+        case 'bronze': awardName += ' (bronze)'; break
+        default: break
       }
       return awardName
     }

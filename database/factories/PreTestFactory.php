@@ -1,55 +1,71 @@
 <?php
 
-use App\User;
+namespace Database\Factories;
+
 use App\PreTest;
+use App\User;
 
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-/** @var Factory $factory */
-$factory->define(PreTest::class, function (Faker $faker) {
-    return [
-        'user_id' => factory(User::class)->create()->id,
-        'game_id' => $faker->numberBetween(5, 25),
-        'questionnaire' => [
-            'blockingBug' => [
-                'activated' => $faker->boolean,
-                'explanation' => $faker->text
+class PreTestFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = PreTest::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'user_id' => User::factory()->create()->id,
+            'game_id' => $this->faker->numberBetween(5, 25),
+            'questionnaire' => [
+                'blockingBug' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'notAutonomous' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'notLaunchable' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'severalBugs' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'spellingMistakes' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'tooHard' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'tooShort' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'unplayableAlone' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'languageUnknown' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
             ],
-            'notAutonomous' => [
-                'activated' => $faker->boolean,
-                'explanation' => $faker->text
-            ],
-            'notLaunchable' => [
-                'activated' => $faker->boolean,
-                'explanation' => $faker->text
-            ],
-            'severalBugs' => [
-                'activated' => $faker->boolean,
-                'explanation' => $faker->text
-            ],
-            'spellingMistakes' => [
-                'activated' => $faker->boolean,
-                'explanation' => $faker->text
-            ],
-            'tooHard' => [
-                'activated' => $faker->boolean,
-                'explanation' => $faker->text
-            ],
-            'tooShort' => [
-                'activated' => $faker->boolean,
-                'explanation' => $faker->text
-            ],
-            'unplayableAlone' => [
-                'activated' => $faker->boolean,
-                'explanation' => $faker->text
-            ],
-            'languageUnknown' => [
-                'activated' => $faker->boolean,
-                'explanation' => $faker->text
-            ]
-        ],
-        'final_thought' => $faker->boolean,
-        'final_thought_explanation' => $faker->paragraphs($faker->numberBetween(1, 3), true)
-    ];
-});
+            'final_thought' => $this->faker->boolean,
+            'final_thought_explanation' => $this->faker->paragraphs($this->faker->numberBetween(1, 3), true),
+        ];
+    }
+}

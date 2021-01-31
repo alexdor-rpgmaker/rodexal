@@ -1,5 +1,5 @@
 export default {
-  data() {
+  data () {
     return {
       fields: {},
       errors: {},
@@ -11,7 +11,7 @@ export default {
     }
   },
   methods: {
-    submit() {
+    submit () {
       if (this.loaded) {
         this.loaded = false
         this.success = false

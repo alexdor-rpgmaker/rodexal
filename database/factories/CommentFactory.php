@@ -1,16 +1,35 @@
-<?php /** @noinspection PhpUndefinedVariableInspection */
+<?php
+
+namespace Database\Factories;
 
 use App\Former\Member;
+use App\Former\Comment;
 use App\Former\NewsPost;
 
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(App\Former\Comment::class, function (Faker $faker) {
-    return [
-        'id_news' => factory(NewsPost::class),
-        'id_membre' => factory(Member::class),
-        'contenu_commentaire' => $faker->paragraphs(2, true),
-        'statut_commentaire' => 1,
-        'date_publication' => now(),
-    ];
-});
+class CommentFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Comment::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'id_news' => NewsPost::factory(),
+            'id_membre' => Member::factory(),
+            'contenu_commentaire' => $this->faker->paragraphs(2, true),
+            'statut_commentaire' => 1,
+            'date_publication' => now(),
+        ];
+    }
+}

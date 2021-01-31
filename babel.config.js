@@ -3,12 +3,12 @@ module.exports = api => {
 
   const presets = [
     [
-      "@babel/preset-env",
+      '@babel/preset-env',
       {
-        useBuiltIns: "usage",
-        corejs: "3.2.1",
+        useBuiltIns: 'usage',
+        corejs: '3.2.1',
         targets: {
-          browsers: "> 5%"
+          browsers: '> 5%'
         }
       }
     ]

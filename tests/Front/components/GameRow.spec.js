@@ -34,21 +34,21 @@ describe('GameRow', () => {
       ],
       awards: [
         {
-          status: "awarded",
-          award_level: "gold",
-          category_name: "Alex"
+          status: 'awarded',
+          award_level: 'gold',
+          category_name: 'Alex'
         },
         {
-          status: "awarded",
-          award_level: "bronze",
-          category_name: "Ambiance"
+          status: 'awarded',
+          award_level: 'bronze',
+          category_name: 'Ambiance'
         },
         {
-          status: "nominated",
+          status: 'nominated',
           award_level: null,
-          category_name: "Meilleurs graphismes"
+          category_name: 'Meilleurs graphismes'
         }
-      ],
+      ]
     }
   }
 

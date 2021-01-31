@@ -4,8 +4,12 @@ namespace App\Former;
 
 use App\Helpers\StringParser;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class Screenshot extends FormerModel
 {
+    use HasFactory;
+
     /**
      * @var string
      */

@@ -109,182 +109,183 @@
 </template>
 
 <script>
-  import GameRow from './GameRow.vue'
+import GameRow from './GameRow.vue'
 
-  export default {
-    components: {
-      GameRow
+export default {
+  components: {
+    GameRow
+  },
+  props: {
+    session: {
+      type: Number,
+      required: false
+    }
+  },
+  data () {
+    return {
+      games: [],
+      query: null,
+      page: 1,
+      totalPagesCount: 1,
+      resultsCountOnThisPage: null,
+      totalResultsCount: null,
+      selectedSoftware: null,
+      selectedSession: null,
+      selectedSort: 'awards_count',
+      withDownloadLinks: false,
+      sortDirection: 'desc',
+      sessions: [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        19,
+        20,
+        21
+      ],
+      softwares: [
+        'adventure game studio',
+        'AINSI',
+        'Autre',
+        'Clickteam Fusion 2.5',
+        'Game Maker Studio 2',
+        'Geex / Rpg Maker Xp',
+        'Klik & Game',
+        'MMF2',
+        'MPEG-1/2 Audio Layer',
+        'Mugen',
+        'Multimedia Fusion 2',
+        'RMVX',
+        'RPG m\'écoeure 2003',
+        'RPG maker',
+        'RPG Maker 2000',
+        'RPG Maker 2003',
+        'Rpg maker 95',
+        'RPG Maker MV',
+        'RPG Maker VX',
+        'RPG Maker VX Ace',
+        'RPG Maker XP',
+        'The Games Factory 1.06',
+        'Unity'
+      ]
+    }
+  },
+  async mounted () {
+    if (this.session) {
+      this.selectedSession = this.session
+    }
+    await this.fetchGames()
+  },
+  computed: {
+    lastPage () {
+      return this.page === this.totalPagesCount
     },
-    props: {
-      session: {
-        type: Number,
-        required: false
+    gamesCount () {
+      if (this.resultsCountOnThisPage === this.totalResultsCount) {
+        return this.resultsCountOnThisPage
       }
+
+      return `${this.resultsCountOnThisPage} sur ${this.totalResultsCount}`
+    }
+  },
+  methods: {
+    async fetchGames () {
+      const params = {
+        page: this.page
+      }
+      if (this.query) {
+        params.q = this.query
+      }
+      if (this.selectedSoftware) {
+        params.software = this.selectedSoftware
+      }
+      if (this.selectedSession) {
+        params.session_id = this.selectedSession
+      }
+      if (this.withDownloadLinks) {
+        params.download_links = 'any'
+      }
+      if (this.selectedSort) {
+        params.sort = `${this.selectedSort}:${this.sortDirection}`
+
+        if (this.selectedSort !== 'title') {
+          params.sort += ',title:asc'
+        }
+      }
+
+      const request = await axios({
+        url: '/api/v0/games',
+        params
+      })
+
+      this.page = request.data.meta.current_page
+      this.totalPagesCount = request.data.meta.last_page
+      this.totalResultsCount = request.data.meta.total
+      this.resultsCountOnThisPage = request.data.data.length
+
+      this.games = request.data.data.map(this.formatGameForList)
     },
-    data() {
-      return {
-        games: [],
-        query: null,
-        page: 1,
-        totalPagesCount: 1,
-        resultsCountOnThisPage: null,
-        totalResultsCount: null,
-        selectedSoftware: null,
-        selectedSession: null,
-        selectedSort: 'awards_count',
-        withDownloadLinks: false,
-        sortDirection: 'desc',
-        sessions: [
-          1,
-          2,
-          3,
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11,
-          12,
-          13,
-          14,
-          15,
-          16,
-          17,
-          19,
-          20
-        ],
-        softwares: [
-          'adventure game studio',
-          'AINSI',
-          'Autre',
-          'Clickteam Fusion 2.5',
-          'Game Maker Studio 2',
-          'Geex / Rpg Maker Xp',
-          'Klik & Game',
-          'MMF2',
-          'MPEG-1/2 Audio Layer',
-          'Mugen',
-          'Multimedia Fusion 2',
-          'RMVX',
-          'RPG m\'écoeure 2003',
-          'RPG maker',
-          'RPG Maker 2000',
-          'RPG Maker 2003',
-          'Rpg maker 95',
-          'RPG Maker MV',
-          'RPG Maker VX',
-          'RPG Maker VX Ace',
-          'RPG Maker XP',
-          'The Games Factory 1.06',
-          'Unity'
-        ]
-      }
-    },
-    async mounted() {
-      if (this.session) {
-        this.selectedSession = this.session
-      }
+    async search () {
+      this.page = 1
       await this.fetchGames()
     },
-    computed: {
-      lastPage() {
-        return this.page === this.totalPagesCount
-      },
-      gamesCount() {
-        if (this.resultsCountOnThisPage === this.totalResultsCount) {
-          return this.resultsCountOnThisPage
-        }
-
-        return `${this.resultsCountOnThisPage} sur ${this.totalResultsCount}`
-      }
+    async goToPage (page) {
+      window.scrollTo(0, 0)
+      this.page = page
+      await this.fetchGames()
     },
-    methods: {
-      async fetchGames() {
-        const params = {
-          page: this.page
-        }
-        if (this.query) {
-          params['q'] = this.query
-        }
-        if (this.selectedSoftware) {
-          params['software'] = this.selectedSoftware
-        }
-        if (this.selectedSession) {
-          params['session_id'] = this.selectedSession
-        }
-        if (this.withDownloadLinks) {
-          params['download_links'] = 'any'
-        }
-        if (this.selectedSort) {
-          params['sort'] = `${this.selectedSort}:${this.sortDirection}`
+    async previousPage () {
+      window.scrollTo(0, 0)
+      this.page -= 1
+      await this.fetchGames()
+    },
+    async nextPage () {
+      window.scrollTo(0, 0)
+      this.page += 1
+      await this.fetchGames()
+    },
+    async sortBy (sortParam) {
+      if (this.selectedSort === sortParam) {
+        this.sortDirection = this.sortDirection !== 'asc' ? 'asc' : 'desc'
+      }
+      this.selectedSort = sortParam
+      await this.search()
+    },
+    sessionName (id) {
+      if (id === 3) return 'Session 2003-2004'
+      else if (id === 17) return 'Session 2017-2018'
 
-          if (this.selectedSort !== 'title') {
-            params['sort'] += ',title:asc'
-          }
-        }
-
-        const request = await axios({
-          url: '/api/v0/games',
-          params
-        })
-
-        this.page = request.data.meta.current_page
-        this.totalPagesCount = request.data.meta.last_page
-        this.totalResultsCount = request.data.meta.total
-        this.resultsCountOnThisPage = request.data.data.length
-
-        this.games = request.data.data.map(this.formatGameForList)
-      },
-      async search() {
-        this.page = 1
-        await this.fetchGames()
-      },
-      async goToPage(page) {
-        window.scrollTo(0, 0)
-        this.page = page
-        await this.fetchGames()
-      },
-      async previousPage() {
-        window.scrollTo(0, 0)
-        this.page -= 1
-        await this.fetchGames()
-      },
-      async nextPage() {
-        window.scrollTo(0, 0)
-        this.page += 1
-        await this.fetchGames()
-      },
-      async sortBy(sortParam) {
-        if (this.selectedSort === sortParam) {
-          this.sortDirection = this.sortDirection !== 'asc' ? 'asc' : 'desc'
-        }
-        this.selectedSort = sortParam
-        await this.search()
-      },
-      sessionName(id) {
-        if (id === 3) return 'Session 2003-2004'
-        else if (id === 17) return 'Session 2017-2018'
-
-        return `Session ${id + 2000}`
-      },
-      formatGameForList(gameDto) {
-        return {
-          id: gameDto.id,
-          title: gameDto.title,
-          genre: gameDto.genre,
-          authors: gameDto.authors,
-          session: gameDto.session,
-          software: gameDto.software,
-          screenshots: gameDto.screenshots,
-          description: gameDto.description,
-          creationGroup: gameDto.creation_group,
-          downloadLinks: gameDto.download_links,
-          awards: gameDto.awards
-        }
+      return `Session ${id + 2000}`
+    },
+    formatGameForList (gameDto) {
+      return {
+        id: gameDto.id,
+        title: gameDto.title,
+        genre: gameDto.genre,
+        authors: gameDto.authors,
+        session: gameDto.session,
+        software: gameDto.software,
+        screenshots: gameDto.screenshots,
+        description: gameDto.description,
+        creationGroup: gameDto.creation_group,
+        downloadLinks: gameDto.download_links,
+        awards: gameDto.awards
       }
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -1,10 +1,30 @@
-<?php /** @noinspection PhpUndefinedVariableInspection */
+<?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-$factory->define(App\Former\AwardGeneralCategory::class, function (Faker $faker) {
-    return [
-        'nom_serie' => $faker->words(3, true),
-        'description_serie' => $faker->paragraph(2)
-    ];
-});
+use App\Former\AwardGeneralCategory;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class AwardGeneralCategoryFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = AwardGeneralCategory::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'nom_serie' => $this->faker->words(3, true),
+            'description_serie' => $this->faker->paragraph(2),
+        ];
+    }
+}

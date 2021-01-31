@@ -29,7 +29,7 @@ class WordsRouterTest extends FeatureTest
      */
     public function testFormulaireNouveauMotDuDictionnaireSiNonAdmin()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)
             ->get('/dictionnaire/creer');
@@ -42,7 +42,7 @@ class WordsRouterTest extends FeatureTest
      */
     public function testFormulaireNouveauMotDuDictionnaireSiAdmin()
     {
-        $user = factory(User::class)->states('admin')->create();
+        $user = User::factory()->states('admin')->create();
 
         $response = $this->actingAs($user)
             ->get('/dictionnaire/creer');
@@ -57,7 +57,7 @@ class WordsRouterTest extends FeatureTest
      */
     public function testNouveauMotDuDictionnaireSiNonAdmin()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)
             ->post('/dictionnaire');
@@ -70,17 +70,17 @@ class WordsRouterTest extends FeatureTest
      */
     public function testRedirectionSiChampsManquantsSiAdmin()
     {
-        $user = factory(User::class)->states('admin')->create();
-        $unsavedWord = factory(Word::class)->make();
+        $user = User::factory()->states('admin')->create();
+        $unsavedWord = Word::factory()->make();
 
         $response = $this->actingAs($user)
             ->post('/dictionnaire', [
-                'label' => $unsavedWord->label
+                'label' => $unsavedWord->label,
             ]);
 
         $response->assertRedirect();
         $this->assertDatabaseMissing('words', [
-            'label' => $unsavedWord->label
+            'label' => $unsavedWord->label,
         ]);
     }
 
@@ -89,19 +89,19 @@ class WordsRouterTest extends FeatureTest
      */
     public function testNouveauMotDuDictionnaireSiAdmin()
     {
-        $user = factory(User::class)->states('admin')->create();
-        $unsavedWord = factory(Word::class)->make();
+        $user = User::factory()->states('admin')->create();
+        $unsavedWord = Word::factory()->make();
 
         $response = $this->actingAs($user)
             ->post('/dictionnaire', [
                 'label' => $unsavedWord->label,
-                'description' => $unsavedWord->description
+                'description' => $unsavedWord->description,
             ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('words', [
             'label' => $unsavedWord->label,
-            'description' => $unsavedWord->description
+            'description' => $unsavedWord->description,
         ]);
     }
 
@@ -112,8 +112,8 @@ class WordsRouterTest extends FeatureTest
      */
     public function testModifierMotDuDictionnaireSiNonAdmin()
     {
-        $user = factory(User::class)->create();
-        $word = factory(Word::class)->create();
+        $user = User::factory()->create();
+        $word = Word::factory()->create();
 
         $response = $this->actingAs($user)
             ->get("/dictionnaire/{$word->slug}/editer");
@@ -126,8 +126,8 @@ class WordsRouterTest extends FeatureTest
      */
     public function testModifierMotDuDictionnaireSiAdmin()
     {
-        $user = factory(User::class)->states('admin')->create();
-        $word = factory(Word::class)->create();
+        $user = User::factory()->states('admin')->create();
+        $word = Word::factory()->create();
 
         $response = $this->actingAs($user)
             ->get("/dictionnaire/{$word->slug}/editer");
@@ -142,8 +142,8 @@ class WordsRouterTest extends FeatureTest
      */
     public function testModificationMotDuDictionnaireSiNonAdmin()
     {
-        $user = factory(User::class)->create();
-        $word = factory(Word::class)->create();
+        $user = User::factory()->create();
+        $word = Word::factory()->create();
 
         $response = $this->actingAs($user)
             ->put("/dictionnaire/{$word->slug}");
@@ -156,21 +156,21 @@ class WordsRouterTest extends FeatureTest
      */
     public function testRedirectionSiChampsManquantsModificationSiAdmin()
     {
-        $user = factory(User::class)->states('admin')->create();
-        $word = factory(Word::class)->create();
-        $unsavedWord = factory(Word::class)->make();
+        $user = User::factory()->states('admin')->create();
+        $word = Word::factory()->create();
+        $unsavedWord = Word::factory()->make();
 
         $response = $this->actingAs($user)
             ->put("/dictionnaire/{$word->slug}", [
-                'label' => $unsavedWord->label
+                'label' => $unsavedWord->label,
             ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('words', [
-            'label' => $word->label
+            'label' => $word->label,
         ]);
         $this->assertDatabaseMissing('words', [
-            'label' => $unsavedWord->label
+            'label' => $unsavedWord->label,
         ]);
     }
 
@@ -179,20 +179,20 @@ class WordsRouterTest extends FeatureTest
      */
     public function testModificationMotDuDictionnaireSiAdmin()
     {
-        $user = factory(User::class)->states('admin')->create();
-        $word = factory(Word::class)->create();
-        $newWord = factory(Word::class)->make();
+        $user = User::factory()->states('admin')->create();
+        $word = Word::factory()->create();
+        $newWord = Word::factory()->make();
 
         $response = $this->actingAs($user)
             ->put("/dictionnaire/{$word->slug}", [
                 'label' => $newWord->label,
-                'description' => $newWord->description
+                'description' => $newWord->description,
             ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('words', [
             'label' => $newWord->label,
-            'description' => $newWord->description
+            'description' => $newWord->description,
         ]);
     }
 
@@ -203,8 +203,8 @@ class WordsRouterTest extends FeatureTest
      */
     public function testSuppressionMotDuDictionnaireSiNonAdmin()
     {
-        $user = factory(User::class)->create();
-        $word = factory(Word::class)->create();
+        $user = User::factory()->create();
+        $word = Word::factory()->create();
 
         $response = $this->actingAs($user)
             ->delete("/dictionnaire/{$word->slug}");
@@ -217,8 +217,8 @@ class WordsRouterTest extends FeatureTest
      */
     public function testSuppressionMotDuDictionnaireSiAdmin()
     {
-        $user = factory(User::class)->states('admin')->create();
-        $word = factory(Word::class)->create();
+        $user = User::factory()->states('admin')->create();
+        $word = Word::factory()->create();
 
         $response = $this->actingAs($user)
             ->delete("/dictionnaire/{$word->slug}");

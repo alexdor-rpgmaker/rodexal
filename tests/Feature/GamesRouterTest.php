@@ -17,20 +17,20 @@ class GamesRouterTest extends FeatureTest
         parent::setUp();
         $this->resetDatabase();
 
-        factory(Session::class)->create([
+        Session::factory()->create([
             'id_session' => 19,
             'nom_session' => 'Session 2019',
         ]);
-        $this->currentSession = factory(Session::class)->create([
+        $this->currentSession = Session::factory()->create([
             'id_session' => 20,
             'nom_session' => 'Session 2020',
         ]);
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 1,
             'support' => 'Software1',
             'id_session' => $this->currentSession,
         ]);
-        factory(Game::class)->create([
+        Game::factory()->create([
             'id_jeu' => 2,
             'support' => 'Software2',
             'id_session' => $this->currentSession,
@@ -52,7 +52,7 @@ class GamesRouterTest extends FeatureTest
         $response->assertViewHas('selectedSession', null);
         $response->assertViewHas('softwares', collect(['Software1', 'Software2']));
 
-        $actualGameIds = $response['games']->map(fn($game) => $game->id_jeu)->toArray();
+        $actualGameIds = $response['games']->map(fn ($game) => $game->id_jeu)->toArray();
         $this->assertEquals([1, 2], $actualGameIds);
 
         $expectedSessions = Session::whereIn('id_session', [19, 20])->get();
@@ -112,7 +112,7 @@ class GamesRouterTest extends FeatureTest
      */
     public function indexVue_listOfGamesOfASession()
     {
-        $session = factory(Session::class)->create([
+        $session = Session::factory()->create([
             'id_session' => 11,
             'nom_session' => 'Session 2011',
         ]);

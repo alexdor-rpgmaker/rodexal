@@ -1,13 +1,33 @@
-<?php /** @noinspection PhpUndefinedVariableInspection */
+<?php
+
+namespace Database\Factories;
 
 use App\Former\Game;
-use Faker\Generator as Faker;
+use App\Former\Screenshot;
 
-$factory->define(App\Former\Screenshot::class, function (Faker $faker) {
-    return [
-        'id_jeu' => factory(Game::class),
-        'nom_screenshot' => $faker->sentence,
-        'local' => 'screenshot.jpg',
-        'ordre' => $faker->numberBetween(1, 5),
-    ];
-});
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class ScreenshotFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Screenshot::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'id_jeu' => Game::factory(),
+            'nom_screenshot' => $this->faker->sentence,
+            'local' => 'screenshot.jpg',
+            'ordre' => $this->faker->numberBetween(1, 5),
+        ];
+    }
+}

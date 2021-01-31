@@ -1,17 +1,33 @@
-<?php /** @noinspection PhpUndefinedVariableInspection */
+<?php
 
+namespace Database\Factories;
+
+use App\Former\Game;
 use App\Former\Session;
-use Faker\Generator as Faker;
 
-$factory->define(App\Former\Game::class, function (Faker $faker) {
-    return [
-        'nom_jeu' => $faker->words(3, true),
-        'id_session' => factory(Session::class),
-        'statut_jeu' => 1,
-        'date_inscription' => now()
-    ];
-});
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->state(App\Former\Game::class, 'deleted', [
-    'statut_jeu' => 0
-]);
+class GameFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Game::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'nom_jeu' => $this->faker->words(3, true),
+            'id_session' => Session::factory(),
+            'statut_jeu' => 1,
+            'date_inscription' => now(),
+        ];
+    }
+}

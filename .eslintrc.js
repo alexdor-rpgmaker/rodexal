@@ -2,7 +2,7 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    "jest/globals": true,
+    'jest/globals': true
   },
   extends: [
     'plugin:vue/essential',
@@ -21,5 +21,7 @@ module.exports = {
     'jest'
   ],
   rules: {
+    'no-new': 0,
+    'no-undef': 0
   }
 }

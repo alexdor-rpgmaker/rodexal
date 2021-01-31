@@ -44,6 +44,7 @@
       href="{{ env('FORMER_APP_URL') }}/archives/news/vieilles_news.css"
     />
 
+    @include('feed::links')
     <link
       rel="alternate"
       type="application/rss+xml"

@@ -1,11 +1,31 @@
-<?php /** @noinspection PhpUndefinedVariableInspection */
+<?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-$factory->define(App\Former\ForumCategory::class, function (Faker $faker) {
-    return [
-        'nom_categorie' => $faker->words(3, true),
-        'permission' => mt_rand(0, 6),
-        'position' => mt_rand(1, 10)
-    ];
-});
+use App\Former\ForumCategory;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class ForumCategoryFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = ForumCategory::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'nom_categorie' => $this->faker->words(3, true),
+            'permission' => mt_rand(0, 6),
+            'position' => mt_rand(1, 10),
+        ];
+    }
+}

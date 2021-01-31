@@ -1,23 +1,30 @@
-<?php /** @noinspection PhpUndefinedVariableInspection */
+<?php
 
-use App\Former\Game;
-use App\Former\Juror;
+namespace Database\Factories;
+
+use App\Former\Test;
 use App\Former\Member;
-use App\Former\TestSuite;
-use Faker\Generator as Faker;
 
-$factory->define(App\Former\Test::class, function (Faker $faker) {
-    return [
-        'id_jeu' => factory(Game::class),
-        'id_jury' => factory(Juror::class),
-        'id_serie' => factory(TestSuite::class),
-        'statut_test' => 1,
-        'date_modification' => now(),
-    ];
-});
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->state(App\Former\Test::class, 'reviewed', function (Faker $faker) {
-    return [
-        'reviewer_id' => factory(Member::class),
-    ];
-});
+class TestFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Test::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'reviewer_id' => Member::factory(),
+        ];
+    }
+}

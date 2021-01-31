@@ -118,7 +118,7 @@ export default {
     initRedirection: String
   },
   mixins: [FormMixin],
-  data() {
+  data () {
     return {
       fields: this.fillFields(),
       method: this.initMethod || 'POST',
@@ -127,12 +127,12 @@ export default {
     }
   },
   computed: {
-    editing() {
+    editing () {
       return this.method === 'PUT'
     }
   },
   methods: {
-    fillFields() {
+    fillFields () {
       const questionnaire = {}
       this.questions.forEach(question => {
         questionnaire[question.id] = {
@@ -145,10 +145,10 @@ export default {
         this.initMethod === 'PUT'
           ? this.preTest
           : {
-              questionnaire,
-              gameId: this.gameId,
-              finalThought: null
-            }
+            questionnaire,
+            gameId: this.gameId,
+            finalThought: null
+          }
       return fields
     }
   }

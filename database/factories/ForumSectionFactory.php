@@ -1,15 +1,35 @@
-<?php /** @noinspection PhpUndefinedVariableInspection */
+<?php
 
+namespace Database\Factories;
+
+use App\Former\ForumSection;
 use App\Former\ForumCategory;
-use Faker\Generator as Faker;
 
-$factory->define(App\Former\ForumSection::class, function (Faker $faker) {
-    return [
-        'id_categorie' => factory(ForumCategory::class),
-        'titre_forum' => $faker->words(3, true),
-        'sous_titre_forum' => $faker->words(3, true),
-        'statut_forum' => 1,
-        'permission_forum' => mt_rand(0, 6),
-        'position_forum' => mt_rand(1, 10)
-    ];
-});
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class ForumSectionFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = ForumSection::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'id_categorie' => ForumCategory::factory(),
+            'titre_forum' => $this->faker->words(3, true),
+            'sous_titre_forum' => $this->faker->words(3, true),
+            'statut_forum' => 1,
+            'permission_forum' => mt_rand(0, 6),
+            'position_forum' => mt_rand(1, 10),
+        ];
+    }
+}

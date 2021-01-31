@@ -1,15 +1,34 @@
-<?php /** @noinspection PhpUndefinedVariableInspection */
+<?php
 
+namespace Database\Factories;
+
+use App\Former\Juror;
 use App\Former\Member;
 use App\Former\Session;
 
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(App\Former\Juror::class, function (Faker $faker) {
-    return [
-        'id_membre' => factory(Member::class),
-        'id_session' => factory(Session::class),
-        'statut_jury' => 2,
-        'date_inscription' => now(),
-    ];
-});
+class JurorFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Juror::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'id_membre' => Member::factory(),
+            'id_session' => Session::factory(),
+            'statut_jury' => 2,
+            'date_inscription' => now(),
+        ];
+    }
+}

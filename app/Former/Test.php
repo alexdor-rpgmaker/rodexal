@@ -2,11 +2,12 @@
 
 namespace App\Former;
 
-use App\Helpers\StringParser;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Test extends FormerModel
 {
+    use HasFactory;
+
     /**
      * @var string
      */

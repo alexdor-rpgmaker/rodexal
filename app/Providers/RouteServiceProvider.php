@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Word;
+use App\PodcastEpisode;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -33,6 +35,10 @@ class RouteServiceProvider extends ServiceProvider
                     ->firstOrFail();
             }
             return Word::findBySlugOrFail($value);
+        });
+        // TODO: Remove this when corrected?
+        Route::bind('podcast', function ($value) {
+            return PodcastEpisode::findBySlugOrFail($value);
         });
 
         parent::boot();

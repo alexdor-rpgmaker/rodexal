@@ -2,8 +2,12 @@
 
 namespace App\Former;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class TestSuiteAssignedJuror extends FormerModel
 {
+    use HasFactory;
+
     /**
      * @var string
      */

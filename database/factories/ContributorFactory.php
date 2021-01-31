@@ -1,13 +1,33 @@
-<?php /** @noinspection PhpUndefinedVariableInspection */
+<?php
+
+namespace Database\Factories;
 
 use App\Former\Game;
-use Faker\Generator as Faker;
+use App\Former\Contributor;
 
-$factory->define(App\Former\Contributor::class, function (Faker $faker) {
-    return [
-        'id_jeu' => factory(Game::class),
-        'nom_membre' => $faker->userName,
-        'mail_membre' => $faker->email,
-        'statut_participant' => 1,
-    ];
-});
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class ContributorFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Contributor::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'id_jeu' => Game::factory(),
+            'nom_membre' => $this->faker->userName,
+            'mail_membre' => $this->faker->email,
+            'statut_participant' => 1,
+        ];
+    }
+}
