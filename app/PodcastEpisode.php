@@ -75,7 +75,7 @@ class PodcastEpisode extends Model implements Feedable
         return self::orderByDesc('created_at')->limit(20)->get();
     }
 
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'slug';
     }

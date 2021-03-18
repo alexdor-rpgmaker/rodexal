@@ -12,12 +12,12 @@ class Word extends MainModel
     use Sluggable;
     use SluggableScopeHelpers;
 
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'slug';
     }
 
-    public function sluggable()
+    public function sluggable(): array
     {
         return [
             'slug' => [
