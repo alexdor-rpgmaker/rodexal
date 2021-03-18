@@ -30,7 +30,7 @@
     "facade/ignition": "^2.5",
     "filp/whoops": "^2.0",
     "fakerphp/faker": "^1.9.1",
-    "heroku/heroku-buildpack-php": "^176.0",
+    "heroku/heroku-buildpack-php": "^190.0",
     "laravel/dusk": "^6.0",
     "mockery/mockery": "^1.4.2",
     "nunomaduro/collision": "^5.0",
