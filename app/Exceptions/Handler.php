@@ -5,7 +5,11 @@ namespace App\Exceptions;
 use Throwable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -36,6 +40,7 @@ class Handler extends ExceptionHandler
      *
      * @param Throwable $exception
      * @return void
+     * @throws Throwable
      */
     public function report(Throwable $exception)
     {
@@ -47,11 +52,13 @@ class Handler extends ExceptionHandler
      *
      * @param Request $request
      * @param Throwable $exception
-     * @return Response
+     * @return Application|JsonResponse|RedirectResponse|Response|Redirector
+     * @throws Throwable
      */
     public function render($request, Throwable $exception)
     {
         if (!Auth::check() && $exception instanceof AuthorizationException) {
+            $request->session()->put('urlBeforeLogin', $request->getRequestUri());
             return redirect(route('oauth'));
         }
 

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +33,16 @@ class UserController extends Controller
             'urlAccessToken' => env('FORMER_APP_URL') . env('FORMER_APP_TOKEN_URL_SUFFIX'),
             'urlResourceOwnerDetails' => env('FORMER_APP_URL') . env('FORMER_APP_RESOURCE_OWNER_URL_SUFFIX')
         ]);
+
+        $guzzleClient = new GuzzleClient([
+            'defaults' => [
+                RequestOptions::CONNECT_TIMEOUT => 5,
+                RequestOptions::ALLOW_REDIRECTS => true
+            ],
+            RequestOptions::VERIFY => App::environment('development') !== true,
+        ]);
+
+        $provider->setHttpClient($guzzleClient);
 
         if (!isset($request->code)) {
             session(['oauth2state' => $provider->getState()]);
@@ -64,13 +77,20 @@ class UserController extends Controller
                 ]);
                 $user->save();
 
-                Auth::login($user, true); // true = "Remember"
+                $remember = true;
+                Auth::login($user, $remember);
 
-                return redirect('/dictionnaire')->with('status', 'Bien connecté !');
-            } catch (IdentityProviderException $e) {
-                Log::emergency($e);
-                return redirect('/dictionnaire')->with('status', 'Erreur dans la connexion...');
-            } catch (UnexpectedValueException $e) {
+                if ($request->session()->has('urlBeforeLogin')) {
+                    $urlBeforeLogin = $request->session()->pull('urlBeforeLogin');
+                    Log::info('Redirect user to URL before login', [
+                        'user' => $user->name,
+                        'urlBeforeLogin' => $urlBeforeLogin
+                    ]);
+                    return redirect($urlBeforeLogin);
+                } else {
+                    return redirect('/dictionnaire');
+                }
+            } catch (IdentityProviderException | UnexpectedValueException $e) {
                 Log::emergency($e);
                 return redirect('/dictionnaire')->with('status', 'Erreur dans la connexion...');
             }
