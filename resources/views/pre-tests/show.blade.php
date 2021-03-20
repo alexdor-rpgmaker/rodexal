@@ -32,13 +32,15 @@
                 <div class="card">
                     <div class="card-body">
                         @foreach (App\PreTest::FIELDS as $field)
-                            @if ($pre_test->questionnaire[$field['id']]['activated'])
-                                <div class="questionnaire-group">
-                                    <p><strong>{{ $field['label'] }}</strong></p>
-                                    <div class="explanation">
-                                        {{ $pre_test->questionnaire[$field['id']]['explanation'] }}
+                            @if (Illuminate\Support\Arr::has($pre_test->questionnaire, $field))
+                                @if ($pre_test->questionnaire[$field['id']]['activated'])
+                                    <div class="questionnaire-group">
+                                        <p><strong>{{ $field['label'] }}</strong></p>
+                                        <div class="explanation">
+                                            {{ $pre_test->questionnaire[$field['id']]['explanation'] }}
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                             @endif
                         @endforeach
 
