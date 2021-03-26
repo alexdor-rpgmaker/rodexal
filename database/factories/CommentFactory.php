@@ -25,7 +25,7 @@ class CommentFactory extends Factory
     public function definition()
     {
         return [
-            'id_news' => NewsPost::factory(),
+            'id_parent' => NewsPost::factory(),
             'id_membre' => Member::factory(),
             'contenu_commentaire' => $this->faker->paragraphs(2, true),
             'statut_commentaire' => 1,

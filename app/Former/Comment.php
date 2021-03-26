@@ -24,7 +24,7 @@ class Comment extends FormerModel
     protected $attributes = [
         'statut_commentaire' => 1,
         'nombre_edition' => 0,
-        'is_commentaire_jeu' => false,
+        'type_parent' => 'News',
         'is_entre_jury' => false,
     ];
     /**
@@ -45,7 +45,7 @@ class Comment extends FormerModel
     // TODO : Deal with Morph associations
     public function newsPost()
     {
-        return $this->belongsTo('App\Former\NewsPost', 'id_news');
+        return $this->belongsTo('App\Former\NewsPost', 'id_parent');
     }
 
     public function game()
