@@ -4,22 +4,26 @@
 
 @section('content')
     <div id="titre_corps">
-        Podcast
+        Pod-Alex
     </div>
     <div id="sous_titre_corps">
-        Voici les épisodes du podcast officiel des Alex d'or !
+        Le podcast officiel des Alex d'or !
     </div>
-    <div id="corps-invisible">
-        <p style="margin-left: 20px;">
-            <a href="{{ route('feeds.podcast') }}" class="bouton">
-                <i class="fa fa-rss"></i> Flux RSS
-            </a>
+    <div id="corps">
+        <p>
+            Grande nouveauté de cette session 2021 : le Podcast des Alex d'or, baptisé <strong>Pod-Alex</strong>.
+            Chaque épisode audio est l'occasion de découvrir un des
+            <a href="{{ App\Former\Game::getListUrl() }}"> jeux en lice</a> ainsi que leurs créateurs.
         </p>
+        <p>
+            <a href="{{ route('podcast.help') }}">Comment écouter le podcast ?</a>
+        </p>
+        <h4 class="mb-4">Episodes</h4>
         <table class="table">
             <thead>
             <tr>
-                <th>Nom</th>
-                <th>Date</th>
+                <th>Titre</th>
+                <th>Date de publication</th>
             </tr>
             </thead>
             <tbody>

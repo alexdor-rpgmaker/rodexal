@@ -22,7 +22,8 @@
     "laravel/tinker": "^2.5",
     "laravel/ui": "^3.0",
     "league/oauth2-client": "^2.4",
-    "spatie/laravel-feed": "^3.1"
+    "spatie/laravel-feed": "^3.1",
+    "willvincent/feeds": "^2.2"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.6",

@@ -2,21 +2,28 @@
 
 namespace App;
 
-use App\Former\Member;
-use App\Vendor\PodcastFeedItem;
-use App\Vendor\PodcastFeedPerson;
-
-use Spatie\Feed\Feedable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PodcastEpisode extends Model implements Feedable
+class PodcastEpisode extends Model
 {
     use HasFactory;
     use Sluggable, SluggableScopeHelpers;
+
+    const PODCAST_PAGE_URL = 'https://anchor.fm/alex-dor1';
+    const PODCAST_FEED_URL = 'https://anchor.fm/s/4bfdd7fc/podcast/rss';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id', 'title', 'description', 'created_at', 'audio_url', 'number', 'duration_in_seconds', 'author_id', 'poster_id'
+    ];
 
     protected $dates = ['created_at'];
 
@@ -38,41 +45,6 @@ class PodcastEpisode extends Model implements Feedable
         $minutes = floor($this->duration_in_seconds / 60);
         $seconds = floor($this->duration_in_seconds % 60);
         return sprintf("%d:%02d", $minutes, $seconds);
-    }
-
-    public function toFeedItem(): PodcastFeedItem
-    {
-        $author = Member::find($this->author_id);
-        $podcastAuthor = PodcastFeedPerson::create([
-            'name' => $author->pseudo,
-            'email' => $author->mail,
-            'websiteUrl' => '' // TODO
-        ]);
-        return PodcastFeedItem::create([
-            'id' => $this->id,
-            'title' => $this->title,
-            'number' => $this->number,
-            'summary' => $this->description,
-            'description' => $this->description,
-            'shortDescription' => $this->description, // TODO
-            'author' => $author->pseudo,
-            'podcastAuthor' => $podcastAuthor,
-            'publicationDate' => $this->created_at,
-            'updated' => $this->updated_at,
-            'guid' => route('podcast.show', $this),
-            'link' => route('podcast.show', $this),
-            'imageUrl' => '', // TODO
-            'enclosureUrl' => $this->audio_url,
-            'enclosureType' => 'audio/mpeg',
-            'enclosureLength' => 0, // TODO Bytes of file
-            'duration' => $this->duration(),
-            'explicit' => 'no',
-        ]);
-    }
-
-    public function getAllFeedItems()
-    {
-        return self::orderByDesc('created_at')->limit(20)->get();
     }
 
     public function getRouteKeyName(): string

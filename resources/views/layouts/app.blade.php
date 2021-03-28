@@ -44,7 +44,6 @@
       href="{{ env('FORMER_APP_URL') }}/archives/news/vieilles_news.css"
     />
 
-    @include('feed::links')
     <link
       rel="alternate"
       type="application/rss+xml"
@@ -152,6 +151,7 @@
               <ul class="dropdown">
                 <!-- <li><a href="{{ env('FORMER_APP_URL') }}/">Accueil</a></li> -->
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=news">News</a></li>
+                <li><a href="{{ route('podcast.index') }}?p=news">Podcast</a></li>
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=blog">Blog</a></li>
               </ul>
             </li>

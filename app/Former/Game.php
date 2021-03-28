@@ -226,9 +226,16 @@ class Game extends FormerModel
         return $downloadUrl;
     }
 
-    public function getUrl()
+    public function getUrl(): string
     {
         $formerAppUrl = env('FORMER_APP_URL');
         return "$formerAppUrl/?p=jeu&id=$this->id_jeu";
+    }
+
+    public static function getListUrl($session = null): string
+    {
+        $formerAppUrl = env('FORMER_APP_URL');
+        $url = "$formerAppUrl/?p=liste-jeux";
+        return $session ? "$url&session=$session" : $url;
     }
 }

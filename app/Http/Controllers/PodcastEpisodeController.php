@@ -21,6 +21,11 @@ class PodcastEpisodeController extends Controller
         ]);
     }
 
+    public function help()
+    {
+        return view('podcast_episodes.help');
+    }
+
     public function show(PodcastEpisode $podcastEpisode)
     {
         $author = Member::find($podcastEpisode->author_id);
