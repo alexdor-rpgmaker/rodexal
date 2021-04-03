@@ -1,0 +1,78 @@
+.games-section {
+  &#games-list {
+    .author {
+      width: 160px;
+    }
+
+    .software, .genre {
+      width: 130px;
+    }
+
+    .download {
+      width: 50px;
+    }
+
+    .page-item .page-link {
+      color: #d39501;
+    }
+
+    .page-item.active .page-link {
+      color: white;
+      border-color: #d39501;
+      background-color: #d39501;
+    }
+
+    .page-item.disabled .page-link {
+      color: #6c757d;
+    }
+
+    .tr td {
+      text-align: left;
+    }
+
+    .color-member,
+    .color-challenger,
+    .color-ambassador,
+    .color-juror,
+    .color-moderator,
+    .color-administrator,
+    .color-webmaster {
+      font-weight: bold;
+    }
+
+    .color-member {
+      color: #2954ff;
+    }
+
+    .color-challenger {
+      color: #0b00a1;
+    }
+
+    .color-ambassador {
+      color: #00acb8;
+    }
+
+    .color-juror {
+      color: #9f3ad1;
+    }
+
+    .color-moderator {
+      color: #269600;
+    }
+
+    .color-administrator,
+    .color-webmaster {
+      color: #cf0000;
+    }
+
+    .awarded-categories, .nominated-categories {
+      font-style: italic;
+    }
+  }
+
+  &#games-form {
+    .legend {
+      width: fit-content;
+    }
+  }
+}

@@ -2,6 +2,7 @@
 
 namespace App\Former;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Session extends FormerModel
@@ -28,6 +29,30 @@ class Session extends FormerModel
     protected $dates = [
         'date_cloture_inscriptions',
     ];
+
+    public function allowsGamesRegistration(): bool
+    {
+        // TODO : Add a specific column for this rule
+        return $this->etape == 1;
+    }
+
+    public function tooLateForGamesRegistration(): bool
+    {
+        // TODO : Add a specific column for this rule
+        return $this->etape > 1;
+    }
+
+    public function lastIncludedDayForGamesRegistration(): string
+    {
+        return $this->date_cloture_inscriptions->subDay()->format('d/m/Y');
+    }
+
+    public function gamesRegistrationEndsInLessThanSevenDays(): bool
+    {
+        $absolute = false;
+        $daysBeforeGamesRegistrationEnd = Carbon::now()->diffInDays($this->date_cloture_inscriptions, $absolute);
+        return $daysBeforeGamesRegistrationEnd >= 0 && $daysBeforeGamesRegistrationEnd < 7;
+    }
 
     public static function nameFromId($sessionId): string
     {

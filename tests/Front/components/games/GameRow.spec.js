@@ -1,4 +1,4 @@
-import GameRow from '~/resources/js/components/GameRow.vue'
+import GameRow from '~/resources/js/components/games/GameRow.vue'
 import { shallowMount } from '@vue/test-utils'
 
 describe('GameRow', () => {

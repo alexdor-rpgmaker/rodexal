@@ -2,9 +2,11 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/css/dictionary.css": "/css/dictionary.css",
+    "/css/games.css": "/css/games.css",
     "/css/pre_tests.css": "/css/pre_tests.css",
     "/css/podcasts.css": "/css/podcasts.css",
-    "/js/games.js": "/js/games.js",
+    "/js/games-form.js": "/js/games-form.js",
+    "/js/games-list.js": "/js/games-list.js",
     "/js/jukebox.js": "/js/jukebox.js",
     "/js/pre-tests.js": "/js/pre-tests.js"
 }

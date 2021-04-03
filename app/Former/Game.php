@@ -4,11 +4,13 @@ namespace App\Former;
 
 use App\Helpers\StringParser;
 
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Game extends FormerModel
 {
+    use Notifiable;
     use HasFactory;
 
     /**
@@ -25,7 +27,9 @@ class Game extends FormerModel
      * @var array
      */
     protected $attributes = [
-        'statut_jeu' => 1
+        'statut_jeu' => 1,
+        'favori' => 0,
+        'nb_commentaires' => 0
     ];
     /**
      * Attributes automatically parsed as dates.
@@ -34,6 +38,17 @@ class Game extends FormerModel
      */
     protected $dates = [
         'date_inscription',
+    ];
+
+    const SOFTWARE_LIST = [
+        'Clickteam Fusion 2.5',
+        'Game Maker Studio 2',
+        'RPG Maker 2003',
+        'RPG Maker MV',
+        'RPG Maker VX',
+        'RPG Maker VX Ace',
+        'RPG Maker XP',
+        'Unity'
     ];
 
     public function session()
@@ -237,5 +252,10 @@ class Game extends FormerModel
         $formerAppUrl = env('FORMER_APP_URL');
         $url = "$formerAppUrl/?p=liste-jeux";
         return $session ? "$url&session=$session" : $url;
+    }
+
+    public function routeNotificationForDiscord()
+    {
+        return env('DISCORD_NEW_GAME_CHANNEL');
     }
 }

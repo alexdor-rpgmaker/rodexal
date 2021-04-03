@@ -16,6 +16,16 @@ class Contributor extends FormerModel
      * @var string
      */
     protected $primaryKey = 'id_participants';
+    /**
+     * Default values.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'ordre' => 1,
+        'peut_editer_jeu' => 1,
+        'statut_participant' => 1
+    ];
 
     public function game()
     {

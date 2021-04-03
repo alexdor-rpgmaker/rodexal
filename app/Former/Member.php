@@ -27,6 +27,17 @@ class Member extends FormerModel
         'sexe' => 0,
     ];
 
+    const RANKS = [
+        "Invité",
+        "Membre",
+        "Concurrent",
+        "Ambassadeur",
+        "Juré",
+        "Modérateur",
+        "Admin",
+        "Webmaster"
+    ];
+
     public function getRankAttribute(): string
     {
         $rankIdToString = [

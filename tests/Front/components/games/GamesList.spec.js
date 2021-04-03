@@ -1,5 +1,5 @@
 import axios from 'axios'
-import Games from '~/resources/js/components/Games.vue'
+import GamesList from '~/resources/js/components/games/GamesList.vue'
 import { shallowMount } from '@vue/test-utils'
 
 jest.mock('axios')
@@ -8,7 +8,7 @@ global.axios = axios
 const windowScroll = jest.fn()
 window.scrollTo = windowScroll
 
-describe('Games', () => {
+describe('GamesList', () => {
   const propsData = {
     session: null
   }
@@ -26,7 +26,7 @@ describe('Games', () => {
   describe('When component is mounted', () => {
     it('fetches games from API', () => {
       const fetchGames = jest.fn()
-      shallowMount(Games, {
+      shallowMount(GamesList, {
         propsData,
         methods: {
           fetchGames
@@ -40,7 +40,7 @@ describe('Games', () => {
   describe('Page buttons', () => {
     describe('when there is only one page', () => {
       it('has no navigation bar', () => {
-        const wrapper = shallowMount(Games, {
+        const wrapper = shallowMount(GamesList, {
           data: () => ({
             page: 1,
             totalPagesCount: 1
@@ -53,7 +53,7 @@ describe('Games', () => {
 
     describe('when current page is the first but not the last', () => {
       it('disables previous button', () => {
-        const wrapper = shallowMount(Games, {
+        const wrapper = shallowMount(GamesList, {
           data: () => ({
             page: 1,
             totalPagesCount: 10
@@ -67,7 +67,7 @@ describe('Games', () => {
 
     describe('when current page is neither the first nor the last', () => {
       it('does not disable buttons', () => {
-        const wrapper = shallowMount(Games, {
+        const wrapper = shallowMount(GamesList, {
           data: () => ({
             page: 5,
             totalPagesCount: 10
@@ -81,7 +81,7 @@ describe('Games', () => {
 
     describe('when current page is the last and not the first', () => {
       it('disables next button', () => {
-        const wrapper = shallowMount(Games, {
+        const wrapper = shallowMount(GamesList, {
           data: () => ({
             page: 10,
             totalPagesCount: 10
@@ -97,7 +97,7 @@ describe('Games', () => {
   describe('.gamesCount()', () => {
     describe('when results count equals total results count (less than two pages)', () => {
       it('displays X', () => {
-        const wrapper = shallowMount(Games, {
+        const wrapper = shallowMount(GamesList, {
           data: () => ({
             totalResultsCount: 2,
             resultsCountOnThisPage: 2
@@ -110,7 +110,7 @@ describe('Games', () => {
 
     describe('when results count does not equal total results count (more than one page)', () => {
       it('displays X sur Y', () => {
-        const wrapper = shallowMount(Games, {
+        const wrapper = shallowMount(GamesList, {
           data: () => ({
             totalResultsCount: 5,
             resultsCountOnThisPage: 2
@@ -124,7 +124,7 @@ describe('Games', () => {
 
   describe('.fetchGames()', () => {
     function createWrapperWithParams (params) {
-      const wrapper = shallowMount(Games, params)
+      const wrapper = shallowMount(GamesList, params)
       const apiResponseBody = {
         meta: {
           current_page: 2,
@@ -233,7 +233,7 @@ describe('Games', () => {
   describe('.search()', () => {
     it('resets page to 1 and fetches games', async () => {
       const fetchGames = jest.fn()
-      const wrapper = shallowMount(Games, {
+      const wrapper = shallowMount(GamesList, {
         propsData,
         data: () => ({ page: 3 }),
         methods: {
@@ -251,7 +251,7 @@ describe('Games', () => {
   describe('.previousPage()', () => {
     it('decreases page to 2, fetches games and scrolls window', async () => {
       const fetchGames = jest.fn()
-      const wrapper = shallowMount(Games, {
+      const wrapper = shallowMount(GamesList, {
         propsData,
         data: () => ({ page: 3 }),
         methods: {
@@ -270,7 +270,7 @@ describe('Games', () => {
   describe('.nextPage()', () => {
     it('increases page to 4, fetches games and scrolls window', async () => {
       const fetchGames = jest.fn()
-      const wrapper = shallowMount(Games, {
+      const wrapper = shallowMount(GamesList, {
         propsData,
         data: () => ({ page: 3 }),
         methods: {
@@ -289,7 +289,7 @@ describe('Games', () => {
   describe('.sortBy(sortParam)', () => {
     it('sorts by title in ascending direction', async () => {
       const search = jest.fn()
-      const wrapper = shallowMount(Games, {
+      const wrapper = shallowMount(GamesList, {
         propsData,
         data: () => ({ selectedSort: 'session', sortDirection: 'asc' }),
         methods: {
@@ -306,7 +306,7 @@ describe('Games', () => {
 
     it('sorts by title in descending direction', async () => {
       const search = jest.fn()
-      const wrapper = shallowMount(Games, {
+      const wrapper = shallowMount(GamesList, {
         propsData,
         data: () => ({ selectedSort: 'title', sortDirection: 'asc' }),
         methods: {
@@ -324,7 +324,7 @@ describe('Games', () => {
 
   describe('.sessionName(id)', () => {
     it('returns the accurate session name', () => {
-      const wrapper = shallowMount(Games, {
+      const wrapper = shallowMount(GamesList, {
         propsData
       })
 
@@ -368,7 +368,7 @@ describe('Games', () => {
         ]
       }
 
-      const wrapper = shallowMount(Games, {
+      const wrapper = shallowMount(GamesList, {
         propsData
       })
 

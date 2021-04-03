@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Former;
 
+use Carbon\Carbon;
 use Tests\TestCase;
 
 use App\Former\Session;
@@ -11,6 +12,92 @@ use App\Former\Session;
  */
 class SessionTest extends TestCase
 {
+    /**
+     * @test
+     * @param int $sessionStep
+     * @param bool $expected
+     * @testdox allowsGamesRegistration - If session step is $sessionStep, is it possible to register game ? $expected
+     * Si l'étape de la session est $sessionStep, est-il possible d'inscrire un jeu ? $expected
+     * @testWith        [0, false]
+     *                  [1, true]
+     *                  [2, false]
+     *                  [3, false]
+     *                  [4, false]
+     */
+    public function allowsGamesRegistration(int $sessionStep, bool $expected)
+    {
+        $session = Session::factory()->make([
+            'etape' => $sessionStep
+        ]);
+        $actualAllowsGamesRegistration = $session->allowsGamesRegistration();
+
+        $this->assertEquals($expected, $actualAllowsGamesRegistration);
+    }
+
+    /**
+     * @test
+     * @param int $sessionStep
+     * @param bool $expected
+     * @testdox tooLateForGamesRegistration - If session step is $sessionStep, is it too late for game registration ? $expected
+     * Si l'étape de la session est $sessionStep, est-il trop tard pour l'inscription d'un jeu ? $expected
+     * @testWith        [0, false]
+     *                  [1, false]
+     *                  [2, true]
+     *                  [3, true]
+     *                  [4, true]
+     */
+    public function tooLateForGamesRegistration(int $sessionStep, bool $expected)
+    {
+        $session = Session::factory()->make([
+            'etape' => $sessionStep
+        ]);
+        $actualTooLateForGamesRegistration = $session->tooLateForGamesRegistration();
+
+        $this->assertEquals($expected, $actualTooLateForGamesRegistration);
+    }
+
+    /**
+     * @test
+     * @testdox lastIncludedDayForGamesRegistration - Returns the day before end of registration's day
+     * Retourne le jour d'avant la date de clôture
+     */
+    public function lastIncludedDayForGamesRegistration()
+    {
+        $session = Session::factory()->make([
+            'date_cloture_inscriptions' => Carbon::create(2021, 3, 13)
+        ]);
+
+        $actualLastIncludedDay = $session->lastIncludedDayForGamesRegistration();
+
+        $this->assertEquals("12/03/2021", $actualLastIncludedDay);
+    }
+
+    /**
+     * @test
+     * @param string $currentDate
+     * @param bool $expected
+     * @testdox gamesRegistrationEndsInLessThanSevenDays - Is today ($currentDate) less than 7 days before ending date (10/03/2021) ? $expected
+     * Est-ce qu'aujourd'hui ($currentDate) est moins de 7j avant la date de clôture (10/03/2021) ? $expected
+     * @testWith        ["02/03/2021", false]
+     *                  ["03/03/2021", true]
+     *                  ["06/03/2021", true]
+     *                  ["10/03/2021", true]
+     *                  ["11/03/2021", false]
+     */
+    public function gamesRegistrationEndsInLessThanSevenDays($currentDate, $expected)
+    {
+        $currentTestDate = Carbon::createFromFormat('d/m/Y', $currentDate);
+        Carbon::setTestNow($currentTestDate);
+
+        $endRegistrationDate = Carbon::create(2021, 3, 10);
+        $session = Session::factory()->make([
+            'date_cloture_inscriptions' => $endRegistrationDate
+        ]);
+        $actualIsInLessThanSevenDays = $session->gamesRegistrationEndsInLessThanSevenDays();
+
+        $this->assertEquals($expected, $actualIsInLessThanSevenDays);
+    }
+
     /**
      * @test
      * @param int $sessionId
@@ -42,8 +129,8 @@ class SessionTest extends TestCase
      *                  [8, true, true]
      *                  [8, false, false]
      *                  [18, true, false]
-     *                  [20, true, true]
-     *                  [21, true, false]
+     *                  [21, true, true]
+     *                  [22, true, false]
      */
     public function sessionIdExists($sessionId, $includeAbandoned, $expected)
     {

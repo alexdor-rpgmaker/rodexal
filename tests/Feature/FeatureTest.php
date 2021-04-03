@@ -2,31 +2,37 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Support\Arr;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Log;
 
 abstract class FeatureTest extends TestCase
 {
-    private static $databasesRefreshed = false;
+    protected static bool $databasesRefreshed = false;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         if (!self::$databasesRefreshed) {
-            $this->resetDatabase();
+            $this->refreshDatabase();
             self::$databasesRefreshed = true;
         }
     }
 
-    protected function resetDatabase(): void
+    protected function refreshDatabase(): void
     {
+        Log::info( "--- Refreshing database ---");
         $this->artisan('migrate:refresh');
     }
 
-    protected function assertDataIds($response, $ids): void
+    protected static function refreshDatabaseOnNextSetup(): void
     {
-        $responseBody = json_decode($response->getContent(), true);
-        $this->assertEquals($ids, Arr::pluck($responseBody['data'], 'id'));
+        self::$databasesRefreshed = false;
     }
+
+//    protected function assertDataIds($response, $ids): void
+//    {
+//        $responseBody = json_decode($response->getContent(), true);
+//        $this->assertEquals($ids, Arr::pluck($responseBody['data'], 'id'));
+//    }
 }

@@ -17,10 +17,13 @@ use Tests\Feature\FeatureTest;
  */
 class GameApiRouterTest extends FeatureTest
 {
+    // TODO : Generate data in refreshDatabase instead of in each test
+    // like in GamesRouterTest ; in order to increase speed.
+
     public function setUp(): void
     {
+        parent::refreshDatabaseOnNextSetup();
         parent::setUp();
-        $this->resetDatabase();
     }
 
     /**

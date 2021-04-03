@@ -162,6 +162,7 @@
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=session&session=21">Informations</a></li>
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=liste-jeux">Jeux en lice</a></li>
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=inscjeu">Inscrire un jeu</a></li>
+                {{--<li><a href="{{ route('register-game') }}">Inscrire un jeu</a></li>--}}
                 <li><a href="{{ env('FORMER_APP_URL') }}?p=reglement">Règlement</a></li>
               </ul>
             </li>
@@ -271,10 +272,11 @@
             @else
 
                 <li>
-                    {{-- <a href="?p=connexion">Se connecter</a> --}}
-                    <a href="{{ url('/oauth/callback') }}">Se connecter</a>
+                    <a href="{{ App\User::signInUrl() }}">Se connecter</a>
                 </li>
-                <li><a href="{{ env('FORMER_APP_URL') }}?p=inscription">S'inscrire</a></li>
+                <li>
+                    <a href="{{ App\User::signUpUrl() }}">S'inscrire</a>
+                </li>
 
             @endauth
           </ul>

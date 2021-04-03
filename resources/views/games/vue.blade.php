@@ -3,7 +3,7 @@
 @section('title', 'Liste des jeux')
 
 @push('scripts')
-    <script type="text/javascript" src="{{ asset('js/games.js') }}" defer></script>
+    <script type="text/javascript" src="{{ asset('js/games-list.js') }}" defer></script>
 @endpush
 
 @section('content')
@@ -36,7 +36,7 @@
         </p>
 
         <div id="games-wrapper">
-            <games :session='@json($selectedSession ? $selectedSession->id_session : null)' />
+            <games-list :session='@json($selectedSession ? $selectedSession->id_session : null)'></games-list>
         </div>
     </div>
 @stop
