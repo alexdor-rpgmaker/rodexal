@@ -159,7 +159,7 @@ class PreTestController extends Controller
                     'id_membre' => intval($userId),
                     'id_session' => $currentSession->id_session,
                 ],
-                'verify' => App::environment('development') !== true
+                'verify' => App::environment('local') !== true
             ]);
 
             return json_decode($response->getBody());
@@ -174,7 +174,7 @@ class PreTestController extends Controller
             $response = $client->request('GET', '/api/v0/jeu.php', [
                 'base_uri' => env('FORMER_APP_URL'),
                 'query' => ['id' => intval($id)],
-                'verify' => App::environment('development') !== true
+                'verify' => App::environment('local') !== true
             ]);
             return json_decode($response->getBody());
         } catch (RequestException $e) {
@@ -195,7 +195,7 @@ class PreTestController extends Controller
                     'id_membre' => $user_id,
                 ],
                 'headers' => ['X-Api-Key' => env('FORMER_APP_API_KEY')],
-                'verify' => App::environment('development') !== true
+                'verify' => App::environment('local') !== true
             ]);
         } catch (RequestException $e) {
             self::formerAppApiError($e);

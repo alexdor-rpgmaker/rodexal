@@ -32,7 +32,7 @@
                 <div class="card">
                     <div class="card-body">
                         @foreach (App\PreTest::FIELDS as $field)
-                            @if (Illuminate\Support\Arr::has($pre_test->questionnaire, $field))
+                            @if (Illuminate\Support\Arr::has($pre_test->questionnaire, $field['id']))
                                 @if ($pre_test->questionnaire[$field['id']]['activated'])
                                     <div class="questionnaire-group">
                                         <p><strong>{{ $field['label'] }}</strong></p>

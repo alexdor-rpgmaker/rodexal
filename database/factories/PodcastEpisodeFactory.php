@@ -22,6 +22,7 @@ class PodcastEpisodeFactory extends Factory
         $poster = User::inRandomOrder()->first();
 
         return [
+            'id' => $this->faker->uuid(),
             'title' => $label,
             'slug' => Str::slug($label, '-'),
             'number' => $this->faker->numberBetween(1, 30),

@@ -41,7 +41,7 @@ class QcmBrowserTest extends BrowserTest
             $browser->waitFor('#notLaunchable');
 
             $elements = $browser->driver->findElements(WebDriverBy::className('form-check-input'));
-            $this->assertCount(10, $elements);
+            $this->assertCount(11, $elements);
 
             $browser->check('notAutonomous')
                 ->type('#explanation-notAutonomous', 'Ce jeu nécessite les RTP')
@@ -69,6 +69,10 @@ class QcmBrowserTest extends BrowserTest
                 ->assertQueryStringHas('p', 'mes-tests');
 
             $browser->visit('/qcm/1')
+                ->assertSee('Le jeu n\'est pas autonome')
+                ->assertSee('Ce jeu nécessite les RTP')
+                ->assertSee('Impossible de lancer le jeu')
+                ->assertSee('Ce jeu ne se lance pas')
                 ->assertSourceHas('Ce jeu était vraiment <u>nul</u>. Mais bon courage pour la suite ! :)')
                 ->click('a.modifier-pre-test')
                 ->assertSee('Modifier le QCM du jeu');

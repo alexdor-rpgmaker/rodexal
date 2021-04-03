@@ -39,7 +39,7 @@ class UserController extends Controller
                 RequestOptions::CONNECT_TIMEOUT => 5,
                 RequestOptions::ALLOW_REDIRECTS => true
             ],
-            RequestOptions::VERIFY => App::environment('development') !== true,
+            RequestOptions::VERIFY => App::environment('local') !== true,
         ]);
 
         $provider->setHttpClient($guzzleClient);

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class ChangePodcastIdType extends Migration
@@ -25,6 +26,7 @@ class ChangePodcastIdType extends Migration
      */
     public function down()
     {
+        DB::table('podcast_episodes')->truncate();
         Schema::table('podcast_episodes', function (Blueprint $table) {
             $table->increments('id')->nullable(false)->change();
         });

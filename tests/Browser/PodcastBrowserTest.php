@@ -63,22 +63,6 @@ class PodcastBrowserTest extends BrowserTest
             ->assertSee('le 01/10/2020')
             ->assertSee('Auteur : Alex RuTiPa')
             ->assertSee('Durée : 5:35')
-            // RSS feed
-            ->back()
-            ->clickLink('Flux RSS')
-            ->assertSee('Podcast des Alex d&#039;or')
-            ->assertSee('Episode 1: First podcast')
-            ->assertSee('<guid>https://rodexal.test/podcast/first-podcast</guid>')
-            ->assertSee('<author>Alex RuTiPa</author>')
-            ->assertSee('<itunes:author>Alex RuTiPa</itunes:author>')
-            ->assertSee('<itunes:episode>1</itunes:episode>')
-            ->assertSee('<itunes:duration>5:35</itunes:duration>')
-            ->assertSee('Episode 2: Second podcast')
-            ->assertSee('<guid>https://rodexal.test/podcast/second-podcast</guid>')
-            ->assertSee('<author>Arshes</author>')
-            ->assertSee('<itunes:author>Arshes</itunes:author>')
-            ->assertSee('<itunes:episode>2</itunes:episode>')
-            ->assertSee('<itunes:duration>8:59</itunes:duration>')
         );
     }
 }
