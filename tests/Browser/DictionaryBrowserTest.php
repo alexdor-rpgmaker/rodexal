@@ -7,7 +7,7 @@ use App\User;
 use Throwable;
 use Laravel\Dusk\Browser;
 
-class DictionaryTest extends BrowserTest
+class DictionaryBrowserTest extends BrowserTest
 {
     /**
      * @testdox On est redirigés sur l'ancien site si on essaye de créer un mot du dictionnaire en n'étant pas connecté
@@ -28,7 +28,7 @@ class DictionaryTest extends BrowserTest
      */
     public function testRemplirDictionnaireSiConnecte()
     {
-        $user = User::factory()->state('admin')->create();
+        $user = User::factory()->admin()->create();
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)

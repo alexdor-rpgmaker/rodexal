@@ -1,20 +1,20 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Former;
 
 use App\Former\Game;
-use App\Former\Session;
+use App\Former\Screenshot;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class GameFactory extends Factory
+class ScreenshotFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Game::class;
+    protected $model = Screenshot::class;
 
     /**
      * Define the model's default state.
@@ -24,10 +24,10 @@ class GameFactory extends Factory
     public function definition()
     {
         return [
-            'nom_jeu' => $this->faker->words(3, true),
-            'id_session' => Session::factory(),
-            'statut_jeu' => 1,
-            'date_inscription' => now(),
+            'id_jeu' => Game::factory(),
+            'nom_screenshot' => $this->faker->sentence,
+            'local' => 'screenshot.jpg',
+            'ordre' => $this->faker->numberBetween(1, 5),
         ];
     }
 }

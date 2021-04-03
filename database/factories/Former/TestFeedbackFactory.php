@@ -1,21 +1,21 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Former;
 
+use App\Former\Test;
 use App\Former\Member;
-use App\Former\Comment;
-use App\Former\NewsPost;
+use App\Former\TestFeedback;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CommentFactory extends Factory
+class TestFeedbackFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Comment::class;
+    protected $model = TestFeedback::class;
 
     /**
      * Define the model's default state.
@@ -25,11 +25,10 @@ class CommentFactory extends Factory
     public function definition()
     {
         return [
-            'id_parent' => NewsPost::factory(),
+            'id_test' => Test::factory(),
             'id_membre' => Member::factory(),
-            'contenu_commentaire' => $this->faker->paragraphs(2, true),
-            'statut_commentaire' => 1,
-            'date_publication' => now(),
+            'note' => mt_rand(1, 5),
+            'date' => now(),
         ];
     }
 }

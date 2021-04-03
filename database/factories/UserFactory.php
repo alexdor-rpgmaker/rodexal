@@ -21,7 +21,7 @@ class UserFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'name' => $this->faker->name,
@@ -31,5 +31,25 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'rank' => 1,
         ];
+    }
+
+    /**
+     * @return Factory
+     */
+    public function jury(): Factory
+    {
+        return $this->state([
+            'rank' => 4,
+        ]);
+    }
+
+    /**
+     * @return Factory
+     */
+    public function admin(): Factory
+    {
+        return $this->state([
+            'rank' => 6,
+        ]);
     }
 }

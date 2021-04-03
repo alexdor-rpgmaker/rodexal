@@ -1,21 +1,21 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Former;
 
-use App\Former\Game;
-use App\Former\Like;
 use App\Former\Member;
+use App\Former\Comment;
+use App\Former\NewsPost;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class LikeFactory extends Factory
+class CommentFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Like::class;
+    protected $model = Comment::class;
 
     /**
      * Define the model's default state.
@@ -25,9 +25,11 @@ class LikeFactory extends Factory
     public function definition()
     {
         return [
-            'id_jeu' => Game::factory(),
+            'id_parent' => NewsPost::factory(),
             'id_membre' => Member::factory(),
-            'date_modification' => now(),
+            'contenu_commentaire' => $this->faker->paragraphs(2, true),
+            'statut_commentaire' => 1,
+            'date_publication' => now(),
         ];
     }
 }

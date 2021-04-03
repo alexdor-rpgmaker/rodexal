@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Former;
 
 use App\Former\Session;
 use App\Former\AwardGeneralCategory;

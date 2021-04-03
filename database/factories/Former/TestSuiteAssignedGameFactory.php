@@ -1,20 +1,21 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Former;
 
 use App\Former\Game;
-use App\Former\Contributor;
+use App\Former\TestSuite;
+use App\Former\TestSuiteAssignedGame;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ContributorFactory extends Factory
+class TestSuiteAssignedGameFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Contributor::class;
+    protected $model = TestSuiteAssignedGame::class;
 
     /**
      * Define the model's default state.
@@ -25,9 +26,7 @@ class ContributorFactory extends Factory
     {
         return [
             'id_jeu' => Game::factory(),
-            'nom_membre' => $this->faker->userName,
-            'mail_membre' => $this->faker->email,
-            'statut_participant' => 1,
+            'id_serie' => TestSuite::factory(),
         ];
     }
 }

@@ -51,7 +51,7 @@ class PreTestsRouterTest extends FeatureTest
     public function testFormulaireQcmPourJeuNonAttribue()
     {
         self::mockHttpClientCreate();
-        $user = User::factory()->states('jury')->create();
+        $user = User::factory()->jury()->create();
 
         $response = $this->actingAs($user)
             ->get('/qcm/creer?game_id=5');
@@ -65,7 +65,7 @@ class PreTestsRouterTest extends FeatureTest
     public function testFormulaireNouveauQcmSiJury()
     {
         self::mockHttpClientCreate();
-        $user = User::factory()->states('jury')->create();
+        $user = User::factory()->jury()->create();
 
         $response = $this->actingAs($user)
             ->get('/qcm/creer?game_id=3');
@@ -94,7 +94,7 @@ class PreTestsRouterTest extends FeatureTest
     public function testRedirectionSiEnregistrementAvecTestNonAttribue()
     {
         self::mockHttpClientCreate();
-        $user = User::factory()->states('jury')->create();
+        $user = User::factory()->jury()->create();
 
         $response = $this->actingAs($user)
             ->post('/qcm', [
@@ -114,7 +114,7 @@ class PreTestsRouterTest extends FeatureTest
     public function testRedirectionSiChampsManquantsSiJury()
     {
         self::mockHttpClientCreate();
-        $user = User::factory()->states('jury')->create();
+        $user = User::factory()->jury()->create();
 
         $response = $this->actingAs($user)
             ->post('/qcm', [
@@ -134,7 +134,7 @@ class PreTestsRouterTest extends FeatureTest
     public function testNouveauQcmSiJury()
     {
         self::mockHttpClientCreate();
-        $user = User::factory()->states('jury')->create();
+        $user = User::factory()->jury()->create();
         $unsavedPreTest = PreTest::factory()->make([
             'game_id' => 3,
         ]);
@@ -193,7 +193,7 @@ class PreTestsRouterTest extends FeatureTest
      */
     public function testInterditDeModifierQcmSiJuryNonCreateur()
     {
-        $user = User::factory()->states('jury')->create();
+        $user = User::factory()->jury()->create();
         $preTest = PreTest::factory()->create();
 
         $response = $this->actingAs($user)
@@ -208,7 +208,7 @@ class PreTestsRouterTest extends FeatureTest
     public function testModifierQcmSiJuryEtCreateur()
     {
         self::mockHttpClientShow();
-        $user = User::factory()->states('jury')->create();
+        $user = User::factory()->jury()->create();
         $preTest = PreTest::factory()->create([
             'user_id' => $user->id,
         ]);
@@ -225,7 +225,7 @@ class PreTestsRouterTest extends FeatureTest
     public function testModifierQcmSiAdmin()
     {
         self::mockHttpClientShow();
-        $user = User::factory()->states('admin')->create();
+        $user = User::factory()->admin()->create();
         $preTest = PreTest::factory()->create();
 
         $response = $this->actingAs($user)
@@ -255,7 +255,7 @@ class PreTestsRouterTest extends FeatureTest
      */
     public function testRedirectionSiChampsManquantsModificationSiAdmin()
     {
-        $user = User::factory()->states('admin')->create();
+        $user = User::factory()->admin()->create();
         $preTest = PreTest::factory()->create();
         $unsavedPreTest = PreTest::factory()->make();
 
@@ -278,7 +278,7 @@ class PreTestsRouterTest extends FeatureTest
      */
     public function testModificationQcmSiJuryEtCreateur()
     {
-        $user = User::factory()->states('jury')->create();
+        $user = User::factory()->jury()->create();
         $preTest = PreTest::factory()->create([
             'user_id' => $user->id,
             'final_thought' => true,

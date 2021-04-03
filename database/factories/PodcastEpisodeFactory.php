@@ -18,6 +18,9 @@ class PodcastEpisodeFactory extends Factory
         $date = $this->faker->date();
         $label = preg_replace('/([a-z]+)([A-Z])/', '$1 $2', $this->faker->unique()->colorName);
 
+        $author = User::inRandomOrder()->first();
+        $poster = User::inRandomOrder()->first();
+
         return [
             'title' => $label,
             'slug' => Str::slug($label, '-'),
@@ -25,8 +28,8 @@ class PodcastEpisodeFactory extends Factory
             'description' => $this->faker->unique()->paragraph(),
             'audio_url' => self::randomSamplePodcastUrl(),
             'duration_in_seconds' => mt_rand(200, 2000),
-            'author_id' => User::inRandomOrder()->first()->id,
-            'poster_id' => User::inRandomOrder()->first()->id,
+            'author_id' => $author ? $author->id : null,
+            'poster_id' => $poster ? $poster->id : null,
             'created_at' => $date,
             'updated_at' => $date
         ];

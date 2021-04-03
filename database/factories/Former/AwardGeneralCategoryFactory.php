@@ -1,19 +1,19 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Former;
 
-use App\Former\ForumCategory;
+use App\Former\AwardGeneralCategory;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ForumCategoryFactory extends Factory
+class AwardGeneralCategoryFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = ForumCategory::class;
+    protected $model = AwardGeneralCategory::class;
 
     /**
      * Define the model's default state.
@@ -23,9 +23,8 @@ class ForumCategoryFactory extends Factory
     public function definition()
     {
         return [
-            'nom_categorie' => $this->faker->words(3, true),
-            'permission' => mt_rand(0, 6),
-            'position' => mt_rand(1, 10),
+            'nom_serie' => $this->faker->words(3, true),
+            'description_serie' => $this->faker->paragraph(2),
         ];
     }
 }

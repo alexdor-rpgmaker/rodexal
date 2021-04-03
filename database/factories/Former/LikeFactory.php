@@ -1,20 +1,21 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Former;
 
-use App\Former\Test;
-use App\Former\TestAverageCharacter;
+use App\Former\Game;
+use App\Former\Like;
+use App\Former\Member;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TestAverageCharacterFactory extends Factory
+class LikeFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = TestAverageCharacter::class;
+    protected $model = Like::class;
 
     /**
      * Define the model's default state.
@@ -24,8 +25,9 @@ class TestAverageCharacterFactory extends Factory
     public function definition()
     {
         return [
-            'id_test' => Test::factory(),
-            'average_char' => mt_rand(100, 9999),
+            'id_jeu' => Game::factory(),
+            'id_membre' => Member::factory(),
+            'date_modification' => now(),
         ];
     }
 }

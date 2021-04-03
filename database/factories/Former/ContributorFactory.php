@@ -1,20 +1,20 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Former;
 
 use App\Former\Game;
-use App\Former\Screenshot;
+use App\Former\Contributor;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ScreenshotFactory extends Factory
+class ContributorFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Screenshot::class;
+    protected $model = Contributor::class;
 
     /**
      * Define the model's default state.
@@ -25,9 +25,9 @@ class ScreenshotFactory extends Factory
     {
         return [
             'id_jeu' => Game::factory(),
-            'nom_screenshot' => $this->faker->sentence,
-            'local' => 'screenshot.jpg',
-            'ordre' => $this->faker->numberBetween(1, 5),
+            'nom_membre' => $this->faker->userName,
+            'mail_membre' => $this->faker->email,
+            'statut_participant' => 1,
         ];
     }
 }

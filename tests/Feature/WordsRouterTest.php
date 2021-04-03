@@ -42,7 +42,7 @@ class WordsRouterTest extends FeatureTest
      */
     public function testFormulaireNouveauMotDuDictionnaireSiAdmin()
     {
-        $user = User::factory()->states('admin')->create();
+        $user = User::factory()->admin()->create();
 
         $response = $this->actingAs($user)
             ->get('/dictionnaire/creer');
@@ -70,7 +70,7 @@ class WordsRouterTest extends FeatureTest
      */
     public function testRedirectionSiChampsManquantsSiAdmin()
     {
-        $user = User::factory()->states('admin')->create();
+        $user = User::factory()->admin()->create();
         $unsavedWord = Word::factory()->make();
 
         $response = $this->actingAs($user)
@@ -89,7 +89,7 @@ class WordsRouterTest extends FeatureTest
      */
     public function testNouveauMotDuDictionnaireSiAdmin()
     {
-        $user = User::factory()->states('admin')->create();
+        $user = User::factory()->admin()->create();
         $unsavedWord = Word::factory()->make();
 
         $response = $this->actingAs($user)
@@ -126,7 +126,7 @@ class WordsRouterTest extends FeatureTest
      */
     public function testModifierMotDuDictionnaireSiAdmin()
     {
-        $user = User::factory()->states('admin')->create();
+        $user = User::factory()->admin()->create();
         $word = Word::factory()->create();
 
         $response = $this->actingAs($user)
@@ -156,7 +156,7 @@ class WordsRouterTest extends FeatureTest
      */
     public function testRedirectionSiChampsManquantsModificationSiAdmin()
     {
-        $user = User::factory()->states('admin')->create();
+        $user = User::factory()->admin()->create();
         $word = Word::factory()->create();
         $unsavedWord = Word::factory()->make();
 
@@ -179,7 +179,7 @@ class WordsRouterTest extends FeatureTest
      */
     public function testModificationMotDuDictionnaireSiAdmin()
     {
-        $user = User::factory()->states('admin')->create();
+        $user = User::factory()->admin()->create();
         $word = Word::factory()->create();
         $newWord = Word::factory()->make();
 
@@ -217,7 +217,7 @@ class WordsRouterTest extends FeatureTest
      */
     public function testSuppressionMotDuDictionnaireSiAdmin()
     {
-        $user = User::factory()->states('admin')->create();
+        $user = User::factory()->admin()->create();
         $word = Word::factory()->create();
 
         $response = $this->actingAs($user)

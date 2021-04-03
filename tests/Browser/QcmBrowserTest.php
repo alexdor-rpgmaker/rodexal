@@ -8,7 +8,7 @@ use Laravel\Dusk\Browser;
 use Facebook\WebDriver\WebDriverBy;
 use Throwable;
 
-class QcmTest extends BrowserTest
+class QcmBrowserTest extends BrowserTest
 {
     /**
      * @testdox On est redirigés sur l'ancien site si on essaye de créer un QCM en n'étant pas connecté
@@ -29,7 +29,7 @@ class QcmTest extends BrowserTest
      */
     public function testCreerEtModifierQcmSiJury()
     {
-        $user = User::factory()->state('jury')->create();
+        $user = User::factory()->jury()->create();
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser->loginAs($user)

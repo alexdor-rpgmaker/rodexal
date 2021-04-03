@@ -149,7 +149,7 @@ class GameApiRouterTest extends FeatureTest
             'statut_participant' => 0,
         ]);
 
-        Game::factory()->states('deleted')->create();
+        Game::factory()->deleted()->create();
 
         $response = $this->get('/api/v0/games', ['query' => ['page' => 1]]);
 

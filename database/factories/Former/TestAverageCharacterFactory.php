@@ -1,21 +1,20 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Former;
 
 use App\Former\Test;
-use App\Former\Member;
-use App\Former\TestFeedback;
+use App\Former\TestAverageCharacter;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TestFeedbackFactory extends Factory
+class TestAverageCharacterFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = TestFeedback::class;
+    protected $model = TestAverageCharacter::class;
 
     /**
      * Define the model's default state.
@@ -26,9 +25,7 @@ class TestFeedbackFactory extends Factory
     {
         return [
             'id_test' => Test::factory(),
-            'id_membre' => Member::factory(),
-            'note' => mt_rand(1, 5),
-            'date' => now(),
+            'average_char' => mt_rand(100, 9999),
         ];
     }
 }

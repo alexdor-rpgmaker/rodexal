@@ -1,20 +1,21 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Former;
 
+use App\Former\Juror;
+use App\Former\Member;
 use App\Former\Session;
-use App\Former\TestSuite;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TestSuiteFactory extends Factory
+class JurorFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = TestSuite::class;
+    protected $model = Juror::class;
 
     /**
      * Define the model's default state.
@@ -24,9 +25,10 @@ class TestSuiteFactory extends Factory
     public function definition()
     {
         return [
-            'nom_serie' => array_rand(['Tests', 'Pré-tests', 'QCM']),
-            'description_serie' => $this->faker->paragraph(2),
+            'id_membre' => Member::factory(),
             'id_session' => Session::factory(),
+            'statut_jury' => 2,
+            'date_inscription' => now(),
         ];
     }
 }
