@@ -43,7 +43,7 @@ class GameResource extends JsonResource
             'download_links' => $this->extractDownloadLinks($game),
             'awards' => GameAwardResource::collection($this->whenLoaded('awards')),
             'authors' => ContributorResource::collection($this->whenLoaded('contributors')),
-            // TODO: Use ScreenshotResource when screenshot URL does not depend on session any more
+            // TODO : Use ScreenshotResource when screenshot URL does not depend on session any more
             'screenshots' => $game->screenshots->transform($this->parseScreenshots($game))
         ];
     }

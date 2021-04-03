@@ -47,7 +47,7 @@ class GameTest extends TestCase
      * @param string $expected
      * @testdox getLogoUrl - If game's distant logo is $distantLink, local logo is $localLink, returns $expected
      * Si le le jeu a pour logo distant $distantLink, pour logo local $localLink, retourne $expected
-     * @testWith        ["http://mygame.com/logo.gif", "logo.gif", "http://alex-dor.test/uploads/logos/logo.gif"]
+     * @testWith        ["http://mygame.com/logo.gif", "logo.gif", "https://alex-dor.test/uploads/logos/logo.gif"]
      *                  ["http://mygame.com/logo.gif", "", "http://mygame.com/logo.gif"]
      *                  ["", "", ""]
      */
@@ -126,7 +126,7 @@ class GameTest extends TestCase
      * @param string $expected
      * @testdox getWindowsDownloadLink - If game's distant link is $distantLink, local link is $localLink, returns $expected
      * Si le le jeu a pour lien distant $distantLink, pour lien local $localLink, retourne $expected
-     * @testWith        ["http://dl.com/jeu.rar", "jeu-local.rar", "http://alex-dor.test/archives/2019/jeux/jeu-local.rar"]
+     * @testWith        ["http://dl.com/jeu.rar", "jeu-local.rar", "https://alex-dor.test/archives/2019/jeux/jeu-local.rar"]
      *                  ["http://dl.com/jeu.rar", "", "http://dl.com/jeu.rar"]
      *                  ["", "", ""]
      */
@@ -148,7 +148,7 @@ class GameTest extends TestCase
      * @param string $expected
      * @testdox getMacDownloadLink - If game's distant link is $distantLink, local link is $localLink, returns $expected
      * Si le le jeu a pour lien distant $distantLink, pour lien local $localLink, retourne $expected
-     * @testWith        ["http://dl.com/jeu.rar", "jeu-local.rar", "http://alex-dor.test/archives/2019/jeux/jeu-local.rar"]
+     * @testWith        ["http://dl.com/jeu.rar", "jeu-local.rar", "https://alex-dor.test/archives/2019/jeux/jeu-local.rar"]
      *                  ["http://dl.com/jeu.rar", "", "http://dl.com/jeu.rar"]
      *                  ["", "", ""]
      */

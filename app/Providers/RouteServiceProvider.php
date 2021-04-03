@@ -28,7 +28,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::pattern('id', '[0-9]+');
 
-        // TODO: Remove this when corrected?
+        // TODO : Remove this when corrected?
         Route::bind('dictionnaire', function ($value) {
             if (is_numeric($value)) {
                 return Word::where('word_id', $value)
@@ -36,7 +36,7 @@ class RouteServiceProvider extends ServiceProvider
             }
             return Word::findBySlugOrFail($value);
         });
-        // TODO: Remove this when corrected?
+        // TODO : Remove this when corrected?
         Route::bind('podcast', function ($value) {
             return PodcastEpisode::findBySlugOrFail($value);
         });

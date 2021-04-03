@@ -24,9 +24,11 @@ class GameApiRouterTest extends FeatureTest
     }
 
     /**
-     * @testdox On peut accéder à la liste des jeux via l'API
+     * @test
+     * @testdox We can list games from API
+     * On peut accéder à la liste des jeux via l'API
      */
-    public function testListGamesWithPagination()
+    public function listGamesWithPagination()
     {
         $session = Session::factory()->create([
             'id_session' => 1,
@@ -160,20 +162,37 @@ class GameApiRouterTest extends FeatureTest
 
         // Pagination
         $response->assertJsonFragment([
-            'meta' => [
-                'current_page' => 1,
-                'from' => 1,
-                'last_page' => 1,
-                'per_page' => 50,
-                'to' => 2,
-                'total' => 2,
-                'path' => 'http://rodexal.test/api/v0/games',
+            "meta" => [
+                "current_page" => 1,
+                "from" => 1,
+                "last_page" => 1,
+                "per_page" => 50,
+                "to" => 2,
+                "total" => 2,
+                "path" => "https://rodexal.test/api/v0/games",
+                "links" => [
+                    [
+                        "url" => null,
+                        "active" => false,
+                        "label" => "&laquo; Précédent",
+                    ],
+                    [
+                        "url" => null,
+                        "active" => false,
+                        "label" => "Suivant &raquo;",
+                    ],
+                    [
+                        "url" => "https://rodexal.test/api/v0/games?page=1",
+                        "active" => true,
+                        "label" => "1",
+                    ]
+                ]
             ],
-            'links' => [
-                'first' => 'http://rodexal.test/api/v0/games?page=1',
-                'last' => 'http://rodexal.test/api/v0/games?page=1',
-                'prev' => null,
-                'next' => null,
+            "links" => [
+                "first" => "https://rodexal.test/api/v0/games?page=1",
+                "last" => "https://rodexal.test/api/v0/games?page=1",
+                "prev" => null,
+                "next" => null,
             ],
         ]);
 
@@ -195,13 +214,13 @@ class GameApiRouterTest extends FeatureTest
                     'size' => 130,
                     'website' => 'https://fake-game.com',
                     'creation_group' => 'Faking Games Software',
-                    'logo' => 'http://alex-dor.test/uploads/logos/fake-game-logo.png',
+                    'logo' => 'https://alex-dor.test/uploads/logos/fake-game-logo.png',
                     'created_at' => '2020-04-01T12:00:00+02:00',
                     'description' => 'Just a sample game in order to test',
                     'download_links' => [
                         [
                             'platform' => 'windows',
-                            'url' => 'http://alex-dor.test/archives/2001/jeux/fake_game.zip',
+                            'url' => 'https://alex-dor.test/archives/2001/jeux/fake_game.zip',
                         ],
                     ],
                     'authors' => [
@@ -221,11 +240,11 @@ class GameApiRouterTest extends FeatureTest
                     'screenshots' => [
                         [
                             'title' => 'First screenshot',
-                            'url' => 'http://alex-dor.test/uploads/screenshots/2001/screenshot-1.jpg',
+                            'url' => 'https://alex-dor.test/uploads/screenshots/2001/screenshot-1.jpg',
                         ],
                         [
                             'title' => 'Second screenshot',
-                            'url' => 'http://alex-dor.test/uploads/screenshots/2001/screenshot-2.jpg',
+                            'url' => 'https://alex-dor.test/uploads/screenshots/2001/screenshot-2.jpg',
                         ],
                     ],
                     'awards' => [
@@ -275,9 +294,11 @@ class GameApiRouterTest extends FeatureTest
     }
 
     /**
-     * @testdox On peut filtrer la liste de jeux de l'API
+     * @test
+     * @testdox We can filter games list from API
+     * On peut filtrer la liste de jeux de l'API
      */
-    public function testListGamesWithFilters()
+    public function listGamesWithFilters()
     {
         $session = Session::factory()->create([
             'id_session' => 1,
@@ -388,9 +409,11 @@ class GameApiRouterTest extends FeatureTest
     }
 
     /**
-     * @testdox On peut filtrer la liste de jeux de l'API par lien de téléchargement
+     * @test
+     * @testdox We can filter games list depending on download links from API
+     * On peut filtrer la liste de jeux de l'API par lien de téléchargement
      */
-    public function testListGamesFilteredByDownloadLink()
+    public function listGamesFilteredByDownloadLink()
     {
         Game::factory()->create([
             'id_jeu' => 1,
@@ -487,9 +510,11 @@ class GameApiRouterTest extends FeatureTest
     }
 
     /**
-     * @testdox On peut ordonner la liste de jeux de l'API
+     * @test
+     * @testdox We can sort games list from API
+     * On peut ordonner la liste de jeux de l'API
      */
-    public function testListGamesWithSorting()
+    public function listGamesWithSorting()
     {
         Game::factory()->create([
             'id_jeu' => 1,
@@ -552,9 +577,11 @@ class GameApiRouterTest extends FeatureTest
     }
 
     /**
-     * @testdox On peut ordonner la liste de jeux de l'API par nombre d'awards
+     * @test
+     * @testdox We can sort games list by awards count
+     * On peut ordonner la liste de jeux de l'API par nombre d'awards
      */
-    public function testListGamesWithSortingOnAwardsCount()
+    public function listGamesWithSortingOnAwardsCount()
     {
         $firstGame = Game::factory()->create([
             'id_jeu' => 1,

@@ -327,7 +327,7 @@
           <div class="row">
             <div class="large-6 columns">
               Hébergé par
-              <a href="http://www.alexzone.net">AlexZone.net</a>.<br />
+              <a href="https://www.alexzone.net">AlexZone.net</a>.<br />
               La page a été calculée en 0,124025 secondes. <br />15 requêtes
               effectuées.
             </div>

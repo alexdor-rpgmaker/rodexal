@@ -173,7 +173,7 @@ class Game extends FormerModel
     /**
      * @return string|null
      */
-    public function getLogoUrl()
+    public function getLogoUrl(): ?string
     {
         if (!empty($this->logo)) {
             return env('FORMER_APP_URL') . '/uploads/logos/' . $this->logo;

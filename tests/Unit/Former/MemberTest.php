@@ -48,7 +48,7 @@ class MemberTest extends TestCase
         $actualHtml = $member->getLink();
 
         $expectedHtml = <<<html
-<a href="http://alex-dor.test/?p=profil&membre=3" class="color-juror">Juan-Pablo</a>
+<a href="https://alex-dor.test/?p=profil&membre=3" class="color-juror">Juan-Pablo</a>
 html;
 
         $this->assertEquals($expectedHtml, $actualHtml);

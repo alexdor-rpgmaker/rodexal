@@ -24,14 +24,14 @@ class GameController extends Controller
 
         $games = FetchGamesWithParameters::perform($request);
 
-        $games = $games->orderBy('awarded_categories_count', 'desc')
-            ->orderBy('nominated_categories_count', 'desc')
+        $games = $games->orderByDesc('awarded_categories_count')
+            ->orderByDesc('nominated_categories_count')
             ->orderBy('id_jeu')
             ->paginate(Pagination::perPage($request->per_page));
 
         $games->getCollection()->transform(fn($game) => CleanGameAttributes::perform($game, true));
 
-        // TODO : Group 1-game software in "other" category
+        // TODO : Remove software category with only one game (move the game in "other" category)
         $softwares = Game::select("support")->distinct()->where('support', '!=', '')->orderBy('support')->pluck("support");
 
         $request->flash();
@@ -50,7 +50,7 @@ class GameController extends Controller
         if ($request->query('session_id')) {
             $session = Session::find($request->query('session_id'));
         }
-        $currentSession = Session::orderBy('id_session', 'desc')->first();
+        $currentSession = Session::orderByDesc('id_session')->first();
 
         return view('games.vue', [
             'selectedSession' => $session,

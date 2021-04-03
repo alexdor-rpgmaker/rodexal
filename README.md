@@ -37,7 +37,7 @@ php artisan db:seed
 
 ## Lancement du serveur
 
-- Sur Windows, il est conseillé d'utiliser [Wamp](http://www.wampserver.com).
+- Sur Windows, il est conseillé d'utiliser [Wamp](https://www.wampserver.com).
 - Sur Mac, il est conseillé d'utiliser [Valet](https://laravel.com/docs/5.7/valet).
 
 ## Compilation des assets

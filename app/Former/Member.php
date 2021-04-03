@@ -43,7 +43,7 @@ class Member extends FormerModel
         return $rankIdToString[$this->rang];
     }
 
-    public function getLink()
+    public function getLink(): string
     {
         $formerAppUrl = env('FORMER_APP_URL');
 
