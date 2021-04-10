@@ -51,7 +51,7 @@
                         <div id="final-thought">
                             <p>
                                 Verdict :
-                                <span class="{{ $pre_test->final_thought ? 'ok' : 'not-ok' }}">
+                                <span class="final-thought {{ $pre_test->final_thought ? 'ok' : 'not-ok' }}">
                                     {{ $pre_test->final_thought ? 'Conforme' : 'Non conforme' }}
                                 </span>
                             </p>

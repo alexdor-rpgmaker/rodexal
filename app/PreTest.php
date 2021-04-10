@@ -74,6 +74,23 @@ class PreTest extends MainModel
         return $this->belongsTo('App\User');
     }
 
+    public function explanationsCount(): int
+    {
+        $count = 0;
+        foreach (self::FIELDS as $field) {
+            if(Arr::has($this->questionnaire, $field['id'])) {
+                if(!empty($this->questionnaire[$field['id']]['explanation'])) {
+                    $count++;
+                }
+            }
+        }
+        if(!empty($this->final_thought_explanation)) {
+            $count++;
+        }
+
+        return $count;
+    }
+
     public function questionnaireHasActivatedFields()
     {
         $questionnaire_flattened = data_get($this->questionnaire, '*.activated');

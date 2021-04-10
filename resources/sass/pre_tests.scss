@@ -14,19 +14,23 @@
 
       span {
         margin-bottom: 10px;
-
-        &.ok {
-          color: green;
-        }
-
-        &.not-ok {
-          color: red;
-        }
       }
     }
 
     .explanation {
       margin-top: 10px;
     }
+  }
+}
+
+.final-thought {
+  font-weight: bold;
+
+  &.ok {
+    color: green;
+  }
+
+  &.not-ok {
+    color: red;
   }
 }

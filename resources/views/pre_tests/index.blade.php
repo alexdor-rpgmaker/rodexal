@@ -2,6 +2,10 @@
 
 @section('title', 'QCM de la session '. $session->name())
 
+@push('stylesheets')
+    <link href="{{ asset('css/pre_tests.css') }}" rel="stylesheet">
+@endpush
+
 @section('content')
     <div id="titre_corps">
         QCM
@@ -20,14 +24,26 @@
         @endif
 
         @foreach ($games as $game)
-            <p>{{$game->nom_jeu}}</p>
+            <p><strong>{{$game->nom_jeu}}</strong></p>
 
             <ul>
                 @foreach ($preTestsByGameId->get($game->id_jeu) as $preTest)
                     <li>
                         <a href="{{ route('qcm.show', $preTest) }}">
-                            QCM de {{$preTest->user->name}}
-                        </a>
+                            QCM de {{$preTest->user->name}}</a>
+                        -
+                        @if($preTest->final_thought)
+                            <span class="final-thought ok">
+                                Conforme
+                            </span>
+                        @else
+                            <span class="final-thought not-ok">
+                                Non conforme
+                            </span>
+                        @endif
+                        @if($preTest->explanationsCount() > 0)
+                            - {{ $preTest->explanationsCount() }} remarque(s)
+                        @endif
                     </li>
                 @endforeach
             </ul>
