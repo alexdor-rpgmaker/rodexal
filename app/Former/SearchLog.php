@@ -33,4 +33,10 @@ class SearchLog extends FormerModel
     {
         return $this->belongsTo('App\Former\Member', 'id_membre');
     }
+
+    public static function getFormUrl(): string
+    {
+        $formerAppUrl = env('FORMER_APP_URL');
+        return "$formerAppUrl/?p=recherche";
+    }
 }

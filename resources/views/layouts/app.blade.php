@@ -223,7 +223,7 @@
             @endif
 
             <li class="name" id="header-recherche">
-              <form action="?p=recherche" method="post">
+              <form action="{{\App\Former\SearchLog::getFormUrl()}}" method="post">
                 <input
                   type="text"
                   name="recherche_champ"
