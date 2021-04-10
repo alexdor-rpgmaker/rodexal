@@ -50,4 +50,17 @@ class Test extends FormerModel
     {
         return $this->belongsTo('App\Former\Juror', 'id_jury');
     }
+
+//    public function getUrl(): string
+//    {
+//        $formerAppUrl = env('FORMER_APP_URL');
+//        return "$formerAppUrl/?p=test&id=$this->id_test";
+//    }
+
+    public static function getListUrl($session = null): string
+    {
+        $formerAppUrl = env('FORMER_APP_URL');
+        $url = "$formerAppUrl/?p=test";
+        return $session ? "$url&session=$session" : $url;
+    }
 }

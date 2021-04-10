@@ -30,6 +30,8 @@ class Session extends FormerModel
         'date_cloture_inscriptions',
     ];
 
+    const IDS_SESSIONS_WITH_QCM = [19, 20, 21];
+
     public function allowsGamesRegistration(): bool
     {
         // TODO : Add a specific column for this rule
@@ -42,6 +44,12 @@ class Session extends FormerModel
         return $this->etape > 1;
     }
 
+    public function preTestsAreFinished(): bool
+    {
+        // TODO : Add a specific column for this rule
+        return $this->etape > 2;
+    }
+
     public function lastIncludedDayForGamesRegistration(): string
     {
         return $this->date_cloture_inscriptions->subDay()->format('d/m/Y');
@@ -52,6 +60,11 @@ class Session extends FormerModel
         $absolute = false;
         $daysBeforeGamesRegistrationEnd = Carbon::now()->diffInDays($this->date_cloture_inscriptions, $absolute);
         return $daysBeforeGamesRegistrationEnd >= 0 && $daysBeforeGamesRegistrationEnd < 7;
+    }
+
+    public function name(): string
+    {
+        return self::nameFromId($this->id_session);
     }
 
     public static function nameFromId($sessionId): string

@@ -24,8 +24,7 @@ class RenameCommentairesIdNewsIsCommentaireJeux extends Migration
             $table->renameColumn('is_commentaire_jeu', 'type_parent');
         });
 
-        Schema::connection(self::FORMER_APP_DATABASE)->table('membres', function(Blueprint $table)
-        {
+        Schema::connection(self::FORMER_APP_DATABASE)->table('membres', function (Blueprint $table) {
             $table->integer('statut_membre')->comment('0: supprimé, 1: inscrit, 2: confirmé, 3: banni')->change();
         });
     }
@@ -47,8 +46,7 @@ class RenameCommentairesIdNewsIsCommentaireJeux extends Migration
             $table->boolean('is_commentaire_jeu')->nullable(false)->change();
         });
 
-        Schema::connection(self::FORMER_APP_DATABASE)->table('membres', function(Blueprint $table)
-        {
+        Schema::connection(self::FORMER_APP_DATABASE)->table('membres', function (Blueprint $table) {
             $table->integer('statut_membre')->comment('0: supprimé, 1: inscrit, 2: confirmé, 3: de-coté')->change();
         });
     }

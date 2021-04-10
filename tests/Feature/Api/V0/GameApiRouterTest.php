@@ -41,7 +41,7 @@ class GameApiRouterTest extends FeatureTest
         $firstGame = Game::factory()->create([
             'id_jeu' => 1,
             'id_session' => $session->id_session,
-            'statut_jeu' => 2,
+            'statut_jeu' => 'qualified',
             'nom_jeu' => 'Fake Game',
             'genre_jeu' => 'Adventure game',
             'support' => 'RPG Maker 2003',
@@ -131,7 +131,7 @@ class GameApiRouterTest extends FeatureTest
         $secondGame = Game::factory()->create([
             'id_jeu' => 2,
             'id_session' => $session->id_session,
-            'statut_jeu' => 1,
+            'statut_jeu' => 'registered',
             'nom_jeu' => 'Fake Game 2',
             'genre_jeu' => 'Racing game',
             'support' => 'RPG Maker XP',

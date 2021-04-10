@@ -27,7 +27,7 @@ class Game extends FormerModel
      * @var array
      */
     protected $attributes = [
-        'statut_jeu' => 1,
+        'statut_jeu' => 'registered',
         'favori' => 0,
         'nb_commentaires' => 0
     ];
@@ -87,7 +87,7 @@ class Game extends FormerModel
     protected static function booted()
     {
         static::addGlobalScope('deleted', function (Builder $builder) {
-            $builder->where('statut_jeu', '>', 0);
+            $builder->where('statut_jeu', '!=', 'deleted');
         });
     }
 
@@ -153,32 +153,38 @@ class Game extends FormerModel
 
     public function getStatus(): string
     {
+        // TODO : Remove ?
         $stepStatusMatrix = [
             1 => [
-                0 => 'deleted',
-                1 => 'applied',
+                'deleted' => 'deleted',
+                'disqualified' => 'disqualified',
+                'registered' => 'registered',
             ],
             2 => [
-                0 => 'deleted',
-                1 => 'applied',
+                'deleted' => 'deleted',
+                'disqualified' => 'disqualified',
+                'registered' => 'registered',
             ],
             3 => [
-                0 => 'deleted',
-                1 => 'not_qualified',
-                2 => 'qualified',
+                'deleted' => 'deleted',
+                'disqualified' => 'disqualified',
+                'registered' => 'not_qualified',
+                'qualified' => 'qualified',
             ],
             4 => [
-                0 => 'deleted',
-                1 => 'not_qualified',
-                2 => 'not_nominated',
-                3 => 'nominated',
+                'deleted' => 'deleted',
+                'disqualified' => 'disqualified',
+                'registered' => 'not_qualified',
+                'qualified' => 'not_nominated',
+                'nominated' => 'nominated',
             ],
             5 => [
-                0 => 'deleted',
-                1 => 'not_qualified',
-                2 => 'not_nominated',
-                3 => 'not_awarded',
-                4 => 'awarded',
+                'deleted' => 'deleted',
+                'disqualified' => 'disqualified',
+                'registered' => 'not_qualified',
+                'qualified' => 'not_nominated',
+                'nominated' => 'not_awarded',
+                'awarded' => 'awarded',
             ],
         ];
 

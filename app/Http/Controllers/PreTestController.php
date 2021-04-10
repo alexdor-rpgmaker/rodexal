@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\PreTest;
+use App\Former\Game;
 use App\Former\Session;
 use App\Helpers\StringParser;
 
@@ -30,13 +31,40 @@ class PreTestController extends Controller
         $this->authorizeResource(PreTest::class, 'pre_test');
     }
 
+    public function index(Request $request)
+    {
+        $sessions = Session::orderBy('id_session')->get();
+        $currentSession = $sessions->last();
+        $session = $request->query('session_id')
+            ? $sessions->firstWhere('id_session', $request->query('session_id'))
+            : $sessions->last();
+
+        $games = Game::where('id_session', $session->id_session);
+
+        // If pre-tests are not finished, we only display pre-tests of disqualified games
+        if ($session == $currentSession && !$session->preTestsAreFinished()) {
+            $games = $games->where('statut_jeu', 'disqualified');
+        }
+
+        $games = $games->orderBy('nom_jeu')->get();
+        $preTestsByGameId = $this->fetchAndGroupPreTestsByGameId($games);
+        $games = $games->filter(fn($game) => $preTestsByGameId->has($game->id_jeu));
+
+        return view('pre_tests.index', [
+            'games' => $games,
+            'session' => $session,
+            'currentSession' => $currentSession,
+            'preTestsByGameId' => $preTestsByGameId
+        ]);
+    }
+
     public function show(PreTest $preTest)
     {
         $game = self::fetchGame($preTest->game_id, $this->client);
 
         $preTest->final_thought_explanation = StringParser::richText($preTest->final_thought_explanation);
 
-        return view('pre-tests.show', [
+        return view('pre_tests.show', [
             'pre_test' => $preTest,
             'game' => $game,
         ]);
@@ -50,7 +78,7 @@ class PreTestController extends Controller
         abort_if($alreadyFilledPreTest, Response::HTTP_BAD_REQUEST, "Un QCM a déjà été rempli pour ce jeu");
 
         $game = self::fetchGame($gameId, $this->client);
-        return view('pre-tests.form', [
+        return view('pre_tests.form', [
             'pre_test' => null,
             'title' => "Remplir un QCM pour le jeu $game->title",
             'game_id' => $game->id,
@@ -104,7 +132,7 @@ class PreTestController extends Controller
 
         $preTest->finalThought = $preTest->final_thought == 1;
         $preTest->finalThoughtExplanation = $preTest->final_thought_explanation;
-        return view('pre-tests.form', [
+        return view('pre_tests.form', [
             'pre_test' => $preTest,
             'title' => "Modifier le QCM du jeu $game->title",
             'game_id' => $game->id,
@@ -135,6 +163,22 @@ class PreTestController extends Controller
 
     // Helper
 
+    /**
+     * @param $games
+     * @return mixed
+     */
+    private function fetchAndGroupPreTestsByGameId($games)
+    {
+        $gamesId = Arr::pluck($games, 'id_jeu');
+        return PreTest::select('pre_tests.*', 'users.name')
+            ->join('users', 'users.id', '=', 'pre_tests.user_id')
+            ->whereIn('game_id', $gamesId)
+            ->orderBy('users.name')
+            ->get()
+            ->groupBy('game_id');
+    }
+
+    // TODO : Fetch directly from database instead of API call
     private static function checkGameIsInUserAssignments($gameId, $userId, GuzzleClient $client): void
     {
         if (env('DUSK', false)) {
@@ -149,6 +193,7 @@ class PreTestController extends Controller
         abort_unless($gameInAssignment, Response::HTTP_FORBIDDEN, "Ce jeu ne vous est pas attribué !");
     }
 
+    // TODO : Fetch directly from database instead of API call
     private static function fetchUserAssignments($userId, GuzzleClient $client)
     {
         try {
@@ -168,6 +213,7 @@ class PreTestController extends Controller
         }
     }
 
+    // TODO : Fetch directly from database instead of API call
     private static function fetchGame($id, GuzzleClient $client)
     {
         try {
@@ -182,6 +228,7 @@ class PreTestController extends Controller
         }
     }
 
+    // TODO : Insert directly in database instead of API call
     private static function assignTestToUser($game_id, $user_id, GuzzleClient $client): void
     {
         if (env('DUSK', false)) {

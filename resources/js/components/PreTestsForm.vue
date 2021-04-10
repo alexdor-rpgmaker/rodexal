@@ -155,7 +155,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 h2 {
   font-size: 30px;
   margin-top: 30px;

@@ -55,7 +55,7 @@ Route::resource('dictionnaire', WordController::class)->except([
 ]);
 
 Route::resource('qcm', PreTestController::class)->except([
-    'index', 'destroy'
+    'destroy'
 ])->parameters([
     'qcm' => 'pre_test'
 ]);

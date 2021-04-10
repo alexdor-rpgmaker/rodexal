@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\V0;
 
 use App\PreTest;
+use App\Former\Game;
+use App\Former\Session;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Str;
@@ -18,6 +20,16 @@ class PreTestApiController extends Controller
 
     public function index(Request $request)
     {
+        $sessionId = $request->session_id
+            ? (int)$request->session_id
+            : Arr::last(Session::IDS_SESSIONS_WITH_QCM);
+        if (!in_array($sessionId, Session::IDS_SESSIONS_WITH_QCM)) {
+            return response()->json([]);
+        }
+
+        $games = Game::withoutGlobalScope('deleted')->where('id_session', $sessionId)->get();
+        $gamesId = Arr::pluck($games, 'id_jeu');
+
         $preTests = PreTest::select(
             'id',
             'user_id',
@@ -26,28 +38,8 @@ class PreTestApiController extends Controller
             'final_thought',
             'created_at',
             'updated_at'
-        );
-
-        // TODO : Fetch from database
-        // Begin dirty way to choose session
-        $minGameId = null;
-        $maxGameId = null;
-        $sessionId = $request->session_id ? (int) $request->session_id : 20;
-        if ($sessionId == 20) {
-            $minGameId = 975;
-            $maxGameId = 1007;
-        } else if ($sessionId == 19) {
-            $maxGameId = 974;
-        }
-        if ($minGameId) {
-            $preTests = $preTests->where('game_id', '>=', $minGameId);
-        }
-        if ($maxGameId) {
-            $preTests = $preTests->where('game_id', '<=', $maxGameId);
-        }
-        // End dirty way to choose session
-
-        $preTests = $preTests->get();
+        )->whereIn('game_id', $gamesId)
+            ->get();
 
         $fields = Arr::pluck(PreTest::FIELDS, 'id');
         $preTests->map(function ($preTest) use ($fields) {
@@ -58,6 +50,6 @@ class PreTestApiController extends Controller
             return $preTest;
         });
 
-        return response()->json($preTests, 200);
+        return response()->json($preTests);
     }
 }

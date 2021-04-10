@@ -15,29 +15,31 @@ class GameTest extends TestCase
     /**
      * @test
      * @param int    $sessionStep
-     * @param int    $gameStatusNumber
-     * @param string $gameStatus
-     * @testdox getStatus - If session's step is $sessionStep and game status number is $gameStatusNumber, the status is $gameStatus
-     * Si la session est à l'étape $sessionStep et que le jeu a le statut numéro $gameStatusNumber, son statut est $gameStatus
-     * @testWith        [1, 0, "deleted"]
-     *                  [2, 1, "applied"]
-     *                  [3, 1, "not_qualified"]
-     *                  [3, 2, "qualified"]
-     *                  [4, 2, "not_nominated"]
-     *                  [4, 3, "nominated"]
-     *                  [5, 3, "not_awarded"]
-     *                  [5, 4, "awarded"]
+     * @param int    $gameStatus
+     * @param string $expectedGameStatus
+     * @testdox getStatus - If session's step is $sessionStep and game status number is $gameStatus, the status is $expectedGameStatus
+     * Si la session est à l'étape $sessionStep et que le jeu a le statut numéro $gameStatus, son statut est $expectedGameStatus
+     * @testWith        [1, "deleted", "deleted"]
+     *                  [1, "disqualified", "disqualified"]
+     *                  [2, "disqualified", "disqualified"]
+     *                  [2, "registered", "registered"]
+     *                  [3, "registered", "not_qualified"]
+     *                  [3, "qualified", "qualified"]
+     *                  [4, "qualified", "not_nominated"]
+     *                  [4, "nominated", "nominated"]
+     *                  [5, "nominated", "not_awarded"]
+     *                  [5, "awarded", "awarded"]
      */
-    public function getStatus_severalCases($sessionStep, $gameStatusNumber, $gameStatus)
+    public function getStatus_severalCases($sessionStep, $gameStatus, $expectedGameStatus)
     {
         $game = Game::factory()->create([
-            'statut_jeu' => $gameStatusNumber,
+            'statut_jeu' => $gameStatus,
             'id_session' => Session::factory()->create([
                 'etape' => $sessionStep,
             ]),
         ]);
 
-        $this->assertEquals($gameStatus, $game->getStatus());
+        $this->assertEquals($expectedGameStatus, $game->getStatus());
     }
 
     /**

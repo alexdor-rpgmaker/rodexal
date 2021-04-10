@@ -8,5 +8,6 @@
     "/js/games-form.js": "/js/games-form.js",
     "/js/games-list.js": "/js/games-list.js",
     "/js/jukebox.js": "/js/jukebox.js",
-    "/js/pre-tests.js": "/js/pre-tests.js"
+    "/js/pre-tests.js": "/js/pre-tests.js",
+    "/js/session-name.js": "/js/session-name.js"
 }

@@ -58,6 +58,28 @@ class SessionTest extends TestCase
 
     /**
      * @test
+     * @param int $sessionStep
+     * @param bool $expected
+     * @testdox preTestsAreFinished - If session step is $sessionStep, are pre-tests finished ? $expected
+     * Si l'étape de la session est $sessionStep, est-ce que les pré-tests sont finis ? $expected
+     * @testWith        [0, false]
+     *                  [1, false]
+     *                  [2, false]
+     *                  [3, true]
+     *                  [4, true]
+     */
+    public function preTestsAreFinished(int $sessionStep, bool $expected)
+    {
+        $session = Session::factory()->make([
+            'etape' => $sessionStep
+        ]);
+        $actualPreTestsAreFinished = $session->preTestsAreFinished();
+
+        $this->assertEquals($expected, $actualPreTestsAreFinished);
+    }
+
+    /**
+     * @test
      * @testdox lastIncludedDayForGamesRegistration - Returns the day before end of registration's day
      * Retourne le jour d'avant la date de clôture
      */
@@ -96,6 +118,29 @@ class SessionTest extends TestCase
         $actualIsInLessThanSevenDays = $session->gamesRegistrationEndsInLessThanSevenDays();
 
         $this->assertEquals($expected, $actualIsInLessThanSevenDays);
+    }
+
+    /**
+     * @test
+     * @param int $sessionId
+     * @param bool $expected
+     * @testdox name - If session ID given is $sessionId, session name is $expected
+     * Si l'ID de session fourni est $sessionId, le nom de la session est $expected
+     * @testWith        [1, "2001"]
+     *                  [3, "2003-2004"]
+     *                  [10, "2010"]
+     *                  [16, "2016-2017"]
+     *                  [17, "2017-2018"]
+     */
+    public function name($sessionId, $expected)
+    {
+        $session = Session::factory()->make([
+            'id_session' => $sessionId
+        ]);
+
+        $actualSessionName = $session->name();
+
+        $this->assertEquals($expected, $actualSessionName);
     }
 
     /**

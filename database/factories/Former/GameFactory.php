@@ -26,7 +26,7 @@ class GameFactory extends Factory
         return [
             'nom_jeu' => $this->faker->words(3, true),
             'id_session' => Session::factory(),
-            'statut_jeu' => 1,
+            'statut_jeu' => 'registered',
             'date_inscription' => now(),
         ];
     }
@@ -37,7 +37,7 @@ class GameFactory extends Factory
     public function deleted(): Factory
     {
         return $this->state([
-            'statut_jeu' => 0,
+            'statut_jeu' => 'deleted',
         ]);
     }
 }

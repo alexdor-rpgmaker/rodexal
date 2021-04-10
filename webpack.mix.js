@@ -17,6 +17,7 @@ mix
   .js('resources/js/games-list.js', 'public/js')
   .js('resources/js/pre-tests.js', 'public/js')
   .js('resources/js/jukebox.js', 'public/js')
+  .js('resources/js/session-name.js', 'public/js')
   .sass('resources/sass/app.scss', 'public/css')
   .sass('resources/sass/dictionary.scss', 'public/css')
   .sass('resources/sass/games.scss', 'public/css')
