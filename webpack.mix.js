@@ -14,8 +14,13 @@ const mix = require('laravel-mix')
 mix
   .js('resources/js/app.js', 'public/js')
   .js('resources/js/session-name.js', 'public/js')
+  .vue({ version: 2 })
   .sass('resources/sass/app.scss', 'public/css')
   .sass('resources/sass/dictionary.scss', 'public/css')
   .sass('resources/sass/games.scss', 'public/css')
   .sass('resources/sass/pre_tests.scss', 'public/css')
   .sass('resources/sass/podcasts.scss', 'public/css')
+
+if (mix.inProduction()) {
+  mix.version();
+}

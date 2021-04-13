@@ -108,14 +108,33 @@
 <script>
 import FormMixin from '../FormMixin'
 
+// noinspection JSUnusedGlobalSymbols
 export default {
   props: {
-    questions: Array,
-    gameId: Number,
-    preTest: Object,
-    initMethod: String,
-    initAction: String,
-    initRedirection: String
+    questions: {
+      type: Array,
+      required: true
+    },
+    gameId: {
+      type: Number,
+      required: true
+    },
+    preTest: {
+      type: Object,
+      required: false
+    },
+    initMethod: {
+      type: String,
+      required: false
+    },
+    initAction: {
+      type: String,
+      required: false
+    },
+    initRedirection: {
+      type: String,
+      required: false
+    }
   },
   mixins: [FormMixin],
   data () {

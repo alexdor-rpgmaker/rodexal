@@ -1,9 +1,9 @@
 {
     "/js/app.js": "/js/app.js",
+    "/js/session-name.js": "/js/session-name.js",
     "/css/app.css": "/css/app.css",
-    "/css/dictionary.css": "/css/dictionary.css",
-    "/css/games.css": "/css/games.css",
     "/css/pre_tests.css": "/css/pre_tests.css",
-    "/css/podcasts.css": "/css/podcasts.css",
-    "/js/session-name.js": "/js/session-name.js"
+    "/css/games.css": "/css/games.css",
+    "/css/dictionary.css": "/css/dictionary.css",
+    "/css/podcasts.css": "/css/podcasts.css"
 }

@@ -13,6 +13,7 @@
 <script>
 import sessionName from '../session-name'
 
+// noinspection JSUnusedGlobalSymbols
 export default {
   props: {
     initialSessionId: {

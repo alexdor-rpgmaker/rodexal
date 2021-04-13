@@ -51,6 +51,11 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      formerAppUrl: process.env.MIX_FORMER_APP_URL
+    }
+  },
   computed: {
     awardedCategories () {
       return this.game

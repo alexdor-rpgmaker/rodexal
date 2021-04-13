@@ -46,6 +46,7 @@
 </template>
 
 <script>
+// noinspection JSUnusedGlobalSymbols
 export default {
   data() {
     return {

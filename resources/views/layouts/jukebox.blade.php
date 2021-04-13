@@ -10,12 +10,7 @@
 
     <title>{{ config('app.name', "Alex d'or") }}</title>
 
-    <script type="text/javascript">
-      window.debug = @json(env('APP_DEBUG'));
-      window.formerAppUrl = @json(env('FORMER_APP_URL'));
-    </script>
-
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{  mix('js/app.js') }}" defer></script>
     @stack('scripts')
 
     <!-- Font Awesome -->

@@ -89,6 +89,7 @@
 <script>
 import Amplitude from 'amplitudejs'
 
+// noinspection JSUnusedGlobalSymbols
 export default {
   data () {
     return {
@@ -116,20 +117,20 @@ export default {
       return this.status !== 'stop'
     },
     currentMusicGameLink () {
-      return formerAppUrl + '?p=jeu&id=' + this.currentMusic.game.id
+      return process.env.MIX_FORMER_APP_URL + '?p=jeu&id=' + this.currentMusic.game.id
     }
   },
   methods: {
     // Init and callbacks
     async fetchMusics () {
       const request = await axios({
-        url: formerAppUrl + '/api/v0/musics.php'
+        url: process.env.MIX_FORMER_APP_URL + '/api/v0/musics.php'
       })
       this.musics = request.data.map(this.formatMusicForJukebox)
     },
     initializeAmplitude () {
       Amplitude.init({
-        debug,
+        debug: process.env.MIX_DEBUG,
         shuffle_on: this.shuffle,
         callbacks: {
           play: this.playCallback,
