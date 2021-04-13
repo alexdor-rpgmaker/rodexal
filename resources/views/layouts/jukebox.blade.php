@@ -93,22 +93,24 @@
     <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/vendor/custom.modernizr.js"></script>
   </head>
   <body style="margin-bottom: 0;">
-    <div class="row" id="mainrow">
-      <main class="py-4">
-          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-              @csrf
-          </form>
+    <div id="wrap">
+      <div class="row" id="mainrow">
+        <main class="py-4">
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
 
-          @if (session('status'))
-              <div class="container">
-                  <div class="message_info">
-                      {{ session('status') }}
-                  </div>
-              </div>
-          @endif
+            @if (session('status'))
+                <div class="container">
+                    <div class="message_info">
+                        {{ session('status') }}
+                    </div>
+                </div>
+            @endif
 
-          @yield('content')
-      </main>
+            @yield('content')
+        </main>
+      </div>
     </div>
   </body>
 </html>

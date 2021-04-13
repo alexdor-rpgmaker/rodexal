@@ -6,10 +6,6 @@
     <link href="{{ asset('css/games.css') }}" rel="stylesheet">
 @endpush
 
-@push('scripts')
-    <script type="text/javascript" src="{{ asset('js/games-form.js') }}" defer></script>
-@endpush
-
 @section('content')
     @if($currentSession->tooLateForGamesRegistration())
         <div class="message_erreur">

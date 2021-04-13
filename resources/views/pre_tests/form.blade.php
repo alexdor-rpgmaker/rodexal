@@ -2,10 +2,6 @@
 
 @section('title', $title)
 
-@push('scripts')
-    <script type="text/javascript" src="{{ asset('js/pre-tests.js') }}" defer></script>
-@endpush
-
 @section('content')
     <div class="container">
         <div id="pre-tests-form" class="row justify-content-center">
@@ -23,8 +19,8 @@
                             :pre-test='@json($pre_test)'
                             :init-method='@json($form_method)'
                             :init-action='@json($form_url)'
-                            :init-redirection='@json(env('FORMER_APP_URL').'/?p=mes-tests&message=Enregistrement effectué !')'
-                        />
+                            :init-redirection='@json(env('FORMER_APP_URL').'/?p=mes-tests&message=Enregistrement effectué !')'>
+                        </pre-tests-form>
                     </div>
                 </div>
             </div>

@@ -2,10 +2,6 @@
 
 @section('title', 'Liste des jeux')
 
-@push('scripts')
-    <script type="text/javascript" src="{{ asset('js/games-list.js') }}" defer></script>
-@endpush
-
 @section('content')
     <div id="titre_corps">
         @if($selectedSession)

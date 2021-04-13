@@ -1,9 +1,5 @@
 @extends('layouts.jukebox')
 
-@push('scripts')
-    <script type="text/javascript" src="{{ asset('js/jukebox.js') }}" defer></script>
-@endpush
-
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
