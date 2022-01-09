@@ -6,44 +6,49 @@
     </template>
     <template v-else>
       <div class="form-group row" v-for="question in questions" :key="question.label">
-        <div class="col-sm-12">
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              :name="question.id"
-              :id="question.id"
-              v-model="fields.questionnaire[question.id].activated"
-            >
-            <label class="form-check-label" :for="question.id">{{question.label}}</label>
-            <div
-              class="field-description"
-              v-if="question.fieldDescription"
-            >{{ question.fieldDescription }}</div>
-            <div class="field-description" v-if="question.word">
-              => Définition de
-              <a :href="'/dictionnaire#' + question.word">{{ question.word }}</a>
+        <template v-if="fields.questionnaire[question.id]">
+          <div class="col-sm-12">
+            <div class="form-check">
+              <input
+                  class="form-check-input"
+                  type="checkbox"
+                  :name="question.id"
+                  :id="question.id"
+                  v-model="fields.questionnaire[question.id].activated"
+              >
+              <label class="form-check-label" :for="question.id">{{ question.label }}</label>
+              <div
+                  class="field-description"
+                  v-if="question.fieldDescription"
+              >{{ question.fieldDescription }}
+              </div>
+              <div class="field-description" v-if="question.word">
+                => Définition de
+                <a :href="'/dictionnaire#' + question.word">{{ question.word }}</a>
+              </div>
+              <div
+                  v-if="errors && errors[question.id]"
+                  class="text-danger"
+              >{{ errors[question.label][0] }}
+              </div>
             </div>
-            <div
-              v-if="errors && errors[question.id]"
-              class="text-danger"
-            >{{ errors[question.label][0] }}</div>
+            <div class="checkbox-precision" v-if="fields.questionnaire[question.id].activated">
+              <label :for="'explanation-' + question.id">Précisions</label>
+              <input
+                  type="text"
+                  :name="'explanation-' + question.id"
+                  :id="'explanation-' + question.id"
+                  v-model="fields.questionnaire[question.id].explanation"
+                  style="width: 100%"
+              >
+              <div
+                  v-if="errors && errors[question.id + 'Explanation']"
+                  class="text-danger"
+              >{{ errors[question.id + 'Explanation'][0] }}
+              </div>
+            </div>
           </div>
-          <div class="checkbox-precision" v-if="fields.questionnaire[question.id].activated">
-            <label :for="'explanation-' + question.id">Précisions</label>
-            <input
-              type="text"
-              :name="'explanation-' + question.id"
-              :id="'explanation-' + question.id"
-              v-model="fields.questionnaire[question.id].explanation"
-              style="width: 100%"
-            >
-            <div
-              v-if="errors && errors[question.id + 'Explanation']"
-              class="text-danger"
-            >{{ errors[question.id + 'Explanation'][0] }}</div>
-          </div>
-        </div>
+        </template>
       </div>
 
       <h2>Verdict</h2>
@@ -57,23 +62,23 @@
           <template v-else>
             <div class="form-check form-check-inline">
               <input
-                class="form-check-input"
-                type="radio"
-                name="finalThought"
-                id="finalThought-ok"
-                v-model="fields.finalThought"
-                :value="true"
+                  class="form-check-input"
+                  type="radio"
+                  name="finalThought"
+                  id="finalThought-ok"
+                  v-model="fields.finalThought"
+                  :value="true"
               >
               <label class="form-check-label" for="finalThought-ok">Conforme</label>
             </div>
             <div class="form-check form-check-inline">
               <input
-                class="form-check-input"
-                type="radio"
-                name="finalThought"
-                id="finalThought-not-ok"
-                v-model="fields.finalThought"
-                :value="false"
+                  class="form-check-input"
+                  type="radio"
+                  name="finalThought"
+                  id="finalThought-not-ok"
+                  v-model="fields.finalThought"
+                  :value="false"
               >
               <label class="form-check-label" for="finalThought-not-ok">Non conforme</label>
             </div>
@@ -83,15 +88,16 @@
             <label for="finalThoughtPrecision">Précisions</label>
 
             <textarea
-              class="form-control"
-              name="finalThoughtPrecision"
-              id="finalThoughtPrecision"
-              v-model="fields.finalThoughtExplanation"
+                class="form-control"
+                name="finalThoughtPrecision"
+                id="finalThoughtPrecision"
+                v-model="fields.finalThoughtExplanation"
             ></textarea>
             <div
-              v-if="errors && errors.finalThoughtExplanation"
-              class="text-danger"
-            >{{ errors.finalThoughtExplanation[0] }}</div>
+                v-if="errors && errors.finalThoughtExplanation"
+                class="text-danger"
+            >{{ errors.finalThoughtExplanation[0] }}
+            </div>
           </div>
         </div>
       </div>
@@ -137,7 +143,7 @@ export default {
     }
   },
   mixins: [FormMixin],
-  data () {
+  data() {
     return {
       fields: this.fillFields(),
       method: this.initMethod || 'POST',
@@ -146,12 +152,12 @@ export default {
     }
   },
   computed: {
-    editing () {
+    editing() {
       return this.method === 'PUT'
     }
   },
   methods: {
-    fillFields () {
+    fillFields() {
       const questionnaire = {}
       this.questions.forEach(question => {
         questionnaire[question.id] = {
@@ -161,13 +167,13 @@ export default {
       })
       // noinspection UnnecessaryLocalVariableJS
       const fields =
-        this.initMethod === 'PUT'
-          ? this.preTest
-          : {
-            questionnaire,
-            gameId: this.gameId,
-            finalThought: null
-          }
+          this.initMethod === 'PUT'
+              ? this.preTest
+              : {
+                questionnaire,
+                gameId: this.gameId,
+                finalThought: null
+              }
       return fields
     }
   }
