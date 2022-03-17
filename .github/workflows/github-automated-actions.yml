@@ -4,6 +4,7 @@ jobs:
   phpunit:
     runs-on: ubuntu-latest
     container:
+      # Remind to update image version along with PHP version
       image: kirschbaumdevelopment/laravel-test-runner:8.0
 
     services:
@@ -21,14 +22,24 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Install composer dependencies
+      - name: Install front-end dependencies
         run: |
-          composer install --no-scripts
+          npm install
+          npm run dev
+
+      - name: Run front-end unit testsuite
+        run: npm run test
+
+      - name: Install composer dependencies
+        run: composer install --no-scripts
 
       - name: Prepare Laravel Application
         run: |
           cp .env.ci .env
           php artisan key:generate
 
-      - name: Run Testsuite
-        run: vendor/bin/phpunit tests/
+      - name: Run e2e testsuite (Dusk)
+        run: composer test:e2e
+
+      - name: Run unit testsuite
+        run: composer test
