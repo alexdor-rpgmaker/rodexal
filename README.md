@@ -1,4 +1,4 @@
-# Alex d'or 2019-2021
+# Alex d'or 2019-2022
 
 Construire collaborativement le nouveau site des [Alex d'or](https://www.alexdor.info).
 

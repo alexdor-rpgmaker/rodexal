@@ -153,7 +153,8 @@ export default {
         17,
         19,
         20,
-        21
+        21,
+        22
       ],
       softwares: [
         'adventure game studio',

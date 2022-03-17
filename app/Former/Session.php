@@ -30,7 +30,7 @@ class Session extends FormerModel
         'date_cloture_inscriptions',
     ];
 
-    const IDS_SESSIONS_WITH_QCM = [19, 20, 21];
+    const IDS_SESSIONS_WITH_QCM = [19, 20, 21, 22];
 
     public function allowsGamesRegistration(): bool
     {
@@ -91,7 +91,7 @@ class Session extends FormerModel
             $sessionId < 1 ||
             $sessionId == 4 ||
             $sessionId == 18 ||
-            $sessionId > 21 # TODO : Make variable?
+            $sessionId > 22 # TODO : Make variable?
         ) {
             return false;
         }

@@ -174,8 +174,8 @@ class SessionTest extends TestCase
      *                  [8, true, true]
      *                  [8, false, false]
      *                  [18, true, false]
-     *                  [21, true, true]
-     *                  [22, true, false]
+     *                  [22, true, true]
+     *                  [23, true, false]
      */
     public function sessionIdExists($sessionId, $includeAbandoned, $expected)
     {

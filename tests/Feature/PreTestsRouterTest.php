@@ -111,7 +111,7 @@ class PreTestsRouterTest extends FeatureTest
      * @testdox Index - If game is deleted, then returns nothing
      * Si le jeu est supprimé, alors ne renvoie rien
      */
-    public function index_ifGameIsDeleted_thenSession()
+    public function index_ifGameIsDeleted_thenReturnsNoPreTests()
     {
         $this->currentSessionGame->update(['statut_jeu' => 'deleted']);
 
