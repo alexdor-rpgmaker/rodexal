@@ -17,18 +17,19 @@ jobs:
           - 33306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
+      mysql_former_app:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: rodexal_test_password
+          MYSQL_DATABASE: alexdor_test_db
+        ports:
+          - 33307:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
-
-      - name: Install front-end dependencies
-        run: |
-          npm install
-          npm run dev
-
-      - name: Run front-end unit testsuite
-        run: npm run test
 
       - name: Install composer dependencies
         run: composer install --no-scripts
@@ -38,8 +39,16 @@ jobs:
           cp .env.ci .env
           php artisan key:generate
 
+      - name: Run unit testsuite
+        run: composer test
+
       - name: Run e2e testsuite (Dusk)
         run: composer test:e2e
 
-      - name: Run unit testsuite
-        run: composer test
+      - name: Install front-end dependencies
+        run: |
+          npm install
+          npm run dev
+
+      - name: Run front-end unit testsuite
+        run: npm run test
