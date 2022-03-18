@@ -28,15 +28,7 @@ jobs:
       - name: Verify MySQL connection
         run: |
           mysql --version
-          apt-get install -y mysql-client
-          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -uroot -prodexal_test_db_password -e "SHOW DATABASES"
-
-      - name: Verify unittest DB exists
-        run: mysql --port 33306 -uroot -prodexal_test_db_password -e "SHOW DATABASES LIKE 'rodexal_test_db';"
-      - name: Create 2nd Database
-        run: mysql --port 33306 -u root --password=rodexal_test_db_password -e "CREATE DATABASE IF NOT EXISTS rodexal_alexdor_test_db;"
-      - name: Verify unittest_second DB exists
-        run: mysql --port 33306 -u root --password=rodexal_test_db_password -e "SHOW DATABASES LIKE 'rodexal_alexdor_test_db';"
+          mysql --host 127.0.0.1 --port 3306 -uroot -prodexal_test_db_password -e "SHOW DATABASES"
 
       - name: Install composer dependencies
         run: composer install --no-scripts
@@ -47,6 +39,11 @@ jobs:
           php artisan key:generate
 
       - name: Run unit testsuite
+#        env:
+#          MYSQL_DATABASE: test_db
+#          DB_USERNAME: user
+#          DB_PASSWORD: secret
+#          DB_PORT: ${{ job.services.mysql.ports[3306] }}
         run: composer test
 
       - name: Prepare e2e testsuite (Dusk)
