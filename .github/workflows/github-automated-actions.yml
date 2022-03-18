@@ -23,11 +23,11 @@ jobs:
           fetch-depth: 1
 
       - name: Verify unittest DB exists
-        run: mysql --port 33306 -u root -e "SHOW DATABASES LIKE 'rodexal_test_db'"
+        run: mysql --port 3306 -u root -e "SHOW DATABASES LIKE 'rodexal_test_db'"
       - name: Create 2nd Database
-        run: mysql --port 33306 -u root -e "CREATE DATABASE IF NOT EXISTS rodexal_alexdor_test_db;"
+        run: mysql --port 3306 -u root -e "CREATE DATABASE IF NOT EXISTS rodexal_alexdor_test_db;"
       - name: Verify unittest_second DB exists
-        run: mysql --port 3306 -u root -e "SHOW DATABASES LIKE 'rodexal_alexdor_test_db'"
+        run: mysql --host 127.0.0.1 --port 3306 -u root -e "SHOW DATABASES LIKE 'rodexal_alexdor_test_db'"
 
       - name: Install composer dependencies
         run: composer install --no-scripts
