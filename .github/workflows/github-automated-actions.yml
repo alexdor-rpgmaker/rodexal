@@ -11,19 +11,13 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ROOT_PASSWORD: rodexal_test_password
-          MYSQL_DATABASE: rodexal_test_db
+          MYSQL_USER: rodexal_test_db_user
+          MYSQL_PASSWORD: rodexal_test_db_password
+          MYSQL_ROOT_PASSWORD: rodexal_test_db_password
+        volumes:
+          - "/$(pwd)/mysql-init:/docker-entrypoint-initdb.d"
         ports:
           - 33306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
-      mysql_former_app:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: rodexal_test_password
-          MYSQL_DATABASE: alexdor_test_db
-        ports:
-          - 33307:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
@@ -41,6 +35,11 @@ jobs:
 
       - name: Run unit testsuite
         run: composer test
+
+      - name: Prepare e2e testsuite (Dusk)
+        run: |
+          cp .env.dusk.ci .env
+          php artisan key:generate
 
       - name: Run e2e testsuite (Dusk)
         run: composer test:e2e
