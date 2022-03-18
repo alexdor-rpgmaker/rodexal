@@ -11,6 +11,7 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
+          MYSQL_DATABASE: rodexal_test_db
           MYSQL_USER: rodexal_test_db_user
           MYSQL_PASSWORD: rodexal_test_db_password
           MYSQL_ROOT_PASSWORD: rodexal_test_db_password
