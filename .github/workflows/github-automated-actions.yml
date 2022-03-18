@@ -22,6 +22,8 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Start mysql
+        run: sudo /etc/init.d/mysql start
       - name: Verify unittest DB exists
         run: mysql --port 3306 -u root -e "SHOW DATABASES LIKE 'rodexal_test_db';"
       - name: Create 2nd Database
