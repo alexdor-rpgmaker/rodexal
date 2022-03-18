@@ -3,9 +3,9 @@ on: [ push ]
 jobs:
   phpunit:
     runs-on: ubuntu-latest
-#    container:
-#      # Remind to update image version along with PHP version
-#      image: kirschbaumdevelopment/laravel-test-runner:8.0
+    container:
+      # Remind to update image version along with PHP version
+      image: kirschbaumdevelopment/laravel-test-runner:8.0
 
     services:
       mysql:
@@ -24,8 +24,15 @@ jobs:
 
       - name: Start mysql
         run: sudo /etc/init.d/mysql start
+
+      - name: Verify MySQL connection
+        run: |
+          mysql --version
+          sudo apt-get install -y mysql-client
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -uroot -prodexal_test_db_password -e "SHOW DATABASES"
+
       - name: Verify unittest DB exists
-        run: mysql --port 33306 -u root --password=rodexal_test_db_password -e "SHOW DATABASES LIKE 'rodexal_test_db';"
+        run: mysql --port 33306 -uroot -prodexal_test_db_password -e "SHOW DATABASES LIKE 'rodexal_test_db';"
       - name: Create 2nd Database
         run: mysql --port 33306 -u root --password=rodexal_test_db_password -e "CREATE DATABASE IF NOT EXISTS rodexal_alexdor_test_db;"
       - name: Verify unittest_second DB exists
