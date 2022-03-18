@@ -22,8 +22,8 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Start mysql
-        run: /etc/init.d/mysql start
+#      - name: Start mysql
+#        run: /etc/init.d/mysql start
 
       - name: Verify MySQL connection
         run: |
