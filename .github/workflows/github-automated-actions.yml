@@ -11,12 +11,10 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_USER: rodexal_test_db_user
-          MYSQL_PASSWORD: rodexal_test_db_password
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: rodexal_test_db
-          MYSQL_ROOT_PASSWORD: rodexal_test_db_password
         ports:
-          - 33306:3306
+          - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
@@ -24,13 +22,10 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Verify MySQL connection
-        run: |
-          mysql --version
-          sudo find / -type s
-          mysql --host localhost --port 3306 -urodexal_test_db_user -prodexal_test_db_password -e "SHOW DATABASES"
-
       - name: Verify unittest DB exists
+        run: mysql --host 127.0.0.1 --port 3306 -uroot -e "SHOW DATABASES LIKE 'unittest'"
+
+      - name: Verify unittest DB exists 2
         run: mysql --port 3306 -u root -p rodexal_test_db_password -e "SHOW DATABASES LIKE 'rodexal_test_db';"
 
       - name: Install composer dependencies
