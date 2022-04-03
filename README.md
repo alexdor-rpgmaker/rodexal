@@ -1,6 +1,7 @@
 # Alex d'or 2019-2022
 
 ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock' (2)
+same
 
 Construire collaborativement le nouveau site des [Alex d'or](https://www.alexdor.info).
 
