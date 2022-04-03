@@ -1,6 +1,9 @@
 # Alex d'or 2019-2022
 
-ERROR 2003 (HY000): Can't connect to MySQL server on '127.0.0.1:3306' (111)
+mysql-client is already the newest version (8.0.28-0ubuntu0.20.04.3).
+0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.
+Warning: arning] Using a password on the command line interface can be insecure.
+ERROR 2003 (HY000): Can't connect to MySQL server on '127.0.0.1:33306' (111)
 
 Construire collaborativement le nouveau site des [Alex d'or](https://www.alexdor.info).
 
