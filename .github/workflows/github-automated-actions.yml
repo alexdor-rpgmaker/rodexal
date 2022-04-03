@@ -26,7 +26,7 @@ jobs:
         run: |
           mysql --version
           apt-get install -y mysql-client
-          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -uroot -prodexal_test_db_password -e "SHOW DATABASES"
+          mysql --host 127.0.0.1 --port 3306 -uroot -prodexal_test_db_password -e "SHOW DATABASES"
 
       - name: Verify unittest DB exists
         run: mysql --port 3306 -u root -p rodexal_test_db_password -e "SHOW DATABASES LIKE 'rodexal_test_db';"
