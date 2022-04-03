@@ -1,6 +1,7 @@
 # Alex d'or 2019-2022
 
-mysql: unrecognized service
+sudo: not found
+Error: Process completed with exit code 127.
 
 Construire collaborativement le nouveau site des [Alex d'or](https://www.alexdor.info).
 
