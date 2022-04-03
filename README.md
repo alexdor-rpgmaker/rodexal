@@ -1,7 +1,7 @@
 # Alex d'or 2019-2022
 
 Warning: arning] Using a password on the command line interface can be insecure.
-ERROR 2003 (HY000): Can't connect to MySQL server on '127.0.0.1:3306' (111)
+ERROR 2003 (HY000): Can't connect to MySQL server on '127.0.0.1:33306' (111)
 
 Construire collaborativement le nouveau site des [Alex d'or](https://www.alexdor.info).
 
