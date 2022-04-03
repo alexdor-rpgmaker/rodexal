@@ -24,7 +24,7 @@
         <env name="MAIL_DRIVER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
-        <env name="DB_DATABASE" value="rodexal_test"/>
-        <env name="FORMER_APP_DB_DATABASE" value="alexdor_tests_rodexal"/>
+        <env name="DB_DATABASE" value="rodexal_test_db"/>
+        <env name="FORMER_APP_DB_DATABASE" value="rodexal_alexdor_test_db"/>
     </php>
 </phpunit>

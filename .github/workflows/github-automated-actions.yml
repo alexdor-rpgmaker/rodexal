@@ -1,0 +1,61 @@
+name: GitHub Automated Actions
+on: [ push ]
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    container:
+      # Remind to update image version along with PHP version
+      image: kirschbaumdevelopment/laravel-test-runner:8.0
+
+    services:
+      mysql:
+        image: mysql:8.0.28
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: rodexal_test_db
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Verify unittest DB exists
+        run: mysql --host 127.0.0.1 --port 3306 -uroot -e "SHOW DATABASES LIKE 'rodexal_test_db'"
+
+      - name: Verify unittest DB exists 2
+        run: mysql --port 3306 -u root -p rodexal_test_db_password -e "SHOW DATABASES LIKE 'rodexal_test_db';"
+
+      - name: Install composer dependencies
+        run: composer install --no-scripts
+
+      - name: Prepare Laravel Application
+        run: |
+          cp .env.ci .env
+          php artisan key:generate
+
+      - name: Run unit testsuite
+#        env:
+#          MYSQL_DATABASE: test_db
+#          DB_USERNAME: user
+#          DB_PASSWORD: secret
+#          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+        run: composer test
+
+      - name: Prepare e2e testsuite (Dusk)
+        run: |
+          cp .env.dusk.ci .env
+          php artisan key:generate
+
+      - name: Run e2e testsuite (Dusk)
+        run: composer test:e2e
+
+      - name: Install front-end dependencies
+        run: |
+          npm install
+          npm run dev
+
+      - name: Run front-end unit testsuite
+        run: npm run test

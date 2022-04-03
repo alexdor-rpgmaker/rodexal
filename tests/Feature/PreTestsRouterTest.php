@@ -70,6 +70,7 @@ class PreTestsRouterTest extends FeatureTest
      */
     public function index_ifNoSessionIsAsked_thenReturnsCurrentSessionGameAndPreTest()
     {
+        $this->currentSession->update(['etape' => 3]);
         $preTest = PreTest::factory()->create([
             'game_id' => $this->currentSessionGame->id_jeu,
         ]);
