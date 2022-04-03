@@ -27,8 +27,7 @@ jobs:
       - name: Verify MySQL connection
         run: |
           mysql --version
-          service mysql start
-          find / -type s
+          sudo find / -type s
           mysql --host localhost --port 3306 -urodexal_test_db_user -prodexal_test_db_password -e "SHOW DATABASES"
 
       - name: Verify unittest DB exists
