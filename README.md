@@ -2,6 +2,7 @@
 
 ERROR 2003 (HY000): Can't connect to MySQL server on '127.0.0.1:3306' (111)
 Error: Process completed with exit code 1.
+same
 
 Construire collaborativement le nouveau site des [Alex d'or](https://www.alexdor.info).
 
