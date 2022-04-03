@@ -1,24 +1,7 @@
 # Alex d'or 2019-2022
 
-Former/GameTest
-
-Illuminate\Database\QueryException: SQLSTATE[HY000]
-[1045] Access denied for user 'rodexal_test_db_user'@'172.18.0.2'
-(using password: YES) (SQL: insert into `sessions`
-(`statut_session`, `etape`, `nom_session`, `date_cloture_inscriptions`)
-values (1, 4, Session 2013, 1985-07-24 00:00:00))
-
-PodcastTest
-
-Illuminate\Database\QueryException: SQLSTATE[HY000]
-[1045] Access denied for user 'rodexal_test_db_user'@'172.18.0.2'
-(using password: YES) (SQL: select * from `laralex_users` order by RAND() limit 1)
-
-FeatureTest
-
-Illuminate\Database\QueryException: SQLSTATE[HY000]
-[1045] Access denied for user 'rodexal_test_db_user'@'172.18.0.2'
-(using password: YES) (SQL: select * from information_schema.tables where table_schema = rodexal_test_db and table_name = laralex_migrations and table_type = 'BASE TABLE')
+Warning: arning] Using a password on the command line interface can be insecure.
+ERROR 2003 (HY000): Can't connect to MySQL server on '127.0.0.1:3306' (111)
 
 Construire collaborativement le nouveau site des [Alex d'or](https://www.alexdor.info).
 
