@@ -25,10 +25,10 @@ jobs:
       #      - name: Start mysql
       #        run: /etc/init.d/mysql start
 
-      - name: Verify MySQL connection
-        run: |
-          mysql --version
-          mysql --host 127.0.0.1 --port 33306 -uroot -prodexal_test_db_password -e "SHOW DATABASES"
+      - name: Start mysql
+        run: /etc/init.d/mysql start
+      - name: Verify unittest DB exists
+        run: mysql --port 3306 -u root -p rodexal_test_db_password -e "SHOW DATABASES LIKE 'rodexal_test_db';"
 
       - name: Install composer dependencies
         run: composer install --no-scripts
