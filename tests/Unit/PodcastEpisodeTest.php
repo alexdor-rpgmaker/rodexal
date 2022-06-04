@@ -14,7 +14,7 @@ class PodcastEpisodeTest extends TestCase
      * @test
      * @param int    $durationInSeconds
      * @param string $expectedDuration
-     * @testdox duration - If duration is $durationInSecondss, then display $expectedDuration
+     * @testdox duration - If duration is $durationInSeconds s, then display $expectedDuration
      * Si la durée est de $durationInSeconds en secondes, alors afficher $expectedDuration
      * @testWith        [1, "0:01"]
      *                  [10, "0:10"]

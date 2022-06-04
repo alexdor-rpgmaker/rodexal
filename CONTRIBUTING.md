@@ -34,3 +34,9 @@ Une fois la Pull Request validée et recettée par la team, elle sera mergée su
 ### PhpUnit
 ### Dusk
 ### Jest
+
+## Chantiers à instruire
+
+- Traiter les TODO dans le code
+- Retirer laravel/legacy-factories et adapter les factories
+- Remettre "spatie/phpunit-watcher": "^1.23" pour le watcher
