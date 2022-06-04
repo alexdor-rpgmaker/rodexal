@@ -65,16 +65,18 @@ class PodcastBrowserTest extends BrowserTest
         $this->browse(fn(Browser $browser) => $browser->visit("/podcast")
             // List
             ->assertSee('Episode 1 : Game of season 1')
+            ->assertSee('1 (2021)')
             ->assertSee('01/10/2021')
             ->assertSee('Episode 2 : Game of season 1')
             ->assertSee('03/02/2021')
             ->assertSee('Episode 1 : Game of season 2')
+            ->assertSee('2 (2022)')
             ->assertSee('15/05/2022')
             // One podcast
             ->clickLink('Episode 1 : Game of season 1')
             ->assertSee('Episode 1 : Game of season 1')
             ->assertSee('le 01/10/2021')
-            ->assertSee('Saison : 1')
+            ->assertSee('Saison 1 (2021)')
             ->assertSee('Auteur : Alex RuTiPa')
             ->assertSee('Durée : 5:35')
             // Other podcast
@@ -82,7 +84,7 @@ class PodcastBrowserTest extends BrowserTest
             ->clickLink('Episode 1 : Game of season 2')
             ->assertSee('Episode 1 : Game of season 2')
             ->assertSee('le 15/05/2022')
-            ->assertSee('Saison : 2')
+            ->assertSee('Saison 2 (2022)')
             ->assertSee('Auteur : Arshes')
             ->assertSee('Durée : 1:40')
         );
