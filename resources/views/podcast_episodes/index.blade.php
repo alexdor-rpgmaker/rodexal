@@ -11,7 +11,7 @@
     </div>
     <div id="corps">
         <p>
-            Grande nouveauté de cette session 2021 : le Podcast des Alex d'or, baptisé <strong>Pod-Alex</strong>.
+            Grande nouveauté de la session précédente : le Podcast des Alex d'or, baptisé <strong>Pod-Alex</strong>.
             Chaque épisode audio est l'occasion de découvrir un des
             <a href="{{ App\Former\Game::getListUrl() }}"> jeux en lice</a> ainsi que leurs créateurs.
         </p>
@@ -22,6 +22,7 @@
         <table class="table">
             <thead>
             <tr>
+                <th>Saison (Session)</th>
                 <th>Titre</th>
                 <th>Date de publication</th>
             </tr>
@@ -29,6 +30,9 @@
             <tbody>
             @foreach ($podcastEpisodes as $podcastEpisode)
                 <tr>
+                    <td>
+                        {{$podcastEpisode->seasonAndSession()}}
+                    </td>
                     <td>
                         <a href="{{ route('podcast.show', $podcastEpisode) }}">
                             {{$podcastEpisode->title}}

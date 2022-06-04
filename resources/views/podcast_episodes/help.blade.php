@@ -10,13 +10,9 @@
         Comment écouter le podcast ?
     </div>
     <script>
-      function copyPodcastUrlField() {
+      async function copyPodcastUrlField() {
         const copyText = document.getElementById('podcast-url')
-
-        copyText.select();
-        copyText.setSelectionRange(0, 99999); /* For mobile devices */
-
-        document.execCommand("copy");
+        await navigator.clipboard.writeText(copyText.value);
       }
     </script>
     <div id="corps">

@@ -16,6 +16,7 @@
                 <div id="sous_titre_corps"></div>
                 <div class="card">
                     <div class="card-body">
+                        <p>Saison {{ $podcastEpisode->seasonAndSession() }}</p>
                         <h1>{{ $podcastEpisode->title }}</h1>
                         <p>le {{ $podcastEpisode->created_at->format('d/m/Y') }}</p>
                         <ul>

@@ -43,6 +43,7 @@
                     type="{{ $item->enclosureType }}">
             </enclosure>
             <itunes:author>{{ $item->author }}</itunes:author>
+            <itunes:season>{{ $item->season }}</itunes:season>
             <itunes:episode>{{ $item->number }}</itunes:episode>
             <itunes:episodeType>full</itunes:episodeType>
             <itunes:duration>{{ $item->duration }}</itunes:duration>

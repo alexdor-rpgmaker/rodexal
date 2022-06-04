@@ -48,13 +48,20 @@ class PodcastUpdate extends Command
             $SIMPLEPIE_NAMESPACE_ITUNES = "http://www.itunes.com/dtds/podcast-1.0.dtd";
 
             // echo $item->get_link() . "\n";
-            // echo $item->get_item_tags($SIMPLEPIE_NAMESPACE_ITUNES, 'season')[0]['data'] . "\n";
             // echo $item->get_item_tags($SIMPLEPIE_NAMESPACE_ITUNES, 'image')[0]['attribs']['']['href'] . "\n";
 
             $duration = (int)$item->get_item_tags($SIMPLEPIE_NAMESPACE_ITUNES, 'duration')[0]['data'];
+            $seasonNumber = (int)$item->get_item_tags($SIMPLEPIE_NAMESPACE_ITUNES, 'season')[0]['data'];
             $episodeNumber = (int)$item->get_item_tags($SIMPLEPIE_NAMESPACE_ITUNES, 'episode')[0]['data'];
 
-            $parkkoId = 588; // TODO: Change when Parkko leaves
+            // TODO: Update for each session, or make it variable somehow
+            if($seasonNumber == 1) {
+                // Session 2021
+                $authorId = 588; // Parkko
+            } else if($seasonNumber == 2) {
+                // Session 2022
+                $authorId = 1133; // Solarius
+            }
 
             PodcastEpisode::updateOrCreate(
                 [
@@ -65,10 +72,11 @@ class PodcastUpdate extends Command
                     'description' => strip_tags($item->get_description(), 100),
                     'created_at' => $item->get_date('Y-m-d'),
                     'audio_url' => $item->get_enclosure()->get_link(),
+                    'season' => $seasonNumber,
                     'number' => $episodeNumber,
                     'duration_in_seconds' => $duration,
-                    'author_id' => $parkkoId,
-                    'poster_id' => $parkkoId,
+                    'author_id' => $authorId,
+                    'poster_id' => $authorId,
                 ]
             );
         }

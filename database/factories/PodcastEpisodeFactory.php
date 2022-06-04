@@ -25,6 +25,7 @@ class PodcastEpisodeFactory extends Factory
             'id' => $this->faker->uuid(),
             'title' => $label,
             'slug' => Str::slug($label, '-'),
+            'season' => $this->faker->numberBetween(1, 3),
             'number' => $this->faker->numberBetween(1, 30),
             'description' => $this->faker->unique()->paragraph(),
             'audio_url' => self::randomSamplePodcastUrl(),

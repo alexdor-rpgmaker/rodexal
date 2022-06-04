@@ -10,6 +10,7 @@ class PodcastFeedItem extends FeedItem
     protected Carbon $createdAt;
     protected string $shortDescription;
     protected string $description;
+    protected int $season;
     protected int $number;
     protected string $duration;
     protected string $imageUrl;

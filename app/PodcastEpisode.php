@@ -4,9 +4,8 @@ namespace App;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class PodcastEpisode extends Model
 {
@@ -22,7 +21,16 @@ class PodcastEpisode extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'title', 'description', 'created_at', 'audio_url', 'number', 'duration_in_seconds', 'author_id', 'poster_id'
+        'id',
+        'title',
+        'description',
+        'created_at',
+        'audio_url',
+        'season',
+        'number',
+        'duration_in_seconds',
+        'author_id',
+        'poster_id'
     ];
 
     protected $dates = ['created_at'];
@@ -45,6 +53,16 @@ class PodcastEpisode extends Model
         $minutes = floor($this->duration_in_seconds / 60);
         $seconds = floor($this->duration_in_seconds % 60);
         return sprintf("%d:%02d", $minutes, $seconds);
+    }
+
+    public function session(): int
+    {
+        return 2020 + $this->season;
+    }
+
+    public function seasonAndSession(): string
+    {
+        return "$this->season ({$this->session()})";
     }
 
     public function getRouteKeyName(): string
