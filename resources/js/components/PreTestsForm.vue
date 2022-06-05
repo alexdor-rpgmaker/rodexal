@@ -168,8 +168,8 @@ export default {
       // noinspection UnnecessaryLocalVariableJS
       const fields =
           this.initMethod === 'PUT'
-              ? this.preTest
-              : {
+            ? this.preTest
+            : {
                 questionnaire,
                 gameId: this.gameId,
                 finalThought: null

@@ -4,6 +4,7 @@
     <option
         v-for="sessionId in sessionIds"
         :value="sessionId"
+        :key="sessionId"
       >
       Session {{ nameFromId(sessionId) }}
     </option>
@@ -31,16 +32,16 @@ export default {
     }
   },
   beforeMount() {
-    this.selectedSessionId = this.initialSessionId || this.sessionIds[this.sessionIds.length - 1];
+    this.selectedSessionId = this.initialSessionId || this.sessionIds[this.sessionIds.length - 1]
   },
   methods: {
     nameFromId(sessionId) {
       return sessionName(sessionId)
     },
     changeSession() {
-      const searchParams = new URLSearchParams(window.location.search);
-      searchParams.set("session_id", this.selectedSessionId);
-      window.location.search = searchParams.toString();
+      const searchParams = new URLSearchParams(window.location.search)
+      searchParams.set('session_id', this.selectedSessionId)
+      window.location.search = searchParams.toString()
     }
   }
 }

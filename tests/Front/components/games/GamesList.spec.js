@@ -123,7 +123,7 @@ describe('GamesList', () => {
   })
 
   describe('.fetchGames()', () => {
-    function createWrapperWithParams (params) {
+    function createWrapperWithParams(params) {
       const wrapper = shallowMount(GamesList, params)
       const apiResponseBody = {
         meta: {

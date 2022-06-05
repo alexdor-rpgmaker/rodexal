@@ -1,6 +1,6 @@
-require('./bootstrap')
-
 import Vue from 'vue'
+
+require('./bootstrap')
 
 // Declare Vue.js components from folder components/ recursively
 const files = require.context('./', true, /\.vue$/i)

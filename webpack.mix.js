@@ -22,5 +22,5 @@ mix
   .sass('resources/sass/podcasts.scss', 'public/css')
 
 if (mix.inProduction()) {
-  mix.version();
+  mix.version()
 }

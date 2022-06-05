@@ -121,7 +121,7 @@ export default {
       required: false
     }
   },
-  data () {
+  data() {
     return {
       games: [],
       query: null,
@@ -183,17 +183,17 @@ export default {
       ]
     }
   },
-  async mounted () {
+  async mounted() {
     if (this.session) {
       this.selectedSession = this.session
     }
     await this.fetchGames()
   },
   computed: {
-    lastPage () {
+    lastPage() {
       return this.page === this.totalPagesCount
     },
-    gamesCount () {
+    gamesCount() {
       if (this.resultsCountOnThisPage === this.totalResultsCount) {
         return this.resultsCountOnThisPage
       }
@@ -202,7 +202,7 @@ export default {
     }
   },
   methods: {
-    async fetchGames () {
+    async fetchGames() {
       const params = {
         page: this.page
       }
@@ -238,39 +238,39 @@ export default {
 
       this.games = request.data.data.map(this.formatGameForList)
     },
-    async search () {
+    async search() {
       this.page = 1
       await this.fetchGames()
     },
-    async goToPage (page) {
+    async goToPage(page) {
       window.scrollTo(0, 0)
       this.page = page
       await this.fetchGames()
     },
-    async previousPage () {
+    async previousPage() {
       window.scrollTo(0, 0)
       this.page -= 1
       await this.fetchGames()
     },
-    async nextPage () {
+    async nextPage() {
       window.scrollTo(0, 0)
       this.page += 1
       await this.fetchGames()
     },
-    async sortBy (sortParam) {
+    async sortBy(sortParam) {
       if (this.selectedSort === sortParam) {
         this.sortDirection = this.sortDirection !== 'asc' ? 'asc' : 'desc'
       }
       this.selectedSort = sortParam
       await this.search()
     },
-    sessionName (id) {
+    sessionName(id) {
       if (id === 3) return 'Session 2003-2004'
       else if (id === 17) return 'Session 2017-2018'
 
       return `Session ${id + 2000}`
     },
-    formatGameForList (gameDto) {
+    formatGameForList(gameDto) {
       return {
         id: gameDto.id,
         title: gameDto.title,

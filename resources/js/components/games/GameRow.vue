@@ -57,35 +57,35 @@ export default {
     }
   },
   computed: {
-    awardedCategories () {
+    awardedCategories() {
       return this.game
         .awards
         .filter(award => award.status === 'awarded')
     },
-    awardedCategoriesList () {
+    awardedCategoriesList() {
       return this.awardedCategories
         .map(this.awardName)
         .join(', ')
     },
-    wasAwarded () {
+    wasAwarded() {
       return this.awardedCategories.length > 0
     },
-    nominatedCategories () {
+    nominatedCategories() {
       return this.game
         .awards
         .filter(award => award.status === 'nominated')
     },
-    nominatedCategoriesList () {
+    nominatedCategoriesList() {
       return this.nominatedCategories
         .map(award => award.category_name)
         .join(', ')
     },
-    wasNominated () {
+    wasNominated() {
       return this.nominatedCategories.length > 0
     }
   },
   methods: {
-    awardName (award) {
+    awardName(award) {
       let awardName = award.category_name
       switch (award.award_level) {
         case 'gold': awardName += ' (or)'; break

@@ -91,7 +91,7 @@ import Amplitude from 'amplitudejs'
 
 // noinspection JSUnusedGlobalSymbols
 export default {
-  data () {
+  data() {
     return {
       musics: [],
       currentMusic: {},
@@ -104,31 +104,31 @@ export default {
       musicChangedFromSelector: false
     }
   },
-  async mounted () {
+  async mounted() {
     await this.fetchMusics()
     this.initializeAmplitude()
     this.scriptLoaded = true
   },
   computed: {
-    playing () {
+    playing() {
       return this.status === 'playing'
     },
-    playOrPause () {
+    playOrPause() {
       return this.status !== 'stop'
     },
-    currentMusicGameLink () {
+    currentMusicGameLink() {
       return process.env.MIX_FORMER_APP_URL + '?p=jeu&id=' + this.currentMusic.game.id
     }
   },
   methods: {
     // Init and callbacks
-    async fetchMusics () {
+    async fetchMusics() {
       const request = await axios({
         url: process.env.MIX_FORMER_APP_URL + '/api/v0/musics.php'
       })
       this.musics = request.data.map(this.formatMusicForJukebox)
     },
-    initializeAmplitude () {
+    initializeAmplitude() {
       Amplitude.init({
         debug: process.env.MIX_DEBUG,
         shuffle_on: this.shuffle,
@@ -140,14 +140,14 @@ export default {
         songs: this.musics.map(this.formatMusicForAmplitude)
       })
     },
-    playCallback () {
+    playCallback() {
       this.status = 'playing'
       const metadata = Amplitude.getActiveSongMetadata()
       this.currentMusic = this.musics.find(
         music => music.title === metadata.name
       )
     },
-    durationChangeCallback () {
+    durationChangeCallback() {
       const duration = Amplitude.getSongDuration()
       let minutes = Math.floor(duration / 60)
       if (minutes < 10) minutes = `0${minutes}`
@@ -155,39 +155,39 @@ export default {
       if (seconds < 10) seconds = `0${seconds}`
       this.currentMusicDuration = `${minutes}:${seconds}`
     },
-    songChangeCallback () {
+    songChangeCallback() {
       if (!this.musicChangedFromSelector) {
         this.$refs.musicSelector.value = this.selectorHeading
       }
     },
     // Advance commands
-    toggleRepeat () {
+    toggleRepeat() {
       this.repeat = !this.repeat
       Amplitude.setRepeatSong(this.repeat)
     },
-    toggleShuffle () {
+    toggleShuffle() {
       this.shuffle = !this.shuffle
       Amplitude.setShuffle(this.shuffle)
     },
-    changeMusicFromSelector (event) {
+    changeMusicFromSelector(event) {
       this.musicChangedFromSelector = true
       Amplitude.playSongAtIndex(event.target.value)
       this.musicChangedFromSelector = false
     },
-    changeSongPlayedPercentage (event) {
+    changeSongPlayedPercentage(event) {
       let newPercentage = parseFloat(event.target.value)
       if (newPercentage <= 0) newPercentage = 0.1
       Amplitude.setSongPlayedPercentage(newPercentage)
     },
-    changeVolume (event) {
+    changeVolume(event) {
       const newPercentage = parseFloat(event.target.value)
       Amplitude.setVolume(newPercentage)
     },
     // Commands
-    previous () {
+    previous() {
       Amplitude.prev()
     },
-    playPause () {
+    playPause() {
       if (!this.playing) {
         Amplitude.play()
       } else {
@@ -195,11 +195,11 @@ export default {
         this.status = 'pause'
       }
     },
-    next () {
+    next() {
       Amplitude.next()
     },
     // Formatting
-    formatMusicForJukebox (musicDto) {
+    formatMusicForJukebox(musicDto) {
       return {
         title: musicDto.title,
         description: musicDto.description,
@@ -211,7 +211,7 @@ export default {
         link: musicDto.music_url
       }
     },
-    formatMusicForAmplitude (jukeboxMusic) {
+    formatMusicForAmplitude(jukeboxMusic) {
       return {
         name: jukeboxMusic.title,
         url: jukeboxMusic.link
