@@ -77,7 +77,7 @@
 
                             <fieldset class="fieldset">
                                 <legend class="legend">Généralités</legend>
-                                <table>
+                                <table class="mb-0">
                                     <tr>
                                         <td width="200">
                                             <label for="title">
@@ -85,7 +85,7 @@
                                             </label>
                                         </td>
                                         <td>
-                                            <div class="form-group row">
+                                            <div class="row">
                                                 <input id="title"
                                                        name="title"
                                                        value="{{ old('title', $game->nom_jeu) }}"

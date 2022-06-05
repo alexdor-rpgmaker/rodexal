@@ -1,9 +1,9 @@
 module.exports = {
   collectCoverageFrom: ['**/*.{js}'],
   setupFiles: ['<rootDir>/tests/Front/config/setup'],
-  testURL: 'http://localhost',
   testMatch: ['**/tests/Front/**/*.spec.js'],
   testEnvironment: 'node',
+  testEnvironmentOptions: { url: 'http://localhost' },
   transform: {
     '^.+\\.js$': 'babel-jest',
     '.*\\.(vue)$': 'vue-jest'

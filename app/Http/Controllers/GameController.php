@@ -74,6 +74,8 @@ class GameController extends Controller
     {
         $currentSession = Session::orderByDesc('id_session')->first();
 
+        // TODO: Abort if $currentSession->tooLateForGamesRegistration()
+
         return view('games.form', [
             'game' => new Game,
             'title' => 'Proposez un jeu',

@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         \URL::forceScheme('https');
-        Paginator::useBootstrap();
+        Paginator::useBootstrapFive();
         Route::resourceVerbs([
             'create' => 'creer',
             'edit' => 'editer'

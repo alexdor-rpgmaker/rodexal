@@ -5,7 +5,7 @@
       <img src="https://www.alexdor.info/design/divers/Alex.gif" alt="Alex Rutipa qui marche">
     </template>
     <template v-else>
-      <div class="form-group row" v-for="question in questions" :key="question.label">
+      <div class="row" v-for="question in questions" :key="question.label">
         <template v-if="fields.questionnaire[question.id]">
           <div class="col-sm-12">
             <div class="form-check">
@@ -33,7 +33,7 @@
               </div>
             </div>
             <div class="checkbox-precision" v-if="fields.questionnaire[question.id].activated">
-              <label :for="'explanation-' + question.id">Précisions</label>
+              <label :for="'explanation-' + question.id" class="form-label">Précisions</label>
               <input
                   type="text"
                   :name="'explanation-' + question.id"
@@ -52,7 +52,7 @@
       </div>
 
       <h2>Verdict</h2>
-      <div class="form-group row">
+      <div class="row">
         <div class="col-sm-12">
           <template v-if="editing">
             <input type="hidden" name="finalThought" v-model="fields.finalThought">
@@ -85,7 +85,7 @@
           </template>
           <div v-if="errors && errors.finalThought" class="text-danger">{{ errors.finalThought[0] }}</div>
           <div class="final-thought-precision" v-if="fields.finalThought === false">
-            <label for="finalThoughtPrecision">Précisions</label>
+            <label for="finalThoughtPrecision" class="form-label">Précisions</label>
 
             <textarea
                 class="form-control"
@@ -102,9 +102,9 @@
         </div>
       </div>
 
-      <div class="form-group row mt-3">
+      <div class="row mt-3">
         <div class="col-md-12 text-center">
-          <button type="submit" class="submit btn btn-primary mb-0">Envoyer</button>
+          <button type="submit" class="submit bouton mb-0">Envoyer</button>
         </div>
       </div>
     </template>

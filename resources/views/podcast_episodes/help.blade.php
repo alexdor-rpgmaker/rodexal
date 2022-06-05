@@ -29,12 +29,14 @@
             (par exemple <a href="https://play.google.com/store/apps/details?id=com.bambuna.podcastaddict&hl=fr">Podcast Addict</a> sur Android),
             vous pouvez directement y copier-coller l'URL du flux RSS du podcast :
         </p>
-        <div class="input-group mb-2">
-            <input type="text" value="{{ App\PodcastEpisode::PODCAST_FEED_URL }}" id="podcast-url" class="form-control" readonly>
-            <div class="input-group-append">
+        <form class="row mx-1">
+            <div class="col-sm-5">
+                <input type="text" value="{{ App\PodcastEpisode::PODCAST_FEED_URL }}" id="podcast-url" class="form-control" readonly>
+            </div>
+            <div class="col-auto">
                 <button class="btn btn-outline-secondary" type="button" onclick="copyPodcastUrlField()">Copier</button>
             </div>
-        </div>
+        </form>
         <p>
             Les nouveaux épisodes seront affichés directement dans l'interface et vous pouvez même les télécharger automatiquement sur votre appareil !
         </p>

@@ -27,7 +27,7 @@
                                 <li class="page-item active">
                                     <span>
                                         Toutes les lettres
-                                        <span class="sr-only">(actuelle)</span>
+                                        <span class="visually-hidden">(actuelle)</span>
                                     </span>
                                 </li>
                             @else
@@ -47,7 +47,7 @@
                                     <li class="page-item active">
                                         <span>
                                             {{ $uppercased_letter }}
-                                            <span class="sr-only">(actuelle)</span>
+                                            <span class="visually-hidden">(actuelle)</span>
                                         </span>
                                     </li>
                                 @else
@@ -72,7 +72,7 @@
                                 <div class="card-header">
                                     {{ $word->label }}
 
-                                    <div class="card-options float-right">
+                                    <div class="card-options float-end">
                                         @can('delete', $word)
                                             <form action="{{ route('dictionnaire.destroy', $word) }}" method="POST"
                                                   style="display: inline;">

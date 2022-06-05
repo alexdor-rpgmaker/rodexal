@@ -41,60 +41,52 @@
                     <input name="sort" type="hidden" value="{{ old('sort') }}"/>
                     <div class="row">
                         <div class="col">
-                            <div class="row">
+                            <div class="row gy-2">
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="session">Session</label>
-                                        <select id="session" name="session_id" class="custom-select">
-                                            <option value="">(Toutes les sessions)</option>
-                                            @foreach ($sessions as $session)
-                                                <option
-                                                        value="{{ $session->id_session }}"
-                                                        {{ old("session_id") == $session->id_session ? "selected": "" }}
-                                                >
-                                                    {{ $session->nom_session }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                    <label for="session" class="form-label">Session</label>
+                                    <select id="session" name="session_id" class="form-select">
+                                        <option value="">(Toutes les sessions)</option>
+                                        @foreach ($sessions as $session)
+                                            <option
+                                                    value="{{ $session->id_session }}"
+                                                    {{ old("session_id") == $session->id_session ? "selected": "" }}
+                                            >
+                                                {{ $session->nom_session }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="software">Logiciels</label>
-                                        <select id="software" name="software" class="custom-select">
-                                            <option value="">(Tous les logiciels)</option>
-                                            @foreach ($softwares as $software)
-                                                <option
-                                                        value="{{$software}}"
-                                                        {{ old("software") == $software ? "selected": "" }}
-                                                >
-                                                    {{ $software }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                    <label for="software" class="form-label">Logiciels</label>
+                                    <select id="software" name="software" class="form-select">
+                                        <option value="">(Tous les logiciels)</option>
+                                        @foreach ($softwares as $software)
+                                            <option
+                                                    value="{{$software}}"
+                                                    {{ old("software") == $software ? "selected": "" }}
+                                            >
+                                                {{ $software }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                            </div>
 
-                            <div class="row">
                                 <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="query">Recherche</label>
-                                        <input
-                                                id="query"
-                                                name="q"
-                                                class="form-control"
-                                                type="text"
-                                                placeholder="Aventure, Humour, RuTiPa's Quest, ..."
-                                                value="{{ old('q') }}"
-                                        />
-                                    </div>
+                                    <label for="query" class="form-label">Recherche</label>
+                                    <input
+                                            id="query"
+                                            name="q"
+                                            class="form-control"
+                                            type="text"
+                                            placeholder="Aventure, Humour, RuTiPa's Quest, ..."
+                                            value="{{ old('q') }}"
+                                    />
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="form-check form-group pt-4 mb-5">
+                        <div class="col gy-3">
+                            <div class="form-check pt-4 mb-5">
                                 <input
                                         id="download-links"
                                         name="download_links"
@@ -165,7 +157,7 @@
                                 @if ($games->currentPage() == $index)
                                     <a class="page-link">
                                         {{ $index }}
-                                        <span class="sr-only">(current)</span>
+                                        <span class="visually-hidden">(current)</span>
                                     </a>
                                 @else
                                     <a class="page-link" href="{{ request()->fullUrlWithQuery(['page' => $index]) }}">

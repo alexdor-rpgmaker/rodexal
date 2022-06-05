@@ -1,10 +1,10 @@
 <template>
   <div class="software-form-group">
-    <div class="form-group row">
+    <div class="row mb-2">
       <!--suppress HtmlFormInputWithoutLabel -->
       <select
           id="software-list"
-          class="form-control"
+          class="form-select"
           v-model="selectedSoftware"
           :disabled="!registrationAllowed"
       >
@@ -21,7 +21,7 @@
       </select>
     </div>
     <template v-if="otherSoftwareInputDisplayed">
-      <div class="form-group row">
+      <div class="row">
         <!--suppress HtmlFormInputWithoutLabel -->
         <input
             type="text"
@@ -96,9 +96,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.form-group {
-  margin-bottom: 10px;
-}
-</style>

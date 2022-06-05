@@ -1,85 +1,82 @@
 <template>
-  <div id="games-list" class="container">
-    <form @submit.prevent="search" class="games-form">
-      <div class="row">
-        <div class="col">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="session">Session</label>
-                <select id="session" name="session" class="custom-select" v-model="selectedSession">
+  <div id="games-list">
+    <div class="container">
+      <form @submit.prevent="search" class="games-form">
+        <div class="row">
+          <div class="col">
+            <div class="row gy-2">
+              <div class="col-md-6">
+                <label for="session" class="form-label">Session</label>
+                <select id="session" name="session" class="form-select" v-model="selectedSession">
                   <option :value="null">(Toutes les sessions)</option>
                   <option
-                          :value="session"
-                          v-for="session in sessions"
-                          :key="session"
+                      :value="session"
+                      v-for="session in sessions"
+                      :key="session"
                   >{{ sessionName(session) }}
                   </option>
                 </select>
               </div>
-            </div>
 
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="software">Logiciels</label>
-                <select id="software" name="software" class="custom-select" v-model="selectedSoftware">
+              <div class="col-md-6">
+                <label for="software" class="form-label">Logiciels</label>
+                <select id="software" name="software" class="form-select" v-model="selectedSoftware">
                   <option :value="null">(Tous les logiciels)</option>
                   <option :value="software" v-for="software in softwares" :key="software">{{ software }}</option>
                 </select>
               </div>
-            </div>
-          </div>
 
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="query">Recherche</label>
+              <div class="col-md-12">
+                <label for="query" class="form-label">Recherche</label>
                 <input
-                        id="query"
-                        name="query"
-                        class="form-control"
-                        type="text"
-                        v-model="query"
-                        placeholder="Aventure, Humour, RuTiPa's Quest, ..."
+                    id="query"
+                    name="query"
+                    class="form-control"
+                    type="text"
+                    v-model="query"
+                    placeholder="Aventure, Humour, RuTiPa's Quest, ..."
                 />
               </div>
             </div>
           </div>
-        </div>
-        <div class="col">
-          <div class="form-check form-group pt-4 mb-5">
-            <input
-                    id="download-links"
-                    name="download-links"
-                    class="form-check-input"
-                    type="checkbox"
-                    v-model="withDownloadLinks"
-            />
-            <label for="download-links" class="form-check-label">Avec lien de téléchargement</label>
+          <div class="col gy-3">
+            <div class="form-check pt-4 mb-5">
+              <input
+                  id="download-links"
+                  name="download-links"
+                  class="form-check-input"
+                  type="checkbox"
+                  v-model="withDownloadLinks"
+              />
+              <label for="download-links" class="form-check-label">Avec lien de téléchargement</label>
+            </div>
+
+            <button class="bouton" type="submit">Rechercher</button>
           </div>
-
-          <button class="bouton" type="submit">Rechercher</button>
         </div>
-      </div>
-    </form>
 
-    <p class="mb-4">Nombre de jeux : <strong>{{ gamesCount }}</strong>.</p>
+      </form>
+
+      <p class="mb-4">Nombre de jeux : <strong>{{ gamesCount }}</strong>.</p>
+    </div>
+
     <table class="table">
-      <tr class="tableau_legend">
-        <th></th>
-        <th class="title" @click="sortBy('title')">Titre du Jeu</th>
-        <th class="session" @click="sortBy('session')">Session</th>
-        <th class="author">Auteur(s)</th>
-        <th class="software" @click="sortBy('software')">Support</th>
-        <th class="genre" @click="sortBy('genre')">Genre</th>
-        <th class="download">Téléch.</th>
-      </tr>
-      <game-row
-              class="tr"
-              :game="game"
-              v-for="game in games"
-              :key="game.id"
-      />
+      <tbody>
+        <tr class="tableau_legend">
+          <th></th>
+          <th class="title" @click="sortBy('title')">Titre du Jeu</th>
+          <th class="session" @click="sortBy('session')">Session</th>
+          <th class="author">Auteur(s)</th>
+          <th class="software" @click="sortBy('software')">Support</th>
+          <th class="genre" @click="sortBy('genre')">Genre</th>
+          <th class="download">Téléch.</th>
+        </tr>
+        <game-row
+            v-for="game in games"
+            :game="game"
+            :key="game.id"
+        />
+      </tbody>
     </table>
 
     <nav aria-label="Pagination de la liste des jeux" v-if="totalPagesCount > 1">
@@ -91,7 +88,7 @@
           <template v-if="index === page">
             <a class="page-link">
               {{ index }}
-              <span class="sr-only">(current)</span>
+              <span class="visually-hidden">(current)</span>
             </a>
           </template>
           <template v-else>
@@ -290,44 +287,44 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  #games-list {
-    .title, .session, .software, .genre {
-      cursor: pointer;
-    }
+#games-list {
+  .title, .session, .software, .genre {
+    cursor: pointer;
+  }
 
-    .author {
-      width: 160px;
-    }
+  .author {
+    width: 160px;
+  }
 
-    .software, .genre {
-      width: 130px;
-    }
+  .software, .genre {
+    width: 130px;
+  }
 
-    .download {
-      width: 50px;
-    }
+  .download {
+    width: 50px;
+  }
 
-    .pagination {
-      .page-item {
+  .pagination {
+    .page-item {
+      .page-link {
+        color: #d39501;
+      }
+
+      &.active {
         .page-link {
-          color: #d39501;
+          color: white;
+          border-color: #d39501;
+          background-color: #d39501;
         }
+      }
 
-        &.active {
-          .page-link {
-            color: white;
-            border-color: #d39501;
-            background-color: #d39501;
-          }
-        }
-
-        //noinspection CssUnusedSymbol
-        &.disabled {
-          .page-link {
-            color: #6c757d;
-          }
+      //noinspection CssUnusedSymbol
+      &.disabled {
+        .page-link {
+          color: #6c757d;
         }
       }
     }
   }
+}
 </style>
