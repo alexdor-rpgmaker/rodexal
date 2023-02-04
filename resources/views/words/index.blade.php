@@ -32,7 +32,7 @@
                                 </li>
                             @else
                                 <li class="page-item">
-                                    <a class="bouton" href="{{ route('dictionnaire.index') }}?">Toutes les lettres</a>
+                                    <a class="page-link bouton" href="{{ route('dictionnaire.index') }}?">Toutes les lettres</a>
                                 </li>
                             @endif
 

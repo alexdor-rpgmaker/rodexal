@@ -12,12 +12,12 @@
         margin-bottom: 30px;
 
         ul.pagination-custom {
-            display: inline;
+            display: flex;
+            padding-left: 0;
             list-style: none;
-            padding-inline-start: 0;
 
             li {
-                display: inline;
+                margin-right: 5px;
 
                 .page-link {
                     border-radius: 10px;

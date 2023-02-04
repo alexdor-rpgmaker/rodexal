@@ -6,7 +6,7 @@ module.exports = {
   testEnvironmentOptions: { url: 'http://localhost' },
   transform: {
     '^.+\\.js$': 'babel-jest',
-    '.*\\.(vue)$': 'vue-jest'
+    '.*\\.(vue)$': '@vue/vue2-jest'
   },
   transformIgnorePatterns: [
     '/node_modules/(?!transpile-me|transpile-me-too).+(js|jsx)$'

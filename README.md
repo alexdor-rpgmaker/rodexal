@@ -93,6 +93,12 @@ php artisan dusk:chrome-driver
 
 S'il y a une erreur de type `session not created: This version of ChromeDriver only supports Chrome version XX`, il faut mettre à jour votre Chrome à la version XX. :) (Et parfois relancer la commande ci-dessus.)
 
+## Dépendances
+
+Nous utilisons Vue 2, pas encore migré vers Vue 3. Cela implique :
+- Vue-loader version 15 max
+- Vue-test-utils version 1 max
+
 ## Politique de Contribution
 
 Voir [CONTRIBUTING.md](CONTRIBUTING.md).

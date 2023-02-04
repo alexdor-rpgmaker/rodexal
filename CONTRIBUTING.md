@@ -4,7 +4,7 @@ Les Alex d'or sont nés en 2001. Plusieurs sites se sont succédé :
 - Première page de Booskaboo / Stormer en 2001
 - Site de 2002-2007 par F le chat / Gratteur / Sephiroth XIII / Masthiks
 - Site de 2007-2009 par Sephiroth XIII / Lolow
-- Site de 2010-2020 par Lifaen / AlexRE
+- Site de 2010-2022 par Lifaen / AlexRE
 - Et ce nouveau site avec un vrai framework de développement web moderne et des tests automatisés !
 
 Tous les volontaires peuvent participer au développement de Rodexal, tant que les développements sont validés et relus par l'équipe du projet.
