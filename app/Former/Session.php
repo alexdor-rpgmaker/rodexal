@@ -30,23 +30,24 @@ class Session extends FormerModel
         'date_cloture_inscriptions',
     ];
 
-    const IDS_SESSIONS_WITH_QCM = [19, 20, 21, 22];
+    // TODO: Save and fetch from database
+    const IDS_SESSIONS_WITH_QCM = [19, 20, 21, 22, 23];
 
     public function allowsGamesRegistration(): bool
     {
-        // TODO : Add a specific column for this rule
+        // TODO: Add a specific column for this rule
         return $this->etape == 1;
     }
 
     public function tooLateForGamesRegistration(): bool
     {
-        // TODO : Add a specific column for this rule
+        // TODO: Add a specific column for this rule
         return $this->etape > 1;
     }
 
     public function preTestsAreFinished(): bool
     {
-        // TODO : Add a specific column for this rule
+        // TODO: Add a specific column for this rule
         return $this->etape > 2;
     }
 
@@ -91,7 +92,7 @@ class Session extends FormerModel
             $sessionId < 1 ||
             $sessionId == 4 ||
             $sessionId == 18 ||
-            $sessionId > 22 # TODO : Make variable?
+            $sessionId > self::currentSession()
         ) {
             return false;
         }
@@ -101,5 +102,12 @@ class Session extends FormerModel
         }
 
         return true;
+    }
+
+    public static function currentSession(): Session
+    {
+        return cache()->remember('currentSession', 60, function () {
+            return Session::orderByDesc('id_session')->first();
+        });
     }
 }

@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use App\PreTest;
 use App\Former\Game;
+use App\Former\Juror;
 use App\Former\Session;
+use App\Former\TestSuite;
+use App\Former\TestSuiteAssignedJuror;
 use App\Helpers\StringParser;
 
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Exception\RequestException;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,24 +21,20 @@ use Symfony\Component\HttpFoundation\Response;
 class PreTestController extends Controller
 {
 
-    /**
-     * @var GuzzleClient
-     */
-    private $client;
-
-    public function __construct(GuzzleClient $client)
+    public function __construct()
     {
-        $this->client = $client;
         $this->authorizeResource(PreTest::class, 'pre_test');
     }
 
     public function index(Request $request)
     {
         $sessions = Session::orderBy('id_session')->get();
-        $currentSession = $sessions->last();
+        $currentSession = Session::currentSession();
+        echo $currentSession;
         $session = $request->query('session_id')
+            // Si session_id n'existe pas, retourne une erreur 500
             ? $sessions->firstWhere('id_session', $request->query('session_id'))
-            : $sessions->last();
+            : $currentSession;
 
         $games = Game::where('id_session', $session->id_session);
 
@@ -60,7 +57,7 @@ class PreTestController extends Controller
 
     public function show(PreTest $preTest)
     {
-        $game = self::fetchGame($preTest->game_id, $this->client);
+        $game = self::fetchGame($preTest->game_id);
 
         $preTest->final_thought_explanation = StringParser::richText($preTest->final_thought_explanation);
 
@@ -73,15 +70,15 @@ class PreTestController extends Controller
     public function create(Request $request)
     {
         $gameId = $request->query('game_id');
-        self::checkGameIsInUserAssignments($gameId, Auth::id(), $this->client);
+        self::checkGameIsInUserAssignments($gameId, Auth::id());
         $alreadyFilledPreTest = PreTest::where('game_id', $gameId)->where('user_id', Auth::id())->first();
         abort_if($alreadyFilledPreTest, Response::HTTP_BAD_REQUEST, "Un QCM a déjà été rempli pour ce jeu");
 
-        $game = self::fetchGame($gameId, $this->client);
+        $game = self::fetchGame($gameId);
         return view('pre_tests.form', [
             'pre_test' => null,
-            'title' => "Remplir un QCM pour le jeu $game->title",
-            'game_id' => $game->id,
+            'title' => "Remplir un QCM pour le jeu $game->nom_jeu",
+            'game_id' => $game->id_jeu,
             'form_method' => 'POST',
             'form_url' => route('qcm.store'),
         ]);
@@ -89,7 +86,7 @@ class PreTestController extends Controller
 
     public function store(Request $request)
     {
-        self::checkGameIsInUserAssignments($request->gameId, Auth::id(), $this->client);
+        self::checkGameIsInUserAssignments($request->gameId, Auth::id());
 
         $validator_array = [
             'gameId' => 'required',
@@ -120,7 +117,7 @@ class PreTestController extends Controller
         $preTest->save();
 
         if ($request->finalThought) {
-            self::assignTestToUser($request->gameId, Auth::id(), $this->client);
+            self::assignTestToUser($request->gameId, Auth::id());
         }
 
         return response()->json($preTest, Response::HTTP_OK);
@@ -128,14 +125,14 @@ class PreTestController extends Controller
 
     public function edit(PreTest $preTest)
     {
-        $game = self::fetchGame($preTest->game_id, $this->client);
+        $game = self::fetchGame($preTest->game_id);
 
         $preTest->finalThought = $preTest->final_thought == 1;
         $preTest->finalThoughtExplanation = $preTest->final_thought_explanation;
         return view('pre_tests.form', [
             'pre_test' => $preTest,
-            'title' => "Modifier le QCM du jeu $game->title",
-            'game_id' => $game->id,
+            'title' => "Modifier le QCM du jeu $game->nom_jeu",
+            'game_id' => $game->id_jeu,
             'form_method' => 'PUT',
             'form_url' => route('qcm.update', $preTest->id),
         ]);
@@ -165,9 +162,9 @@ class PreTestController extends Controller
 
     /**
      * @param $games
-     * @return mixed
+     * @return Collection
      */
-    private function fetchAndGroupPreTestsByGameId($games)
+    private function fetchAndGroupPreTestsByGameId($games): Collection
     {
         $gamesId = Arr::pluck($games, 'id_jeu');
         return PreTest::select('pre_tests.*', 'users.name')
@@ -178,86 +175,77 @@ class PreTestController extends Controller
             ->groupBy('game_id');
     }
 
-    // TODO : Fetch directly from database instead of API call
-    private static function checkGameIsInUserAssignments($gameId, $userId, GuzzleClient $client): void
+    private static function checkGameIsInUserAssignments($gameId, $userId): void
     {
         if (env('DUSK', false)) {
             return;
         }
-        $assignments = self::fetchUserAssignments($userId, $client);
-        $gameInAssignment = current(array_filter($assignments, function ($assignment) use ($gameId) {
-            return $assignment->game_id == $gameId;
-        }));
+
+        // A voir si les conditions sur les jurés ou jeu (statut > 0...) peuvent être portées par la classe
+        $jurorHasToPreTestThisGame = TestSuiteAssignedJuror::with([
+            'suite',
+            'juror',
+            'game',
+        ])->where('statut_jeu_jure', '=', 2)
+            ->whereRelation('suite', 'is_pre_test', 1)
+            ->whereRelation('juror', 'id_membre', $userId)
+            ->whereRelation('game', 'id_session', Session::currentSession()->id_session)
+            ->whereRelation('game', 'id_jeu', $gameId)
+            ->exists();
 
         // TODO : Mettre un meilleur message d'erreur si jeu attribué mais d'une session passée
-        abort_unless($gameInAssignment, Response::HTTP_FORBIDDEN, "Ce jeu ne vous est pas attribué !");
+        abort_unless($jurorHasToPreTestThisGame, Response::HTTP_FORBIDDEN, "Ce jeu ne vous est pas attribué !");
     }
 
-    // TODO : Fetch directly from database instead of API call
-    private static function fetchUserAssignments($userId, GuzzleClient $client)
+    private static function fetchGame($id): Game
     {
-        try {
-            $currentSession = Session::orderBy('id_session', 'desc')->first();
-            $response = $client->request('GET', '/api/v0/attributions.php', [
-                'base_uri' => env('FORMER_APP_URL'),
-                'query' => [
-                    'id_membre' => intval($userId),
-                    'id_session' => $currentSession->id_session,
-                ],
-                'verify' => App::environment('local') !== true
-            ]);
-
-            return json_decode($response->getBody());
-        } catch (RequestException $e) {
-            return self::formerAppApiError($e);
-        }
+        return Game::select('id_jeu', 'statut_jeu', 'nom_jeu', 'description_jeu')
+            ->firstWhere('id_jeu', '=', $id);
     }
 
-    // TODO : Fetch directly from database instead of API call
-    private static function fetchGame($id, GuzzleClient $client)
-    {
-        try {
-            $response = $client->request('GET', '/api/v0/jeu.php', [
-                'base_uri' => env('FORMER_APP_URL'),
-                'query' => ['id' => intval($id)],
-                'verify' => App::environment('local') !== true
-            ]);
-            return json_decode($response->getBody());
-        } catch (RequestException $e) {
-            return self::formerAppApiError($e);
-        }
-    }
-
-    // TODO : Insert directly in database instead of API call
-    private static function assignTestToUser($game_id, $user_id, GuzzleClient $client): void
+    private static function assignTestToUser($game_id, $user_id): void
     {
         if (env('DUSK', false)) {
             return;
         }
-        try {
-            $client->request('POST', '/api/v0/attribution.php', [
-                'base_uri' => env('FORMER_APP_URL'),
-                'json' => [
-                    'id_jeu' => $game_id,
-                    'id_membre' => $user_id,
-                ],
-                'headers' => ['X-Api-Key' => env('FORMER_APP_API_KEY')],
-                'verify' => App::environment('local') !== true
-            ]);
-        } catch (RequestException $e) {
-            self::formerAppApiError($e);
-            return;
-        }
-    }
 
-    /**
-     * @param RequestException $e
-     * @return null
-     */
-    private static function formerAppApiError(RequestException $e)
-    {
-        Log::error($e);
-        abort(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
-        return null;
+        // Récupérer le statut de jury du user
+        $jurorId = Juror::select("id_jury")
+            ->where('statut_jury', '=', 1)
+            ->where('id_membre', '=', $user_id)
+            ->where('id_session', '=', Session::currentSession()->id_session)
+            ->pluck("id_jury")
+            ->first();
+
+        // Récupérer le statut du jeu
+        $game = Game::select('nom_jeu', 'informations')
+            ->firstWhere('id_jeu', '=', $game_id);
+
+        if (!$jurorId || !$game) {
+            Log::error("Juré ou jeu non trouvé");
+            die();
+        }
+
+        // Dernière série qui n'est pas de type pré-test
+        $lastTestSuite = TestSuite::where('is_pre_test', '=', 0)
+            ->orderByDesc('id_serie')
+            ->first();
+        $testSuiteAssignedJuror = TestSuiteAssignedJuror::where('statut_jeu_jure', '>', 0)
+            ->where('id_serie', '=', $lastTestSuite->id_serie)
+            ->where('id_jeu', '=', $game_id)
+            ->where('id_jury', '=', $jurorId)
+            ->first();
+
+        if ($testSuiteAssignedJuror) {
+            Log::error("Jeu déjà assigné à ce juré");
+            die();
+        }
+
+        TestSuiteAssignedJuror::create([
+            'id_serie' => $lastTestSuite->id_serie,
+            'id_jeu' => $game_id,
+            'id_jury' => $jurorId,
+            'statut_jeu_jure' => 2,
+        ]);
     }
 }

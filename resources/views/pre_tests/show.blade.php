@@ -10,7 +10,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div id="qcm" class="col-md-8">
-                <div id="titre_corps">QCM : {{ $game->title }}</div>
+                <div id="titre_corps">QCM : {{ $game->nom_jeu }}</div>
                 <div id="sous_titre_corps">
                     Par
                     <a href="{{ env('FORMER_APP_URL') }}?p=profil&membre={{ $pre_test->user_id }}">
@@ -19,8 +19,7 @@
                 </div>
                 <div class="barre_boutons">
                     <span class="bordure_boutons">
-                        {{-- TODO : Change for $game->getUrl() when $game is instance of Game class --}}
-                        <a class="bouton voir-jeu" href="{{ env('FORMER_APP_URL') }}?p=jeu&id={{ $game->id }}">
+                        <a class="bouton voir-jeu" href="{{ $game->getUrl() }}">
                             Voir la fiche du jeu
                         </a>
                         <a class="bouton modifier-pre-test"

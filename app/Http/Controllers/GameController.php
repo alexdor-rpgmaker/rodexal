@@ -32,7 +32,7 @@ class GameController extends Controller
         if ($request->query('session_id')) {
             $selectedSession = $sessions->firstWhere('id_session', $request->query('session_id'));
         }
-        $currentSession = $sessions->last();
+        $currentSession = Session::currentSession();
 
         $games = FetchGamesWithParameters::perform($request);
 
@@ -62,7 +62,7 @@ class GameController extends Controller
         if ($request->query('session_id')) {
             $session = Session::find($request->query('session_id'));
         }
-        $currentSession = Session::orderByDesc('id_session')->first();
+        $currentSession = Session::currentSession();
 
         return view('games.vue', [
             'selectedSession' => $session,
@@ -72,7 +72,7 @@ class GameController extends Controller
 
     public function create()
     {
-        $currentSession = Session::orderByDesc('id_session')->first();
+        $currentSession = Session::currentSession();
 
         // TODO: Abort if $currentSession->tooLateForGamesRegistration()
 
@@ -89,7 +89,7 @@ class GameController extends Controller
     public function store(StoreGameRequest $request)
     {
         $member = Member::find(Auth::id());
-        $currentSession = Session::orderByDesc('id_session')->first();
+        $currentSession = Session::currentSession();
 
         abort_unless(
             $currentSession->allowsGamesRegistration(),
