@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\Api\V0\GameApiController;
 use App\Http\Controllers\Api\V0\PreTestApiController;
+use App\Http\Controllers\Api\V0\JukeboxMusicApiController;
 
 // Cf https://laravel.com/docs/8.x/passport
 // Validate access tokens on incoming requests
@@ -31,4 +32,6 @@ Route::prefix('v0')
         Route::get('/qcm', [PreTestApiController::class, 'index']);
 
         Route::get('/games', [GameApiController::class, 'index']);
+
+        Route::get('/musics', [JukeboxMusicApiController::class, 'index']);
     });

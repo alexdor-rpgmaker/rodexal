@@ -124,9 +124,9 @@ export default {
     // Init and callbacks
     async fetchMusics() {
       const request = await axios({
-        url: process.env.MIX_FORMER_APP_URL + '/api/v0/musics.php'
+        url: '/api/v0/musics'
       })
-      this.musics = request.data.map(this.formatMusicForJukebox)
+      this.musics = request.data.data.map(this.formatMusicForJukebox)
     },
     initializeAmplitude() {
       Amplitude.init({
