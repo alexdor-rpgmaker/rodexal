@@ -106,7 +106,7 @@ class SessionTest extends TestCase
      *                  ["10/03/2021", true]
      *                  ["11/03/2021", false]
      */
-    public function gamesRegistrationEndsInLessThanSevenDays($currentDate, $expected)
+    public function gamesRegistrationEndsInLessThanSevenDays(string $currentDate, bool $expected)
     {
         $currentTestDate = Carbon::createFromFormat('d/m/Y', $currentDate);
         Carbon::setTestNow($currentTestDate);
@@ -123,7 +123,7 @@ class SessionTest extends TestCase
     /**
      * @test
      * @param int $sessionId
-     * @param bool $expected
+     * @param string $expected
      * @testdox name - If session ID given is $sessionId, session name is $expected
      * Si l'ID de session fourni est $sessionId, le nom de la session est $expected
      * @testWith        [1, "2001"]
@@ -132,7 +132,7 @@ class SessionTest extends TestCase
      *                  [16, "2016-2017"]
      *                  [17, "2017-2018"]
      */
-    public function name($sessionId, $expected)
+    public function name(int $sessionId, string $expected)
     {
         $session = Session::factory()->make([
             'id_session' => $sessionId
@@ -146,7 +146,7 @@ class SessionTest extends TestCase
     /**
      * @test
      * @param int $sessionId
-     * @param bool $expected
+     * @param string $expected
      * @testdox nameFromId - If session ID given is $sessionId, session name is $expected
      * Si l'ID de session fourni est $sessionId, le nom de la session est $expected
      * @testWith        [1, "2001"]
@@ -155,32 +155,9 @@ class SessionTest extends TestCase
      *                  [16, "2016-2017"]
      *                  [17, "2017-2018"]
      */
-    public function nameFromId($sessionId, $expected)
+    public function nameFromId(int $sessionId, string $expected)
     {
         $actualSessionExists = Session::nameFromId($sessionId);
-
-        $this->assertEquals($expected, $actualSessionExists);
-    }
-
-    /**
-     * @test
-     * @param int $sessionId
-     * @param bool $includeAbandoned
-     * @param bool $expected
-     * @testdox sessionIdExists - If session ID given is $sessionId (with abandoned sessions is $includeAbandoned), session exists is $expected
-     * Si l'ID de session fourni est $sessionId (en incluant les abandonnées à $includeAbandoned), l'existence de la session est $expected
-     * @testWith        [1, true, true]
-     *                  [4, true, false]
-     *                  [8, true, true]
-     *                  [8, false, false]
-     *                  [18, true, false]
-     *                  [22, true, true]
-     *                  [23, true, false]
-     */
-    public function sessionIdExists($sessionId, $includeAbandoned, $expected)
-    {
-        $options = ['include_abandoned_sessions' => $includeAbandoned];
-        $actualSessionExists = Session::sessionIdExists($sessionId, $options);
 
         $this->assertEquals($expected, $actualSessionExists);
     }

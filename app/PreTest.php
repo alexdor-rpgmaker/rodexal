@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Arr;
 
 class PreTest extends MainModel
 {
@@ -25,37 +25,37 @@ class PreTest extends MainModel
             'id' => 'notLaunchable',
             'label' => 'Impossible de lancer le jeu',
             'fieldDescription' =>
-            'Le jeu est trop lourd, mal optimisé, etc... Vous ne parvenez pas à faire tourner le jeu sur votre ordinateur.'
+                'Le jeu est trop lourd, mal optimisé, etc... Vous ne parvenez pas à faire tourner le jeu sur votre ordinateur.'
         ],
         [
             'id' => 'blockingBug',
             'label' => 'Bug bloquant inévitable',
             'fieldDescription' =>
-            'Impossible d\'avancer dans le jeu à partir de ce bug, impossible de contourner ce bug.'
+                'Impossible d\'avancer dans le jeu à partir de ce bug, impossible de contourner ce bug.'
         ],
         [
             'id' => 'severalBugs',
             'label' => 'Présence abusive de bugs non bloquants',
             'fieldDescription' =>
-            'Il est possible d\'avancer dans le jeu mais le grand nombre de bugs montrent que le jeu n\'a pas été testé par son créateur et/ou qu\'il y a de trop gros problèmes dans la réalisation du jeu.'
+                'Il est possible d\'avancer dans le jeu mais le grand nombre de bugs montrent que le jeu n\'a pas été testé par son créateur et/ou qu\'il y a de trop gros problèmes dans la réalisation du jeu.'
         ],
         [
             'id' => 'spellingMistakes',
             'label' => "Nombre abusif de fautes d'orthographe",
             'fieldDescription' =>
-            'Lorsque la lecture du jeu devient un supplice à cause des fautes.'
+                'Lorsque la lecture du jeu devient un supplice à cause des fautes.'
         ],
         [
             'id' => 'tooHard',
             'label' => 'Difficulté abusive/mal calibrée',
             'fieldDescription' =>
-            'Nombre de game over injuste par heure de jeu, mauvaise maniabilité, explications manquantes...'
+                'Nombre de game over injuste par heure de jeu, mauvaise maniabilité, explications manquantes...'
         ],
         [
             'id' => 'tooShort',
             'label' => 'Jeu trop court',
             'fieldDescription' =>
-            'La totalité du jeu est observable en moins de 20 minutes'
+                'La totalité du jeu est observable en moins de 20 minutes'
         ],
         [
             'id' => 'unplayableAlone',
@@ -78,13 +78,13 @@ class PreTest extends MainModel
     {
         $count = 0;
         foreach (self::FIELDS as $field) {
-            if(Arr::has($this->questionnaire, $field['id'])) {
-                if(!empty($this->questionnaire[$field['id']]['explanation'])) {
+            if (Arr::has($this->questionnaire, $field['id'])) {
+                if (!empty($this->questionnaire[$field['id']]['explanation'])) {
                     $count++;
                 }
             }
         }
-        if(!empty($this->final_thought_explanation)) {
+        if (!empty($this->final_thought_explanation)) {
             $count++;
         }
 

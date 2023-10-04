@@ -83,25 +83,11 @@ class Session extends FormerModel
             $sessionName .= '-2018';
         }
 
+        if ($sessionId == 23) {
+            $sessionName .= '-2024';
+        }
+
         return "20" . $sessionName;
-    }
-
-    public static function sessionIdExists($sessionId, $options = ['include_abandoned_sessions' => true]): bool
-    {
-        if (
-            $sessionId < 1 ||
-            $sessionId == 4 ||
-            $sessionId == 18 ||
-            $sessionId > self::currentSession()
-        ) {
-            return false;
-        }
-
-        if (!$options['include_abandoned_sessions'] && $sessionId == 8) {
-            return false;
-        }
-
-        return true;
     }
 
     public static function currentSession(): Session

@@ -28,7 +28,9 @@ class FetchGamesWithParameters
         ]);
 
         if ($request->session_id) {
-            if (!Session::sessionIdExists($request->session_id)) {
+            $sessionExists = Session::where('id_session', $request->session_id)->exists();
+            if (!$sessionExists) {
+                // TODO: Move this check in the controller (caller)?
                 abort(400, "This session does not exist");
             }
 
@@ -116,20 +118,17 @@ class FetchGamesWithParameters
             if (!array_key_exists($columnToSort, $columnNamesConverter)) {
                 continue;
             }
+            $convertedColumnToSort = $columnNamesConverter[$columnToSort];
 
             if (!$sortingDirection) {
                 $sortingDirection = $DEFAULT_SORT_DIRECTION;
             }
 
-            if (array_key_exists($columnToSort, $columnNamesConverter)) {
-                $columnToSort = $columnNamesConverter[$columnToSort];
-            }
-
-            if ($columnToSort == 'awards_count') {
+            if ($convertedColumnToSort == 'awards_count') {
                 $games = $games->orderBy('awarded_categories_count', $sortingDirection)
                     ->orderBy('nominated_categories_count', $sortingDirection);
             } else {
-                $games = $games->orderBy($columnToSort, $sortingDirection);
+                $games = $games->orderBy($convertedColumnToSort, $sortingDirection);
             }
         }
 
