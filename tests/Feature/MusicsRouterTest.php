@@ -5,7 +5,7 @@ namespace Tests\Feature;
 /**
  * @testdox MusicsRouter
  */
-class MusicsRouterTest extends FeatureTest
+class MusicsRouterTest extends FeatureTestCase
 {
     // Index
 

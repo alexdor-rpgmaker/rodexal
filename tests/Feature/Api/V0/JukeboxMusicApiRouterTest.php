@@ -6,12 +6,12 @@ use App\Former\Game;
 use App\Former\JukeboxMusic;
 use App\Former\Member;
 use App\Former\Session;
-use Tests\Feature\FeatureTest;
+use Tests\Feature\FeatureTestCase;
 
 /**
  * @testdox JukeboxMusicApiRouter
  */
-class JukeboxMusicApiRouterTest extends FeatureTest
+class JukeboxMusicApiRouterTest extends FeatureTestCase
 {
     /**
      * @test

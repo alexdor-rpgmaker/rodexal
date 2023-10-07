@@ -2,15 +2,14 @@
 
 namespace App\Providers;
 
-use App\Policies\WordPolicy;
-use App\Policies\GamePolicy;
-use App\Policies\PreTestPolicy;
-use App\Policies\PodcastEpisodePolicy;
-use App\Word;
-use App\PreTest;
-use App\PodcastEpisode;
 use App\Former\Game;
-
+use App\PodcastEpisode;
+use App\Policies\GamePolicy;
+use App\Policies\PodcastEpisodePolicy;
+use App\Policies\PreTestPolicy;
+use App\Policies\WordPolicy;
+use App\PreTest;
+use App\Word;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -34,8 +33,5 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
-
-        //
     }
 }

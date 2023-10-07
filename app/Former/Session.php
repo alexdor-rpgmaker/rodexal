@@ -26,8 +26,11 @@ class Session extends FormerModel
         'statut_session' => 1,
         'etape' => 1,
     ];
-    protected $dates = [
-        'date_cloture_inscriptions',
+    protected $casts = [
+        'date_lancement' => 'date',
+        'date_cloture_inscriptions' => 'date',
+        'date_annonce_nomines' => 'date',
+        'date_ceremonie' => 'date',
     ];
 
     // TODO: Save and fetch from database

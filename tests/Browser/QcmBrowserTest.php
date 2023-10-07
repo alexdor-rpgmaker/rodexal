@@ -8,7 +8,7 @@ use Laravel\Dusk\Browser;
 use Facebook\WebDriver\WebDriverBy;
 use Throwable;
 
-class QcmBrowserTest extends BrowserTest
+class QcmBrowserTest extends BrowserTestCase
 {
     /**
      * @testdox On est redirigés sur l'ancien site si on essaye de créer un QCM en n'étant pas connecté

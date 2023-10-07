@@ -7,11 +7,12 @@ use App\Former\Game;
 use App\Former\Member;
 use App\Former\Session;
 
+use Illuminate\Support\Facades\Log;
 use Throwable;
 use Carbon\Carbon;
 use Laravel\Dusk\Browser;
 
-class GamesBrowserTest extends BrowserTest
+class GamesBrowserTest extends BrowserTestCase
 {
     protected function setUp(): void
     {
@@ -34,43 +35,74 @@ class GamesBrowserTest extends BrowserTest
 
     /**
      * @test
+     * @testdox Games list (Vue) - We can consult the registered games list
+     * Liste des jeux (Vue) - On peut consulter la liste des jeux inscrits
+     * @throws Throwable
+     */
+    public function gamesListVue_weCanConsultTheRegisteredGamesList()
+    {
+        $this->browse(fn(Browser $browser) => $browser->visit('/jeux/vue')
+            ->assertSee('Titre du Jeu')
+            ->assertSee('Session')
+            ->assertSee('Auteur(s)')
+            ->assertSee('Nombre de jeux : 50 sur 51')
+            ->select('#session', 'Session 2017-2018')
+            ->select('#software', 'RPG Maker 2003')
+            ->click('button[type="submit"]')
+            ->pause(1000)
+            ->assertSee('Nombre de jeux : 50 sur 51')
+
+            // Pagination
+            ->assertPresent('li.previous')
+            ->assertPresent('li.previous.disabled')
+            ->assertPresent('li.next')
+            ->assertMissing('li.next.disabled')
+
+            // Wrong research
+            ->select('#session', 'Session 2017-2018')
+            ->select('#software', 'RPG Maker 2003')
+            ->type('#query', 'My search')
+            ->check('#download-links')
+            ->click('button[type="submit"]')
+            ->pause(1000)
+            ->assertSee('Nombre de jeux : 0')
+        );
+    }
+
+    /**
+     * @test
      * @testdox Games list - We can consult the registered games list
      * Liste des jeux - On peut consulter la liste des jeux inscrits
      * @throws Throwable
      */
     public function gamesList_weCanConsultTheRegisteredGamesList()
     {
-        $gamesListUrls = ['/jeux', '/jeux/vue'];
+        $this->browse(fn(Browser $browser) => $browser->visit('/jeux')
+            ->assertSee('Titre du Jeu')
+            ->assertSee('Session')
+            ->assertSee('Auteur(s)')
+            ->assertSee('Nombre de jeux : 50 sur 51')
+            ->select('#session', 'Session 2017-2018')
+            ->select('#software', 'RPG Maker 2003')
+            ->click('button[type="submit"]')
+            ->pause(1000)
+            ->assertSee('Nombre de jeux : 50 sur 51')
 
-        foreach ($gamesListUrls as $gamesListUrl) {
-            // Log::debug($gamesListUrl);
-            $this->browse(fn(Browser $browser) => $browser->visit($gamesListUrl)
-                ->assertSee('Titre du Jeu')
-                ->assertSee('Session')
-                ->assertSee('Auteur(s)')
-                ->assertSee('Nombre de jeux : 50 sur 51')
-                ->select('#session', 'Session 2017-2018')
-                ->select('#software', 'RPG Maker 2003')
-                ->click('button[type="submit"]')
-                ->pause(1000)
-                ->assertSee('Nombre de jeux : 50 sur 51')
+            // Pagination
+            ->assertPresent('li.previous')
+            ->assertPresent('li.previous.disabled')
+            ->assertPresent('li.next')
+            ->assertMissing('li.next.disabled')
 
-                // Pagination
-                ->assertPresent('li.previous')
-                ->assertPresent('li.previous.disabled')
-                ->assertPresent('li.next')
-                ->assertMissing('li.next.disabled')
-
-                // Wrong research
-                ->select('#session', 'Session 2017-2018')
-                ->select('#software', 'RPG Maker 2003')
-                ->type('#query', 'My search')
-                ->check('#download-links')
-                ->click('button[type="submit"]')
-                ->pause(1000)
-                ->assertSee('Nombre de jeux : 0')
-            );
-        }
+            // Wrong research
+            ->select('#session', 'Session 2017-2018')
+            ->select('#software', 'RPG Maker 2003')
+            ->type('#query', 'My search')
+            ->check('#download-links')
+            ->click('button[type="submit"]')
+            ->pause(1000)
+            ->assertSee('Nombre de jeux : 0')
+        );
     }
 
     /**

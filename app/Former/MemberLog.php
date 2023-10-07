@@ -13,8 +13,8 @@ class MemberLog extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_action',
+    protected $casts = [
+        'date_action' => 'datetime',
     ];
 
     public function member()

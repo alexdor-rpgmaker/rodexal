@@ -17,8 +17,8 @@ class EmailSent extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date',
+    protected $casts = [
+        'date' => 'datetime',
     ];
 
     public function sender()

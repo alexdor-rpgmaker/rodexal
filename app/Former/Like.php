@@ -25,8 +25,8 @@ class Like extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_modification',
+    protected $casts = [
+        'date_modification' => 'datetime',
     ];
 
     public function game()

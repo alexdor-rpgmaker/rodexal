@@ -9,6 +9,7 @@
 .DS_Store
 .env
 .env.dusk*
+.phpunit.cache
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml

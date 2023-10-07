@@ -17,8 +17,8 @@ class GuestbookPost extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_signature',
+    protected $casts = [
+        'date_signature' => 'datetime',
     ];
 
     public function member()

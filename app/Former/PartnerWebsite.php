@@ -17,7 +17,7 @@ class PartnerWebsite extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_demande',
+    protected $casts = [
+        'date_demande' => 'datetime',
     ];
 }

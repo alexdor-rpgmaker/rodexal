@@ -8,7 +8,7 @@ use App\Word;
 /**
  * @testdox WordsRouter
  */
-class WordsRouterTest extends FeatureTest
+class WordsRouterTest extends FeatureTestCase
 {
     // Index
 

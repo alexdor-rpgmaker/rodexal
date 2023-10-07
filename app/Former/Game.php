@@ -36,8 +36,8 @@ class Game extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_inscription',
+    protected $casts = [
+        'date_inscription' => 'datetime',
     ];
 
     const SOFTWARE_LIST = [

@@ -17,9 +17,9 @@ class Connection extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_connexion',
-        'date_expiration',
+    protected $casts = [
+        'date_connexion' => 'datetime',
+        'date_expiration' => 'datetime',
     ];
 
     public function member()

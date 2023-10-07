@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Log;
 
-abstract class FeatureTest extends TestCase
+abstract class FeatureTestCase extends TestCase
 {
     protected static bool $databasesRefreshed = false;
 

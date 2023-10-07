@@ -25,8 +25,8 @@ class SearchLog extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_recherche',
+    protected $casts = [
+        'date_recherche' => 'datetime',
     ];
 
     public function member()

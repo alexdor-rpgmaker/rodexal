@@ -26,8 +26,8 @@ class AwardMedia extends FormerModel
         'statut_media' => 2,
         'type_media' => 1
     ];
-    protected $dates = [
-        'date_ajout_media',
+    protected $casts = [
+        'date_ajout_media' => 'datetime',
     ];
 
     public function artist()

@@ -7,12 +7,12 @@ use App\Former\Session;
 use App\PreTest;
 use App\User;
 use Carbon\Carbon;
-use Tests\Feature\FeatureTest;
+use Tests\Feature\FeatureTestCase;
 
 /**
  * @testdox PreTestsApiRouter
  */
-class PreTestsApiRouterTest extends FeatureTest
+class PreTestsApiRouterTest extends FeatureTestCase
 {
     public static function setUpBeforeClass(): void
     {

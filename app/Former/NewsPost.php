@@ -32,9 +32,9 @@ class NewsPost extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_creation_news',
-        'date_validation_news',
+    protected $casts = [
+        'date_creation_news' => 'datetime',
+        'date_validation_news' => 'datetime',
     ];
 
     public function member()

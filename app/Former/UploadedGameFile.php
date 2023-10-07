@@ -17,8 +17,8 @@ class UploadedGameFile extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_upload',
+    protected $casts = [
+        'date_upload' => 'datetime',
     ];
 
     public function member()

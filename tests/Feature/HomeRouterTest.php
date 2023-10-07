@@ -5,7 +5,7 @@ namespace Tests\Feature;
 /**
  * @testdox HomeRouter
  */
-class HomeRouterTest extends FeatureTest
+class HomeRouterTest extends FeatureTestCase
 {
     // Index
 

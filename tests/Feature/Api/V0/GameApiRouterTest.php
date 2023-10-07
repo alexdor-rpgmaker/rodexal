@@ -10,12 +10,12 @@ use App\Former\Nomination;
 use App\Former\Contributor;
 use App\Former\AwardSessionCategory;
 
-use Tests\Feature\FeatureTest;
+use Tests\Feature\FeatureTestCase;
 
 /**
  * @testdox GameApiRouter
  */
-class GameApiRouterTest extends FeatureTest
+class GameApiRouterTest extends FeatureTestCase
 {
     // TODO : Generate data in refreshDatabase instead of in each test
     // like in GamesRouterTest ; in order to increase speed.

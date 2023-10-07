@@ -25,8 +25,8 @@ class JukeboxMusic extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_publication',
+    protected $casts = [
+        'date_publication' => 'datetime',
     ];
 
     public function game()

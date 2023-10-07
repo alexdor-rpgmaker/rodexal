@@ -25,7 +25,7 @@ class Poll extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_sondage',
+    protected $casts = [
+        'date_sondage' => 'datetime',
     ];
 }

@@ -32,9 +32,9 @@ class Comment extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_publication',
-        'date_edition',
+    protected $casts = [
+        'date_publication' => 'datetime',
+        'date_edition' => 'datetime',
     ];
 
     public function member()

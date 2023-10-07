@@ -7,7 +7,7 @@ use App\User;
 use Throwable;
 use Laravel\Dusk\Browser;
 
-class DictionaryBrowserTest extends BrowserTest
+class DictionaryBrowserTest extends BrowserTestCase
 {
     /**
      * @testdox On est redirigés sur l'ancien site si on essaye de créer un mot du dictionnaire en n'étant pas connecté

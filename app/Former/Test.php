@@ -31,9 +31,9 @@ class Test extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_modification',
-        'reviewed_at',
+    protected $casts = [
+        'date_modification' => 'datetime',
+        'reviewed_at' => 'datetime',
     ];
 
     public function suite()

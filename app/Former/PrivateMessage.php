@@ -26,10 +26,10 @@ class PrivateMessage extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_publication',
-        'date_edition',
-        'date_dernier_message',
+    protected $casts = [
+        'date_publication' => 'datetime',
+        'date_edition' => 'datetime',
+        'date_dernier_message' => 'datetime',
     ];
 
     public function sender()

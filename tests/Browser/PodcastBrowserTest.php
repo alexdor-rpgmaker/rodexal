@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Throwable;
 use Laravel\Dusk\Browser;
 
-class PodcastBrowserTest extends BrowserTest
+class PodcastBrowserTest extends BrowserTestCase
 {
     protected function setUp(): void
     {

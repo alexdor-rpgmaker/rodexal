@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Notification;
 /**
  * @testdox GamesRouter
  */
-class GamesRouterTest extends FeatureTest
+class GamesRouterTest extends FeatureTestCase
 {
     private User $currentUser;
     private Session $currentSession;

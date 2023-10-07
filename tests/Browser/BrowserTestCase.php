@@ -4,7 +4,7 @@ namespace Tests\Browser;
 
 use Tests\DuskTestCase;
 
-abstract class BrowserTest extends DuskTestCase
+abstract class BrowserTestCase extends DuskTestCase
 {
     private static $databasesRefreshed = false;
 

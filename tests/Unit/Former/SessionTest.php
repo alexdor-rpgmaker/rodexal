@@ -132,7 +132,7 @@ class SessionTest extends TestCase
      *                  [16, "2016-2017"]
      *                  [17, "2017-2018"]
      */
-    public function name(int $sessionId, string $expected)
+    public function sessionName(int $sessionId, string $expected)
     {
         $session = Session::factory()->make([
             'id_session' => $sessionId

@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Collection;
 /**
  * @testdox PreTestsRouter
  */
-class PreTestsRouterTest extends FeatureTest
+class PreTestsRouterTest extends FeatureTestCase
 {
     private Session $previousSession;
     private Session $currentSession;

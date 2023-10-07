@@ -33,7 +33,9 @@ class PodcastEpisode extends Model
         'poster_id'
     ];
 
-    protected $dates = ['created_at'];
+    protected $casts = [
+        'created_at' => 'datetime'
+    ];
 
     //  TODO : Add with migration when member and podcast are in the same connection
     //  $table->foreign('author_id')->references('id')->on('member')->onDelete('cascade');

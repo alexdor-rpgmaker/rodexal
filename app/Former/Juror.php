@@ -31,9 +31,9 @@ class Juror extends FormerModel
      *
      * @var array
      */
-    protected $dates = [
-        'date_inscription',
-        'date_validation',
+    protected $casts = [
+        'date_inscription' => 'date',
+        'date_validation' => 'date',
     ];
 
     public function session()
