@@ -2,11 +2,10 @@
 
 namespace Tests\Feature\Api\V0;
 
-use App\User;
-use App\PreTest;
 use App\Former\Game;
 use App\Former\Session;
-
+use App\PreTest;
+use App\User;
 use Carbon\Carbon;
 use Tests\Feature\FeatureTest;
 
@@ -15,6 +14,11 @@ use Tests\Feature\FeatureTest;
  */
 class PreTestsApiRouterTest extends FeatureTest
 {
+    public static function setUpBeforeClass(): void
+    {
+        parent::refreshDatabaseOnNextSetup();
+    }
+
     /**
      * @test
      * @testdox We can read the JSON list of filled QCM
@@ -61,7 +65,8 @@ class PreTestsApiRouterTest extends FeatureTest
             ->assertJsonPath('2.game_id', 789);
     }
 
-    private static function createOtherSessionGameAndPreTest() {
+    private static function createOtherSessionGameAndPreTest(): void
+    {
         Session::factory()->create([
             'id_session' => 20,
         ]);

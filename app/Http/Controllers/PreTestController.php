@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\PreTest;
 use App\Former\Game;
 use App\Former\Juror;
 use App\Former\Session;
 use App\Former\TestSuite;
 use App\Former\TestSuiteAssignedJuror;
 use App\Helpers\StringParser;
-
+use App\PreTest;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -20,17 +19,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PreTestController extends Controller
 {
+    private Session $sessionInstance;
 
-    public function __construct()
+    public function __construct(Session $sessionInstance)
     {
+        $this->sessionInstance = $sessionInstance;
+
         $this->authorizeResource(PreTest::class, 'pre_test');
     }
 
     public function index(Request $request)
     {
         $sessions = Session::orderBy('id_session')->get();
-        $currentSession = Session::currentSession();
-        echo $currentSession;
+        $currentSession = $this->sessionInstance::currentSession();
         $session = $request->query('session_id')
             // Si session_id n'existe pas, retourne une erreur 500
             ? $sessions->firstWhere('id_session', $request->query('session_id'))
@@ -39,7 +40,7 @@ class PreTestController extends Controller
         $games = Game::where('id_session', $session->id_session);
 
         // If pre-tests are not finished, we only display pre-tests of disqualified games
-        if ($session == $currentSession && !$session->preTestsAreFinished()) {
+        if ($session === $currentSession && !$session->preTestsAreFinished()) {
             $games = $games->where('statut_jeu', 'disqualified');
         }
 
@@ -70,7 +71,7 @@ class PreTestController extends Controller
     public function create(Request $request)
     {
         $gameId = $request->query('game_id');
-        self::checkGameIsInUserAssignments($gameId, Auth::id());
+        self::checkGameIsInUserAssignments($this->sessionInstance, $gameId, Auth::id());
         $alreadyFilledPreTest = PreTest::where('game_id', $gameId)->where('user_id', Auth::id())->first();
         abort_if($alreadyFilledPreTest, Response::HTTP_BAD_REQUEST, "Un QCM a déjà été rempli pour ce jeu");
 
@@ -86,7 +87,7 @@ class PreTestController extends Controller
 
     public function store(Request $request)
     {
-        self::checkGameIsInUserAssignments($request->gameId, Auth::id());
+        self::checkGameIsInUserAssignments($this->sessionInstance, $request->gameId, Auth::id());
 
         $validator_array = [
             'gameId' => 'required',
@@ -117,7 +118,7 @@ class PreTestController extends Controller
         $preTest->save();
 
         if ($request->finalThought) {
-            self::assignTestToUser($request->gameId, Auth::id());
+            self::assignTestToUser($this->sessionInstance, $request->gameId, Auth::id());
         }
 
         return response()->json($preTest, Response::HTTP_OK);
@@ -175,7 +176,7 @@ class PreTestController extends Controller
             ->groupBy('game_id');
     }
 
-    private static function checkGameIsInUserAssignments($gameId, $userId): void
+    private static function checkGameIsInUserAssignments($session, $gameId, $userId): void
     {
         if (env('DUSK', false)) {
             return;
@@ -189,7 +190,7 @@ class PreTestController extends Controller
         ])->where('statut_jeu_jure', '=', 2)
             ->whereRelation('suite', 'is_pre_test', 1)
             ->whereRelation('juror', 'id_membre', $userId)
-            ->whereRelation('game', 'id_session', Session::currentSession()->id_session)
+            ->whereRelation('game', 'id_session', $session::currentSession()->id_session)
             ->whereRelation('game', 'id_jeu', $gameId)
             ->exists();
 
@@ -203,7 +204,7 @@ class PreTestController extends Controller
             ->firstWhere('id_jeu', '=', $id);
     }
 
-    private static function assignTestToUser($game_id, $user_id): void
+    private static function assignTestToUser($session, $game_id, $user_id): void
     {
         if (env('DUSK', false)) {
             return;
@@ -213,7 +214,7 @@ class PreTestController extends Controller
         $jurorId = Juror::select("id_jury")
             ->where('statut_jury', '=', 1)
             ->where('id_membre', '=', $user_id)
-            ->where('id_session', '=', Session::currentSession()->id_session)
+            ->where('id_session', '=', $session::currentSession()->id_session)
             ->pluck("id_jury")
             ->first();
 

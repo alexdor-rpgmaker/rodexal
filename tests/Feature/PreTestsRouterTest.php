@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\User;
-use App\PreTest;
 use App\Former\Game;
+use App\Former\Juror;
+use App\Former\Member;
 use App\Former\Session;
-
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\Psr7\Response;
+use App\Former\TestSuite;
+use App\Former\TestSuiteAssignedJuror;
+use App\PreTest;
+use App\User;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -59,6 +58,17 @@ class PreTestsRouterTest extends FeatureTest
 
         $this->currentSession = Session::find(21);
         $this->currentSessionGame = Game::find(21);
+
+        // TODO: Comprendre pourquoi il y a une Session 22 alors que rien ne la crée dans ce fichier
+        // (commenter ce mock pour ce faire)
+        $this->instance(
+            Session::class,
+            $this->partialMock(
+                Session::class,
+                fn($mock) => $mock->shouldReceive('currentSession')
+                    ->andReturn($this->currentSession)
+            )
+        );
     }
 
     // Index
@@ -80,7 +90,7 @@ class PreTestsRouterTest extends FeatureTest
         $response->assertOk()
             ->assertViewHas('session', $this->currentSession)
             ->assertViewHas('currentSession', $this->currentSession)
-            ->assertViewHas('games.0', $this->currentSessionGame)
+            ->assertViewHas('games.0', $this->currentSessionGame) // TODO: Fix this flacky test
             ->assertViewHas("preTestsByGameId.$currentSessionGameId.0", $preTest);
     }
 
@@ -160,8 +170,13 @@ class PreTestsRouterTest extends FeatureTest
      */
     public function show_affichageQcm()
     {
-        self::mockHttpClientShow();
-        $preTest = PreTest::factory()->create();
+        $game = Game::factory()->create([
+            'id_jeu' => 789,
+            'id_session' => $this->currentSession->id_session,
+        ]);
+        $preTest = PreTest::factory()->create([
+            'game_id' => $game->id_jeu,
+        ]);
 
         $response = $this->get("/qcm/$preTest->id");
 
@@ -182,7 +197,8 @@ class PreTestsRouterTest extends FeatureTest
         $response = $this->actingAs($user)
             ->get('/qcm/creer');
 
-        $response->assertForbidden();
+        $response->assertForbidden()
+            ->assertSeeText('Vous devez être un juré pour créer un QCM !');
     }
 
     /**
@@ -192,13 +208,13 @@ class PreTestsRouterTest extends FeatureTest
      */
     public function create_ifGameNotAssigned_thenForbidden()
     {
-        self::mockHttpClientCreate();
         $user = User::factory()->jury()->create();
 
         $response = $this->actingAs($user)
             ->get('/qcm/creer?game_id=5');
 
-        $response->assertForbidden();
+        $response->assertForbidden()
+            ->assertSeeText('Ce jeu ne vous est pas attribué !');
     }
 
     /**
@@ -208,8 +224,33 @@ class PreTestsRouterTest extends FeatureTest
      */
     public function create_ifGameIsAssigned_thenOk()
     {
-        self::mockHttpClientCreate();
-        $user = User::factory()->jury()->create();
+        $member = Member::factory()->create([
+            'id_membre' => 456,
+        ]);
+        $user = User::factory()->jury()->create([
+            'id' => $member->id_membre,
+        ]);
+
+        $game = Game::factory()->create([
+            'id_jeu' => 3,
+            'id_session' => $this->currentSession->id_session,
+        ]);
+        $juror = Juror::factory()->create([
+            'id_membre' => $member->id_membre,
+            'id_session' => $this->currentSession->id_session,
+            'statut_jury' => 1,
+        ]);
+        $suite = TestSuite::factory()->create([
+            'id_serie' => 123,
+            'is_pre_test' => 1,
+            'nom_serie' => 'Pré-Tests de 2021',
+        ]);
+        TestSuiteAssignedJuror::factory()->create([
+            'id_jeu' => $game->id_jeu,
+            'id_jury' => $juror->id_jury,
+            'id_serie' => $suite->id_serie,
+            'statut_jeu_jure' => 2,
+        ]);
 
         $response = $this->actingAs($user)
             ->get('/qcm/creer?game_id=3');
@@ -231,7 +272,8 @@ class PreTestsRouterTest extends FeatureTest
         $response = $this->actingAs($user)
             ->post('/qcm');
 
-        $response->assertForbidden();
+        $response->assertForbidden()
+            ->assertSeeText('Vous devez être un juré pour créer un QCM !');
     }
 
     /**
@@ -241,7 +283,6 @@ class PreTestsRouterTest extends FeatureTest
      */
     public function store_ifGameNotAssigned_thenForbidden()
     {
-        self::mockHttpClientCreate();
         $user = User::factory()->jury()->create();
 
         $response = $this->actingAs($user)
@@ -263,18 +304,43 @@ class PreTestsRouterTest extends FeatureTest
      */
     public function store_ifParametersAreMissing_thenRedirect()
     {
-        self::mockHttpClientCreate();
-        $user = User::factory()->jury()->create();
+        $member = Member::factory()->create([
+            'id_membre' => 567,
+        ]);
+        $user = User::factory()->jury()->create([
+            'id' => $member->id_membre,
+        ]);
+
+        $game = Game::factory()->create([
+            'id_jeu' => 4,
+            'id_session' => $this->currentSession->id_session,
+        ]);
+        $juror = Juror::factory()->create([
+            'id_membre' => $member->id_membre,
+            'id_session' => $this->currentSession->id_session,
+            'statut_jury' => 1,
+        ]);
+        $suite = TestSuite::factory()->create([
+            'id_serie' => 124,
+            'is_pre_test' => 1,
+            'nom_serie' => 'Pré-Tests de 2021',
+        ]);
+        TestSuiteAssignedJuror::factory()->create([
+            'id_jeu' => $game->id_jeu,
+            'id_jury' => $juror->id_jury,
+            'id_serie' => $suite->id_serie,
+            'statut_jeu_jure' => 2,
+        ]);
 
         $response = $this->actingAs($user)
             ->post('/qcm', [
-                'gameId' => 3,
+                'gameId' => 4,
             ]);
 
         $response->assertRedirect();
         $this->assertDatabaseMissing('pre_tests', [
             'user_id' => $user->id,
-            'game_id' => 3,
+            'game_id' => 4,
         ]);
     }
 
@@ -285,10 +351,42 @@ class PreTestsRouterTest extends FeatureTest
      */
     public function store_ifEverythingIsOk_thenOk()
     {
-        self::mockHttpClientCreate();
-        $user = User::factory()->jury()->create();
+        $member = Member::factory()->create([
+            'id_membre' => 678,
+        ]);
+        $user = User::factory()->jury()->create([
+            'id' => $member->id_membre,
+        ]);
+
+        $game = Game::factory()->create([
+            'id_jeu' => 5,
+            'id_session' => $this->currentSession->id_session,
+        ]);
+        $juror = Juror::factory()->create([
+            'id_membre' => $member->id_membre,
+            'id_session' => $this->currentSession->id_session,
+            'statut_jury' => 1,
+        ]);
+        $preTestSuite = TestSuite::factory()->create([
+            'id_serie' => 125,
+            'is_pre_test' => 1,
+            'nom_serie' => 'Pré-Tests de 2021',
+        ]);
+        // Test suite that is not a pre-test, for creating an assignment
+        TestSuite::factory()->create([
+            'id_serie' => 126,
+            'is_pre_test' => 0,
+            'nom_serie' => 'Tests de 2021',
+        ]);
+        TestSuiteAssignedJuror::factory()->create([
+            'id_jeu' => $game->id_jeu,
+            'id_jury' => $juror->id_jury,
+            'id_serie' => $preTestSuite->id_serie,
+            'statut_jeu_jure' => 2,
+        ]);
+
         $unsavedPreTest = PreTest::factory()->make([
-            'game_id' => 3,
+            'game_id' => $game->id_jeu,
         ]);
 
         $response = $this->actingAs($user)
@@ -325,7 +423,8 @@ class PreTestsRouterTest extends FeatureTest
         $response = $this->actingAs($user)
             ->get("/qcm/{$preTest->id}/editer");
 
-        $response->assertForbidden();
+        $response->assertForbidden()
+            ->assertSeeText('Vous devez être un juré pour modifier un QCM !');
     }
 
     /**
@@ -341,7 +440,8 @@ class PreTestsRouterTest extends FeatureTest
         $response = $this->actingAs($user)
             ->get("/qcm/{$preTest->id}/editer");
 
-        $response->assertForbidden();
+        $response->assertForbidden()
+            ->assertSeeText("Vous devez être l'auteur du QCM pour pouvoir le modifier !");
     }
 
     /**
@@ -351,10 +451,10 @@ class PreTestsRouterTest extends FeatureTest
      */
     public function edit_ifJurorHasCreatedQcm_thenOk()
     {
-        self::mockHttpClientShow();
         $user = User::factory()->jury()->create();
         $preTest = PreTest::factory()->create([
             'user_id' => $user->id,
+            'game_id' => 3,
         ]);
 
         $response = $this->actingAs($user)
@@ -370,9 +470,37 @@ class PreTestsRouterTest extends FeatureTest
      */
     public function edit_ifUserIsAdmin_thenOk()
     {
-        self::mockHttpClientShow();
-        $user = User::factory()->admin()->create();
-        $preTest = PreTest::factory()->create();
+        $member = Member::factory()->create([
+            'id_membre' => 789,
+        ]);
+        $user = User::factory()->admin()->create([
+            'id' => $member->id_membre,
+        ]);
+
+        $game = Game::factory()->create([
+            'id_jeu' => 6,
+            'id_session' => $this->currentSession->id_session,
+        ]);
+        $juror = Juror::factory()->create([
+            'id_membre' => $member->id_membre,
+            'id_session' => $this->currentSession->id_session,
+            'statut_jury' => 1,
+        ]);
+        $suite = TestSuite::factory()->create([
+            'id_serie' => 127,
+            'is_pre_test' => 1,
+            'nom_serie' => 'Pré-Tests de 2021',
+        ]);
+        TestSuiteAssignedJuror::factory()->create([
+            'id_jeu' => $game->id_jeu,
+            'id_jury' => $juror->id_jury,
+            'id_serie' => $suite->id_serie,
+            'statut_jeu_jure' => 2,
+        ]);
+        $preTest = PreTest::factory()->create([
+            'game_id' => $game->id_jeu,
+            'user_id' => $member->id_membre,
+        ]);
 
         $response = $this->actingAs($user)
             ->get("/qcm/{$preTest->id}/editer");
@@ -397,7 +525,8 @@ class PreTestsRouterTest extends FeatureTest
         $response = $this->actingAs($user)
             ->put("/qcm/{$preTest->id}");
 
-        $response->assertForbidden();
+        $response->assertForbidden()
+            ->assertSeeText('Vous devez être un juré pour modifier un QCM !');
     }
 
     /**
@@ -413,7 +542,8 @@ class PreTestsRouterTest extends FeatureTest
         $response = $this->actingAs($user)
             ->put("/qcm/{$preTest->id}");
 
-        $response->assertForbidden();
+        $response->assertForbidden()
+            ->assertSeeText("Vous devez être l'auteur du QCM pour pouvoir le modifier !");
     }
 
     /**
@@ -473,64 +603,4 @@ class PreTestsRouterTest extends FeatureTest
             'final_thought_explanation' => $newPreTest->final_thought_explanation,
         ]);
     }
-
-    // Helper
-
-    private function gameResponse()
-    {
-        return new Response(200, [], json_encode([
-            'id' => 3,
-            'title' => 'Legend of Lemidora',
-        ]));
-    }
-
-    private function assignmentsResponse()
-    {
-        return new Response(200, [], json_encode([
-            [
-                'game_id' => 3,
-                'pre_test' => true,
-                'serie_locked' => false,
-                'assignment_locked' => false,
-            ],
-        ]));
-    }
-
-    private function mockHttpClientShow()
-    {
-        $mock = new MockHandler([
-            self::gameResponse(),
-        ]);
-        $handler = HandlerStack::create($mock);
-        $client = new GuzzleClient(['handler' => $handler]);
-        $this->app->instance(GuzzleClient::class, $client);
-    }
-
-    private function mockHttpClientCreate()
-    {
-        $mock = new MockHandler([
-            self::assignmentsResponse(),
-            self::gameResponse(),
-        ]);
-        $handler = HandlerStack::create($mock);
-        $client = new GuzzleClient(['handler' => $handler]);
-        $this->app->instance(GuzzleClient::class, $client);
-    }
-
-//    private function mockHttpClientStore()
-//    {
-//        $mock = new MockHandler([
-//            self::assignmentsResponse(),
-//            self::newAssignmentResponse(),
-//        ]);
-//        $handler = HandlerStack::create($mock);
-//        $client = new GuzzleClient(['handler' => $handler]);
-//        $this->app->instance(GuzzleClient::class, $client);
-//    }
-//
-//    private function newAssignmentResponse()
-//    {
-//        $new_id = 14;
-//        return new Response(200, [], $new_id);
-//    }
 }

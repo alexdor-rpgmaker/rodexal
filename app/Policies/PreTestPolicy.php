@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\User;
 use App\PreTest;
+use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class PreTestPolicy
@@ -37,10 +37,13 @@ class PreTestPolicy
 
     public function update(User $user, PreTest $preTest)
     {
-        if ($user->isJury() && $preTest->user_id == $user->id) {
-            return true;
+        if (!$user->isJury()) {
+            return $this->deny("Vous devez être un juré pour modifier un QCM !");
         }
-        return $this->deny("Vous devez être un juré pour modifier un QCM !");
+        if ($preTest->user_id != $user->id) {
+            return $this->deny("Vous devez être l'auteur du QCM pour pouvoir le modifier !");
+        }
+        return true;
     }
 
     public function delete(User $user, PreTest $preTest)
