@@ -76,16 +76,16 @@
     </script>
     <link
       rel="stylesheet"
-      href="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/css/normalize.css"
+      href="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/css/normalize.css"
     />
     <link
       rel="stylesheet"
-      href="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/css/foundation.css"
+      href="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/css/foundation.css"
     />
-    <link rel="stylesheet" href="{{ env('FORMER_APP_URL') }}/design/newdefaut/interface.css" />
-    <link rel="stylesheet" href="{{ env('FORMER_APP_URL') }}/design/newdefaut/elements.css" />
+    <link rel="stylesheet" href="{{ env('FORMER_APP_URL') }}/design/2013-alexre/interface.css" />
+    <link rel="stylesheet" href="{{ env('FORMER_APP_URL') }}/design/2013-alexre/elements.css" />
 
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/vendor/custom.modernizr.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/vendor/custom.modernizr.js"></script>
   </head>
   <body style="margin-bottom: 0;">
     <div id="wrap">

@@ -65,13 +65,13 @@
     />
     <link
       rel="stylesheet"
-      href="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/icones/stylesheets/general_foundicons.css"
+      href="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/icones/stylesheets/general_foundicons.css"
     />
 
     <!--[if lt IE 8]>
       <link
         rel="stylesheet"
-        href="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/icones/stylesheets/general_foundicons_ie7.css"
+        href="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/icones/stylesheets/general_foundicons_ie7.css"
       />
     <![endif]-->
 
@@ -107,16 +107,16 @@
     </script>
     <link
       rel="stylesheet"
-      href="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/css/normalize.css"
+      href="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/css/normalize.css"
     />
     <link
       rel="stylesheet"
-      href="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/css/foundation.css"
+      href="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/css/foundation.css"
     />
-    <link rel="stylesheet" href="{{ env('FORMER_APP_URL') }}/design/newdefaut/interface.css" />
-    <link rel="stylesheet" href="{{ env('FORMER_APP_URL') }}/design/newdefaut/elements.css" />
+    <link rel="stylesheet" href="{{ env('FORMER_APP_URL') }}/design/2013-alexre/interface.css" />
+    <link rel="stylesheet" href="{{ env('FORMER_APP_URL') }}/design/2013-alexre/elements.css" />
 
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/vendor/custom.modernizr.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/vendor/custom.modernizr.js"></script>
   </head>
   <body>
     <div id="wrap">
@@ -126,7 +126,7 @@
           <li class="name">
             <a href="{{ env('FORMER_APP_URL') }}/">
               <img
-                src="{{ env('FORMER_APP_URL') }}/design/newdefaut/interface/ban.png"
+                src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/interface/ban.png"
                 width="266"
                 height="44"
               />
@@ -235,7 +235,7 @@
 
                 <li>
                     <a href="?p=mp-messagerie" onFocus="this.blur();" title="Messagerie privée">
-                    <img src="{{ env('FORMER_APP_URL') }}/design/newdefaut/interface/mp-transp.png" width="26" height="20" alt="Messagerie privée"/></a>
+                    <img src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/interface/mp-transp.png" width="26" height="20" alt="Messagerie privée"/></a>
                 </li>
 
                 <li class="has-dropdown">
@@ -351,21 +351,21 @@
 
     <!-- Included JS Files (Uncompressed) -->
 
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/vendor/zepto.js"></script>
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.js"></script>
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.clearing.js"></script>
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.orbit.js"></script>
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.section.js"></script>
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.topbar.js"></script>
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.dropdown.js"></script>
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.cookie.js"></script>
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.alerts.js"></script>
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.forms.js"></script>
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.magellan.js"></script>
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.placeholder.js"></script>
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.reveal.js"></script>
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.tooltips.js"></script>
-    <script src="{{ env('FORMER_APP_URL') }}/design/newdefaut/foundation/js/foundation/foundation.joyride.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/vendor/zepto.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/foundation/foundation.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/foundation/foundation.clearing.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/foundation/foundation.orbit.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/foundation/foundation.section.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/foundation/foundation.topbar.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/foundation/foundation.dropdown.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/foundation/foundation.cookie.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/foundation/foundation.alerts.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/foundation/foundation.forms.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/foundation/foundation.magellan.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/foundation/foundation.placeholder.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/foundation/foundation.reveal.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/foundation/foundation.tooltips.js"></script>
+    <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/foundation/foundation.joyride.js"></script>
 
     <script>
       $(document).foundation();
