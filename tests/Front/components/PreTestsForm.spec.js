@@ -96,7 +96,8 @@ describe('PreTestsForm', () => {
             }
           },
           gameId,
-          finalThought: null
+          finalThought: null,
+          finalThoughtExplanation: null
         })
       })
     })

@@ -30,7 +30,7 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        @foreach (App\PreTest::FIELDS as $field)
+                        @foreach (App\PreTest::QCM_FIELDS as $field)
                             @if (Illuminate\Support\Arr::has($pre_test->questionnaire, $field['id']))
                                 @if ($pre_test->questionnaire[$field['id']]['activated'])
                                     <div class="questionnaire-group">

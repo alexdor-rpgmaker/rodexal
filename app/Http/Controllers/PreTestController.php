@@ -37,6 +37,9 @@ class PreTestController extends Controller
             ? $sessions->firstWhere('id_session', $request->query('session_id'))
             : $currentSession;
 
+        $sessionWithQcms = in_array($session->id_session, Session::IDS_SESSIONS_WITH_QCM);
+        abort_unless($sessionWithQcms, Response::HTTP_BAD_REQUEST, "Cette session n'a pas de QCM.");
+
         $games = Game::where('id_session', $session->id_session);
 
         // If pre-tests are not finished, we only display pre-tests of disqualified games
@@ -78,8 +81,8 @@ class PreTestController extends Controller
         $game = self::fetchGame($gameId);
         return view('pre_tests.form', [
             'pre_test' => null,
-            'title' => "Remplir un QCM pour le jeu $game->nom_jeu",
             'game_id' => $game->id_jeu,
+            'game_title' => $game->nom_jeu,
             'form_method' => 'POST',
             'form_url' => route('qcm.store'),
         ]);
@@ -94,7 +97,7 @@ class PreTestController extends Controller
             'finalThought' => 'required|boolean',
             'finalThoughtExplanation' => 'nullable|string',
         ];
-        $fields = Arr::pluck(PreTest::FIELDS, 'id');
+        $fields = Arr::pluck(PreTest::QCM_FIELDS, 'id');
         foreach ($fields as $field) {
             $validator_array["questionnaire.$field.activated"] = 'required|boolean';
             $validator_array["questionnaire.$field.explanation"] = 'nullable|string';
@@ -132,8 +135,8 @@ class PreTestController extends Controller
         $preTest->finalThoughtExplanation = $preTest->final_thought_explanation;
         return view('pre_tests.form', [
             'pre_test' => $preTest,
-            'title' => "Modifier le QCM du jeu $game->nom_jeu",
             'game_id' => $game->id_jeu,
+            'game_title' => $game->nom_jeu,
             'form_method' => 'PUT',
             'form_url' => route('qcm.update', $preTest->id),
         ]);
@@ -145,7 +148,7 @@ class PreTestController extends Controller
             'finalThought' => 'required|boolean',
             'finalThoughtExplanation' => 'nullable|string',
         ];
-        $fields = Arr::pluck(PreTest::FIELDS, 'id');
+        $fields = Arr::pluck(PreTest::QCM_FIELDS, 'id');
         foreach ($fields as $field) {
             $validator_array["questionnaire.$field.activated"] = 'required|boolean';
             $validator_array["questionnaire.$field.explanation"] = 'nullable|string';

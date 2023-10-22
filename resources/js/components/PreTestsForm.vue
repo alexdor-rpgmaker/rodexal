@@ -5,7 +5,7 @@
       <img src="https://www.alexdor.info/design/divers/Alex.gif" alt="Alex Rutipa qui marche">
     </template>
     <template v-else>
-      <div class="row" v-for="question in questions" :key="question.label">
+      <div class="row" v-for="question in questions" :key="question.id">
         <template v-if="fields.questionnaire[question.id]">
           <div class="col-sm-12">
             <div class="form-check">
@@ -172,7 +172,8 @@ export default {
             : {
                 questionnaire,
                 gameId: this.gameId,
-                finalThought: null
+                finalThought: null,
+                finalThoughtExplanation: null
               }
       return fields
     }

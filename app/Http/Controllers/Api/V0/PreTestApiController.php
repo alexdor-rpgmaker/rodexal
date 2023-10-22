@@ -41,7 +41,7 @@ class PreTestApiController extends Controller
         )->whereIn('game_id', $gamesId)
             ->get();
 
-        $fields = Arr::pluck(PreTest::FIELDS, 'id');
+        $fields = Arr::pluck(PreTest::QCM_FIELDS, 'id');
         $preTests->map(function ($preTest) use ($fields) {
             foreach ($fields as $field) {
                 $preTest[Str::snake($field)] = Arr::get($preTest, "questionnaire.$field.activated");

@@ -2,8 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Tests\TestCase;
 
 abstract class FeatureTestCase extends TestCase
 {
@@ -21,8 +22,13 @@ abstract class FeatureTestCase extends TestCase
 
     protected function refreshDatabase(): void
     {
-        Log::info( "--- Refreshing database ---");
-        $this->artisan('migrate:refresh');
+        Log::info("--- Refreshing database ---");
+
+        // artisan migrate:fresh does not drop & recreate the other databases, so we need to do it manually
+        $formerAppDatabaseName = $_ENV['FORMER_APP_DB_DATABASE'];
+        DB::statement("DROP DATABASE `{$formerAppDatabaseName}`");
+        DB::statement("CREATE DATABASE `{$formerAppDatabaseName}`");
+        $this->artisan('migrate:fresh');
     }
 
     protected static function refreshDatabaseOnNextSetup(): void

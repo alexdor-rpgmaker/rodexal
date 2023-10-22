@@ -12,5 +12,9 @@ export default (sessionId) => {
     sessionName += '-2018'
   }
 
+  if (sessionId === 23) {
+    sessionName += '-2024'
+  }
+
   return '20' + sessionName
 }

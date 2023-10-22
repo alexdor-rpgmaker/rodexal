@@ -4,9 +4,8 @@ namespace Database\Factories;
 
 use App\User;
 use App\Word;
-
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class WordFactory extends Factory
 {
@@ -24,7 +23,9 @@ class WordFactory extends Factory
      */
     public function definition()
     {
+        // colorName() returns something like 'SeaGreen' or 'DarkOliveGreen'
         $label = preg_replace('/([a-z]+)([A-Z])/', '$1 $2', $this->faker->unique()->colorName);
+        $label .= " " . $this->faker->randomNumber(3, true);
 
         return [
             'label' => $label,

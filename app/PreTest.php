@@ -15,7 +15,8 @@ class PreTest extends MainModel
         'questionnaire' => 'array'
     ];
 
-    const FIELDS = [
+    // Fields for pre-tests between 2019 and 2022
+    const QCM_FIELDS = [
         [
             'id' => 'notAutonomous',
             'label' => "Le jeu n'est pas autonome",
@@ -77,7 +78,7 @@ class PreTest extends MainModel
     public function explanationsCount(): int
     {
         $count = 0;
-        foreach (self::FIELDS as $field) {
+        foreach (self::QCM_FIELDS as $field) {
             if (Arr::has($this->questionnaire, $field['id'])) {
                 if (!empty($this->questionnaire[$field['id']]['explanation'])) {
                     $count++;

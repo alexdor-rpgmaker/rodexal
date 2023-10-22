@@ -36,7 +36,7 @@ class QcmBrowserTest extends BrowserTestCase
                 ->visit('/qcm/creer?game_id=937')
                 ->assertPathBeginsWith('/qcm/creer')
                 ->assertDontSee('Ce jeu ne vous est pas attribué !')
-                ->assertSee('Remplir un QCM pour le jeu');
+                ->assertSee('QCM pour le jeu');
 
             $browser->waitFor('#notLaunchable');
 
@@ -75,7 +75,7 @@ class QcmBrowserTest extends BrowserTestCase
                 ->assertSee('Ce jeu ne se lance pas')
                 ->assertSourceHas('Ce jeu était vraiment <u>nul</u>. Mais bon courage pour la suite ! :)')
                 ->click('a.modifier-pre-test')
-                ->assertSee('Modifier le QCM du jeu');
+                ->assertSee('QCM pour le jeu');
 
             $browser->waitFor('#notLaunchable')
                 ->assertInputValue('#explanation-notLaunchable', 'Ce jeu ne se lance pas')
