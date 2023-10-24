@@ -12,15 +12,14 @@
 */
 
 use App\Http\Controllers\Auth\LoginController;
-
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MusicController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\PodcastEpisodeController;
+use App\Http\Controllers\PreQualificationController;
 use App\Http\Controllers\PreTestController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WordController;
-
 use App\PodcastEpisode;
 
 // Auth::routes();
@@ -58,6 +57,12 @@ Route::resource('qcm', PreTestController::class)->except([
     'destroy'
 ])->parameters([
     'qcm' => 'pre_test'
+]);
+
+Route::resource('pre_qualifications', PreQualificationController::class)->only([
+    'create', 'store'
+])->parameters([
+    'pre_qualification' => 'pre_test'
 ]);
 
 Route::redirect('/podcast/rss', PodcastEpisode::PODCAST_FEED_URL);

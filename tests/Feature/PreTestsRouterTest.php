@@ -81,6 +81,7 @@ class PreTestsRouterTest extends FeatureTestCase
     public function index_ifNoSessionIsAsked_thenReturnsCurrentSessionGameAndPreTest()
     {
         $preTest = PreTest::factory()->create([
+            'type' => 'qcm',
             'game_id' => $this->currentSessionGame->id_jeu,
         ]);
 
@@ -102,6 +103,7 @@ class PreTestsRouterTest extends FeatureTestCase
     public function index_ifPreviousSessionIsAsked_thenReturnsPreviousSessionGameAndPreTest()
     {
         $preTest = PreTest::factory()->create([
+            'type' => 'qcm',
             'game_id' => $this->previousSessionGame->id_jeu,
         ]);
 
@@ -126,6 +128,7 @@ class PreTestsRouterTest extends FeatureTestCase
         $this->currentSessionGame->update(['statut_jeu' => 'deleted']);
 
         PreTest::factory()->count(2)->create([
+            'type' => 'qcm',
             'game_id' => $this->currentSessionGame->id_jeu,
         ]);
 
@@ -149,6 +152,7 @@ class PreTestsRouterTest extends FeatureTestCase
         $this->currentSessionGame->update(['statut_jeu' => 'disqualified']);
 
         PreTest::factory()->count(2)->create([
+            'type' => 'qcm',
             'game_id' => $this->currentSessionGame->id_jeu,
         ]);
 
@@ -175,6 +179,7 @@ class PreTestsRouterTest extends FeatureTestCase
             'id_session' => $this->currentSession->id_session,
         ]);
         $preTest = PreTest::factory()->create([
+            'type' => 'qcm',
             'game_id' => $game->id_jeu,
         ]);
 
@@ -386,6 +391,7 @@ class PreTestsRouterTest extends FeatureTestCase
         ]);
 
         $unsavedPreTest = PreTest::factory()->make([
+            'type' => 'qcm',
             'game_id' => $game->id_jeu,
         ]);
 
@@ -417,6 +423,7 @@ class PreTestsRouterTest extends FeatureTestCase
     {
         $user = User::factory()->create();
         $preTest = PreTest::factory()->create([
+            'type' => 'qcm',
             'user_id' => $user->id,
         ]);
 
@@ -435,7 +442,9 @@ class PreTestsRouterTest extends FeatureTestCase
     public function edit_ifUserHasNotCreatedQcm_thenForbidden()
     {
         $user = User::factory()->jury()->create();
-        $preTest = PreTest::factory()->create();
+        $preTest = PreTest::factory()->create([
+            'type' => 'qcm',
+        ]);
 
         $response = $this->actingAs($user)
             ->get("/qcm/{$preTest->id}/editer");
@@ -453,6 +462,7 @@ class PreTestsRouterTest extends FeatureTestCase
     {
         $user = User::factory()->jury()->create();
         $preTest = PreTest::factory()->create([
+            'type' => 'qcm',
             'user_id' => $user->id,
             'game_id' => 3,
         ]);
@@ -498,6 +508,7 @@ class PreTestsRouterTest extends FeatureTestCase
             'statut_jeu_jure' => 2,
         ]);
         $preTest = PreTest::factory()->create([
+            'type' => 'qcm',
             'game_id' => $game->id_jeu,
             'user_id' => $member->id_membre,
         ]);
@@ -519,6 +530,7 @@ class PreTestsRouterTest extends FeatureTestCase
     {
         $user = User::factory()->create();
         $preTest = PreTest::factory()->create([
+            'type' => 'qcm',
             'user_id' => $user->id,
         ]);
 
@@ -537,7 +549,9 @@ class PreTestsRouterTest extends FeatureTestCase
     public function update_ifUserHasNotCreatedQcm_thenForbidden()
     {
         $user = User::factory()->jury()->create();
-        $preTest = PreTest::factory()->create();
+        $preTest = PreTest::factory()->create([
+            'type' => 'qcm',
+        ]);
 
         $response = $this->actingAs($user)
             ->put("/qcm/{$preTest->id}");
@@ -554,8 +568,12 @@ class PreTestsRouterTest extends FeatureTestCase
     public function update_ifMissingFields_thenRedirect()
     {
         $user = User::factory()->admin()->create();
-        $preTest = PreTest::factory()->create();
-        $unsavedPreTest = PreTest::factory()->make();
+        $preTest = PreTest::factory()->create([
+            'type' => 'qcm',
+        ]);
+        $unsavedPreTest = PreTest::factory()->make([
+            'type' => 'qcm',
+        ]);
 
         $response = $this->actingAs($user)
             ->put("/qcm/{$preTest->id}", [
@@ -580,10 +598,12 @@ class PreTestsRouterTest extends FeatureTestCase
     {
         $user = User::factory()->jury()->create();
         $preTest = PreTest::factory()->create([
+            'type' => 'qcm',
             'user_id' => $user->id,
             'final_thought' => true,
         ]);
         $newPreTest = PreTest::factory()->make([
+            'type' => 'qcm',
             'user_id' => $user->id,
         ]);
 

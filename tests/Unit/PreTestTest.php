@@ -22,6 +22,7 @@ class PreTestTest extends TestCase
     {
         $questionnaireWithoutExplanation = self::questionnaireNoActivatedFieldsNoExplanations();
         $preTest = PreTest::factory()->make([
+            'type' => 'qcm',
             'final_thought_explanation' => "",
             'questionnaire' => $questionnaireWithoutExplanation
         ]);
@@ -42,6 +43,7 @@ class PreTestTest extends TestCase
         $questionnaire['blockingBug']['explanation'] = "My second explanation";
         $questionnaire['notAutonomous']['explanation'] = "My third explanation";
         $preTest = PreTest::factory()->make([
+            'type' => 'qcm',
             'final_thought_explanation' => "My first explanation",
             'questionnaire' => $questionnaire
         ]);
@@ -62,6 +64,7 @@ class PreTestTest extends TestCase
     {
         $questionnaireWithoutActivatedFields = self::questionnaireNoActivatedFieldsNoExplanations();
         $preTest = PreTest::factory()->make([
+            'type' => 'qcm',
             'questionnaire' => $questionnaireWithoutActivatedFields
         ]);
 
@@ -81,6 +84,7 @@ class PreTestTest extends TestCase
         $questionnaire['blockingBug']['activated'] = true;
         $questionnaire['notAutonomous']['activated'] = true;
         $preTest = PreTest::factory()->make([
+            'type' => 'qcm',
             'questionnaire' => $questionnaire
         ]);
 

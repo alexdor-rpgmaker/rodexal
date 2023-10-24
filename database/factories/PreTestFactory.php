@@ -26,6 +26,7 @@ class PreTestFactory extends Factory
         return [
             'user_id' => User::factory()->create()->id,
             'game_id' => $this->faker->numberBetween(5, 25),
+            'type' => 'pre-qualification',
             'questionnaire' => [
                 'blockingBug' => [
                     'activated' => $this->faker->boolean,

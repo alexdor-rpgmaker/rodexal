@@ -38,6 +38,7 @@ class PreTestsApiRouterTest extends FeatureTestCase
         ]);
         PreTest::factory()->create([
             'id' => 123,
+            'type' => 'qcm',
             'user_id' => 456,
             'game_id' => 789,
             'final_thought' => 1,
@@ -46,6 +47,7 @@ class PreTestsApiRouterTest extends FeatureTestCase
             'updated_at' => Carbon::create(2021, 3, 13, 9, 18, 23),
         ]);
         PreTest::factory()->count(2)->create([
+            'type' => 'qcm',
             'game_id' => 789,
         ]);
 
@@ -75,6 +77,7 @@ class PreTestsApiRouterTest extends FeatureTestCase
             'id_session' => 20,
         ]);
         PreTest::factory()->count(2)->create([
+            'type' => 'qcm',
             'game_id' => 999,
         ]);
     }
