@@ -22,8 +22,8 @@ class PreTestApiController extends Controller
     {
         $sessionId = $request->session_id
             ? (int)$request->session_id
-            : Arr::last(Session::IDS_SESSIONS_WITH_QCM);
-        if (!in_array($sessionId, Session::IDS_SESSIONS_WITH_QCM)) {
+            : Arr::last(Session::IDS_SESSIONS_WITH_PRE_TESTS);
+        if (!in_array($sessionId, Session::IDS_SESSIONS_WITH_PRE_TESTS)) {
             return response()->json([]);
         }
 

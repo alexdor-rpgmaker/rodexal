@@ -61,6 +61,8 @@ class PreTestController extends Controller
 
     public function show(PreTest $preTest)
     {
+        abort_if($preTest->type != 'qcm', Response::HTTP_NOT_FOUND);
+
         $game = self::fetchGame($preTest->game_id);
 
         $preTest->final_thought_explanation = StringParser::richText($preTest->final_thought_explanation);
@@ -94,7 +96,7 @@ class PreTestController extends Controller
 
         $validator_array = [
             'gameId' => 'required',
-            'finalThought' => 'required|boolean',
+            'finalThought' => 'required|in:ok,not-ok',
             'finalThoughtExplanation' => 'nullable|string',
         ];
         $fields = Arr::pluck(PreTest::QCM_FIELDS, 'id');
@@ -118,10 +120,11 @@ class PreTestController extends Controller
         $preTest->final_thought = $request->finalThought;
         $preTest->final_thought_explanation = $request->finalThoughtExplanation;
         $preTest->questionnaire = $request->questionnaire;
+        $preTest->type = "qcm";
         $preTest->save();
 
-        if ($request->finalThought) {
-            self::assignTestToUser($this->sessionInstance, $request->gameId, Auth::id());
+        if ($preTest->final_thought == "ok") {
+            self::assignTestToUser($this->sessionInstance, $preTest->game_id, Auth::id());
         }
 
         return response()->json($preTest, Response::HTTP_OK);
@@ -129,9 +132,11 @@ class PreTestController extends Controller
 
     public function edit(PreTest $preTest)
     {
+        abort_if($preTest->type != 'qcm', Response::HTTP_NOT_FOUND);
+
         $game = self::fetchGame($preTest->game_id);
 
-        $preTest->finalThought = $preTest->final_thought == 1;
+        $preTest->finalThought = $preTest->final_thought;
         $preTest->finalThoughtExplanation = $preTest->final_thought_explanation;
         return view('pre_tests.form', [
             'pre_test' => $preTest,
@@ -145,7 +150,7 @@ class PreTestController extends Controller
     public function update(Request $request, PreTest $preTest): JsonResponse
     {
         $validator_array = [
-            'finalThought' => 'required|boolean',
+            'finalThought' => 'required|in:ok,not-ok',
             'finalThoughtExplanation' => 'nullable|string',
         ];
         $fields = Arr::pluck(PreTest::QCM_FIELDS, 'id');

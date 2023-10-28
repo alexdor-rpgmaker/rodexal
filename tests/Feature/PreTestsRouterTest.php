@@ -175,7 +175,6 @@ class PreTestsRouterTest extends FeatureTestCase
     public function show_affichageQcm()
     {
         $game = Game::factory()->create([
-            'id_jeu' => 789,
             'id_session' => $this->currentSession->id_session,
         ]);
         $preTest = PreTest::factory()->create([
@@ -186,6 +185,26 @@ class PreTestsRouterTest extends FeatureTestCase
         $response = $this->get("/qcm/$preTest->id");
 
         $response->assertOk();
+    }
+
+    /**
+     * @test
+     * @testdox Show - We cannot see a filled pre-qualification
+     * On ne peut pas voir une pré-qualification remplie
+     */
+    public function show_ifPreQualification_thenNotFound()
+    {
+        $game = Game::factory()->create([
+            'id_session' => $this->currentSession->id_session,
+        ]);
+        $preTest = PreTest::factory()->create([
+            'type' => 'pre-qualification',
+            'game_id' => $game->id_jeu,
+        ]);
+
+        $response = $this->get("/qcm/$preTest->id");
+
+        $response->assertNotFound();
     }
 
     // Create
@@ -203,7 +222,7 @@ class PreTestsRouterTest extends FeatureTestCase
             ->get('/qcm/creer');
 
         $response->assertForbidden()
-            ->assertSeeText('Vous devez être un juré pour créer un QCM !');
+            ->assertSeeText('Vous devez être un juré pour créer une pré-qualif/un QCM !');
     }
 
     /**
@@ -278,7 +297,7 @@ class PreTestsRouterTest extends FeatureTestCase
             ->post('/qcm');
 
         $response->assertForbidden()
-            ->assertSeeText('Vous devez être un juré pour créer un QCM !');
+            ->assertSeeText('Vous devez être un juré pour créer une pré-qualif/un QCM !');
     }
 
     /**
@@ -295,7 +314,8 @@ class PreTestsRouterTest extends FeatureTestCase
                 'gameId' => 8,
             ]);
 
-        $response->assertForbidden();
+        $response->assertForbidden()
+            ->assertSeeText('Ce jeu ne vous est pas attribué !');
         $this->assertDatabaseMissing('pre_tests', [
             'user_id' => $user->id,
             'game_id' => 8,
@@ -304,10 +324,10 @@ class PreTestsRouterTest extends FeatureTestCase
 
     /**
      * @test
-     * @testdox Store - If parameters are missing then redirect
-     * On est redirigés quand il manque des paramètres pour ajouter un QCM, si on est juré
+     * @testdox Store - If parameters are missing then 422 error
+     * On a une erreur 422 quand il manque des paramètres pour ajouter un QCM, si on est juré
      */
-    public function store_ifParametersAreMissing_thenRedirect()
+    public function store_ifParametersAreMissing_thenUnprocessableEntityError()
     {
         $member = Member::factory()->create([
             'id_membre' => 567,
@@ -340,9 +360,16 @@ class PreTestsRouterTest extends FeatureTestCase
         $response = $this->actingAs($user)
             ->post('/qcm', [
                 'gameId' => 4,
+                // No other params
+            ], [
+                'Accept' => 'application/json',
             ]);
 
-        $response->assertRedirect();
+        $response->assertUnprocessable()
+            ->assertJsonPath(
+                "message",
+                "Le champ Verdict est obligatoire. (and 9 more errors)"
+            );
         $this->assertDatabaseMissing('pre_tests', [
             'user_id' => $user->id,
             'game_id' => 4,
@@ -351,10 +378,10 @@ class PreTestsRouterTest extends FeatureTestCase
 
     /**
      * @test
-     * @testdox Store - A juror can store a QCM
-     * On peut créer un QCM si on est juré
+     * @testdox Store - If finalThought value is not one of the authorized ones then 422 error
+     * On a une erreur 422 si le paramètre finalThought ne contient pas une des valeurs attendues
      */
-    public function store_ifEverythingIsOk_thenOk()
+    public function store_ifFinalThoughtParameterIsWrong_thenUnprocessableEntityError()
     {
         $member = Member::factory()->create([
             'id_membre' => 678,
@@ -372,14 +399,76 @@ class PreTestsRouterTest extends FeatureTestCase
             'id_session' => $this->currentSession->id_session,
             'statut_jury' => 1,
         ]);
-        $preTestSuite = TestSuite::factory()->create([
+        $suite = TestSuite::factory()->create([
             'id_serie' => 125,
+            'is_pre_test' => 1,
+            'nom_serie' => 'Pré-Tests de 2021',
+        ]);
+        TestSuiteAssignedJuror::factory()->create([
+            'id_jeu' => $game->id_jeu,
+            'id_jury' => $juror->id_jury,
+            'id_serie' => $suite->id_serie,
+            'statut_jeu_jure' => 2,
+        ]);
+
+        $unsavedPreTest = PreTest::factory()->make([
+            'type' => 'pre-qualification',
+            'game_id' => $game->id_jeu,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->post('/qcm', [
+                'gameId' => $game->id_jeu,
+                // Invalid finalThought value
+                'finalThought' => '1',
+                'finalThoughtExplanation' => null,
+                'questionnaire' => $unsavedPreTest->questionnaire,
+            ], [
+                'Accept' => 'application/json',
+            ]);
+
+        $response->assertUnprocessable()
+            ->assertJsonPath(
+                "errors.finalThought.0",
+                "L'élément sélectionné dans Verdict est invalide."
+            );
+        $this->assertDatabaseMissing('pre_tests', [
+            'user_id' => $user->id,
+            'game_id' => $game->id_jeu,
+        ]);
+    }
+
+    /**
+     * @test
+     * @testdox Store - A juror can store a QCM
+     * On peut créer un QCM si on est juré
+     */
+    public function store_ifEverythingIsOk_thenOk()
+    {
+        $member = Member::factory()->create([
+            'id_membre' => 789,
+        ]);
+        $user = User::factory()->jury()->create([
+            'id' => $member->id_membre,
+        ]);
+
+        $game = Game::factory()->create([
+            'id_jeu' => 6,
+            'id_session' => $this->currentSession->id_session,
+        ]);
+        $juror = Juror::factory()->create([
+            'id_membre' => $member->id_membre,
+            'id_session' => $this->currentSession->id_session,
+            'statut_jury' => 1,
+        ]);
+        $preTestSuite = TestSuite::factory()->create([
+            'id_serie' => 126,
             'is_pre_test' => 1,
             'nom_serie' => 'Pré-Tests de 2021',
         ]);
         // Test suite that is not a pre-test, for creating an assignment
         TestSuite::factory()->create([
-            'id_serie' => 126,
+            'id_serie' => 127,
             'is_pre_test' => 0,
             'nom_serie' => 'Tests de 2021',
         ]);
@@ -398,7 +487,7 @@ class PreTestsRouterTest extends FeatureTestCase
         $response = $this->actingAs($user)
             ->post('/qcm', [
                 'gameId' => $unsavedPreTest->game_id,
-                'finalThought' => true,
+                'finalThought' => 'ok',
                 'finalThoughtExplanation' => null,
                 'questionnaire' => $unsavedPreTest->questionnaire,
             ]);
@@ -407,8 +496,9 @@ class PreTestsRouterTest extends FeatureTestCase
         $this->assertDatabaseHas('pre_tests', [
             'user_id' => $user->id,
             'game_id' => $unsavedPreTest->game_id,
-            'final_thought' => true,
+            'final_thought' => 'ok',
             'final_thought_explanation' => null,
+            'type' => 'qcm',
         ]);
     }
 
@@ -431,7 +521,7 @@ class PreTestsRouterTest extends FeatureTestCase
             ->get("/qcm/{$preTest->id}/editer");
 
         $response->assertForbidden()
-            ->assertSeeText('Vous devez être un juré pour modifier un QCM !');
+            ->assertSeeText('Vous devez être un juré pour modifier une pré-qualif/un QCM !');
     }
 
     /**
@@ -450,7 +540,7 @@ class PreTestsRouterTest extends FeatureTestCase
             ->get("/qcm/{$preTest->id}/editer");
 
         $response->assertForbidden()
-            ->assertSeeText("Vous devez être l'auteur du QCM pour pouvoir le modifier !");
+            ->assertSeeText("Vous devez être l'auteur de la pré-qualif/du QCM pour pouvoir la/le modifier !");
     }
 
     /**
@@ -481,14 +571,14 @@ class PreTestsRouterTest extends FeatureTestCase
     public function edit_ifUserIsAdmin_thenOk()
     {
         $member = Member::factory()->create([
-            'id_membre' => 789,
+            'id_membre' => 890,
         ]);
         $user = User::factory()->admin()->create([
             'id' => $member->id_membre,
         ]);
 
         $game = Game::factory()->create([
-            'id_jeu' => 6,
+            'id_jeu' => 7,
             'id_session' => $this->currentSession->id_session,
         ]);
         $juror = Juror::factory()->create([
@@ -497,7 +587,7 @@ class PreTestsRouterTest extends FeatureTestCase
             'statut_jury' => 1,
         ]);
         $suite = TestSuite::factory()->create([
-            'id_serie' => 127,
+            'id_serie' => 128,
             'is_pre_test' => 1,
             'nom_serie' => 'Pré-Tests de 2021',
         ]);
@@ -538,7 +628,7 @@ class PreTestsRouterTest extends FeatureTestCase
             ->put("/qcm/{$preTest->id}");
 
         $response->assertForbidden()
-            ->assertSeeText('Vous devez être un juré pour modifier un QCM !');
+            ->assertSeeText('Vous devez être un juré pour modifier une pré-qualif/un QCM !');
     }
 
     /**
@@ -557,7 +647,7 @@ class PreTestsRouterTest extends FeatureTestCase
             ->put("/qcm/{$preTest->id}");
 
         $response->assertForbidden()
-            ->assertSeeText("Vous devez être l'auteur du QCM pour pouvoir le modifier !");
+            ->assertSeeText("Vous devez être l'auteur de la pré-qualif/du QCM pour pouvoir la/le modifier !");
     }
 
     /**
@@ -583,9 +673,11 @@ class PreTestsRouterTest extends FeatureTestCase
         $response->assertRedirect();
         $this->assertDatabaseHas('pre_tests', [
             'final_thought_explanation' => $preTest->final_thought_explanation,
+            'type' => 'qcm',
         ]);
         $this->assertDatabaseMissing('pre_tests', [
             'final_thought_explanation' => $unsavedPreTest->final_thought_explanation,
+            'type' => 'qcm',
         ]);
     }
 
@@ -600,7 +692,7 @@ class PreTestsRouterTest extends FeatureTestCase
         $preTest = PreTest::factory()->create([
             'type' => 'qcm',
             'user_id' => $user->id,
-            'final_thought' => true,
+            'final_thought' => 'ok',
         ]);
         $newPreTest = PreTest::factory()->make([
             'type' => 'qcm',
@@ -610,7 +702,7 @@ class PreTestsRouterTest extends FeatureTestCase
         $response = $this->actingAs($user)
             ->put("/qcm/{$preTest->id}", [
                 'gameId' => $newPreTest->game_id,
-                'finalThought' => false,
+                'finalThought' => 'not-ok',
                 'finalThoughtExplanation' => $newPreTest->final_thought_explanation,
                 'questionnaire' => $newPreTest->questionnaire,
             ]);
@@ -619,8 +711,9 @@ class PreTestsRouterTest extends FeatureTestCase
         $this->assertDatabaseHas('pre_tests', [
             'user_id' => $user->id,
             'game_id' => $preTest->game_id,
-            'final_thought' => true,
+            'final_thought' => 'ok',
             'final_thought_explanation' => $newPreTest->final_thought_explanation,
+            'type' => 'qcm',
         ]);
     }
 }

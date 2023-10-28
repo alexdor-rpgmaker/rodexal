@@ -63,8 +63,49 @@ class PreTestFactory extends Factory
                     'activated' => $this->faker->boolean,
                     'explanation' => $this->faker->text,
                 ],
+                // 2013
+                'abusiveBugs' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'notForWindows' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'noDownloadLink' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'illegalContent' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'plagiarism' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'unusualController' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'painfulHandling' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'wrongAgeCategory' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'partialCredits' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
+                'annoyingLag' => [
+                    'activated' => $this->faker->boolean,
+                    'explanation' => $this->faker->text,
+                ],
             ],
-            'final_thought' => $this->faker->boolean,
+            'final_thought' => array_rand(['ok', 'not-ok']),
             'final_thought_explanation' => $this->faker->paragraphs($this->faker->numberBetween(1, 3), true),
         ];
     }

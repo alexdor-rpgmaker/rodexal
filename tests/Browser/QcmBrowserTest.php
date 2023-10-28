@@ -61,7 +61,7 @@ class QcmBrowserTest extends BrowserTestCase
                 ->type('#explanation-unplayableAlone', "J'ai eu besoin de mes 3 soeurs pour y jouer...")
                 ->check('languageUnknown')
                 ->type('#explanation-languageUnknown', "Quelle idée de faire parler le héros en Swahili...")
-                ->radio('finalThought', 'false')
+                ->radio('finalThought', 'not-ok')
                 ->type('#finalThoughtPrecision', "Ce jeu était vraiment [u]nul[/u]. Mais bon courage pour la suite ! :)")
                 ->click('button.submit')
                 ->waitUntilMissing('#pre-tests-form')

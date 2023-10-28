@@ -56,7 +56,7 @@
         <div class="col-sm-12">
           <template v-if="editing">
             <input type="hidden" name="finalThought" v-model="fields.finalThought">
-            <span v-if="fields.finalThought">Conforme</span>
+            <span v-if="fields.finalThought === 'ok'">Conforme</span>
             <span v-else>Non conforme</span>
           </template>
           <template v-else>
@@ -67,7 +67,7 @@
                   name="finalThought"
                   id="finalThought-ok"
                   v-model="fields.finalThought"
-                  :value="true"
+                  value="ok"
               >
               <label class="form-check-label" for="finalThought-ok">Conforme</label>
             </div>
@@ -78,13 +78,13 @@
                   name="finalThought"
                   id="finalThought-not-ok"
                   v-model="fields.finalThought"
-                  :value="false"
+                  value="not-ok"
               >
               <label class="form-check-label" for="finalThought-not-ok">Non conforme</label>
             </div>
           </template>
           <div v-if="errors && errors.finalThought" class="text-danger">{{ errors.finalThought[0] }}</div>
-          <div class="final-thought-precision" v-if="fields.finalThought === false">
+          <div class="final-thought-precision" v-if="fields.finalThought === 'not-ok'">
             <label for="finalThoughtPrecision" class="form-label">Précisions</label>
 
             <textarea

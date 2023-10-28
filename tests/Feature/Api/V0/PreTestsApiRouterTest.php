@@ -41,7 +41,7 @@ class PreTestsApiRouterTest extends FeatureTestCase
             'type' => 'qcm',
             'user_id' => 456,
             'game_id' => 789,
-            'final_thought' => 1,
+            'final_thought' => 'ok',
             'final_thought_explanation' => 'Whatever',
             'created_at' => Carbon::create(2021, 3, 10, 18, 9, 17),
             'updated_at' => Carbon::create(2021, 3, 13, 9, 18, 23),
@@ -60,7 +60,7 @@ class PreTestsApiRouterTest extends FeatureTestCase
             ->assertJsonPath('0.id', 123)
             ->assertJsonPath('0.user_id', 456)
             ->assertJsonPath('0.game_id', 789)
-            ->assertJsonPath('0.final_thought', 1)
+            ->assertJsonPath('0.final_thought', 'ok')
             ->assertJsonPath('0.created_at', '2021-03-10T17:09:17.000000Z') // TODO : Fix timezone ?
             ->assertJsonPath('0.updated_at', '2021-03-13T08:18:23.000000Z')
             ->assertJsonPath('1.game_id', 789)

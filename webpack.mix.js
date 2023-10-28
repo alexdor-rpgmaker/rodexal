@@ -19,6 +19,7 @@ mix
   .sass('resources/sass/dictionary.scss', 'public/css')
   .sass('resources/sass/games.scss', 'public/css')
   .sass('resources/sass/pre_tests.scss', 'public/css')
+  .sass('resources/sass/pre_qualifications.scss', 'public/css')
   .sass('resources/sass/podcasts.scss', 'public/css')
 
 if (mix.inProduction()) {

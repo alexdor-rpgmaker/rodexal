@@ -59,10 +59,10 @@ Route::resource('qcm', PreTestController::class)->except([
     'qcm' => 'pre_test'
 ]);
 
-Route::resource('pre_qualifications', PreQualificationController::class)->only([
-    'create', 'store'
+Route::resource('pre_qualifications', PreQualificationController::class)->except([
+    'index', 'update', 'destroy'
 ])->parameters([
-    'pre_qualification' => 'pre_test'
+    'pre_qualifications' => 'pre_test'
 ]);
 
 Route::redirect('/podcast/rss', PodcastEpisode::PODCAST_FEED_URL);

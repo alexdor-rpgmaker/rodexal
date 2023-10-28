@@ -1,0 +1,41 @@
+#pre-qualification {
+  .questionnaire-group {
+    margin-top: 20px;
+    margin-bottom: 30px;
+
+    p {
+      margin-bottom: 6px;
+    }
+  }
+
+  #final-thought {
+    p {
+      font-weight: bold;
+      text-align: center;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #e8dbcd;
+      border: 1px dashed #9d6b39;
+    }
+
+    .explanation {
+      margin-top: 20px;
+    }
+  }
+}
+
+.final-thought {
+  font-weight: bold;
+
+  &.ok {
+    color: #51b02c;
+  }
+
+  &.some-problems {
+    color: #9fb711;
+  }
+
+  &.not-ok {
+    color: #cc3838;
+  }
+}
