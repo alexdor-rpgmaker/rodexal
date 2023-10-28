@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\PreTest;
 use App\User;
-
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PreTestFactory extends Factory
@@ -21,7 +20,7 @@ class PreTestFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'user_id' => User::factory()->create()->id,

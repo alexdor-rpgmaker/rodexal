@@ -22,7 +22,7 @@ class JurorFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'id_membre' => Member::factory(),

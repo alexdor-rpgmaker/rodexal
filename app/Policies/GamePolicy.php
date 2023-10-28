@@ -2,15 +2,15 @@
 
 namespace App\Policies;
 
-use App\User;
 use App\Former\Game;
+use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class GamePolicy
 {
     use HandlesAuthorization;
 
-    public function before(User $user, $ability): ?bool
+    public function before(User $user, $ability): bool|null
     {
         if ($user->isAdmin()) {
             return true;

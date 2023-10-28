@@ -21,7 +21,7 @@ class WordFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         // colorName() returns something like 'SeaGreen' or 'DarkOliveGreen'
         $label = preg_replace('/([a-z]+)([A-Z])/', '$1 $2', $this->faker->unique()->colorName);

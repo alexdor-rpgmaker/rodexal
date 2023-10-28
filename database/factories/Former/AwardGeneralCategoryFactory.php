@@ -20,7 +20,7 @@ class AwardGeneralCategoryFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'nom_serie' => $this->faker->words(3, true),

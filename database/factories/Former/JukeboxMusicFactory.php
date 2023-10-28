@@ -21,7 +21,7 @@ class JukeboxMusicFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'id_posteur' => Member::inRandomOrder()->first()->id_membre,

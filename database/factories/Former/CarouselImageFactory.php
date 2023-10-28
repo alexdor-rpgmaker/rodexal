@@ -20,7 +20,7 @@ class CarouselImageFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'url_image' => 'uploads/carrousel/id-'.mt_rand(1111, 3333).'.png',

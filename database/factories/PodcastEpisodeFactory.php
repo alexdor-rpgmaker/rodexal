@@ -13,7 +13,7 @@ class PodcastEpisodeFactory extends Factory
 {
     protected $model = PodcastEpisode::class;
 
-    public function definition()
+    public function definition(): array
     {
         $date = $this->faker->date();
         $label = preg_replace('/([a-z]+)([A-Z])/', '$1 $2', $this->faker->unique()->colorName);

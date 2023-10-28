@@ -22,7 +22,7 @@ class StaffMemberFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         $type_role = mt_rand(1, 8);
         $type_to_role = [

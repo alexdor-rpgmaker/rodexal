@@ -20,7 +20,7 @@ class ForumCategoryFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'nom_categorie' => $this->faker->words(3, true),

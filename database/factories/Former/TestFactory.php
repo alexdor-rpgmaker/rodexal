@@ -21,7 +21,7 @@ class TestFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'reviewer_id' => Member::factory(),

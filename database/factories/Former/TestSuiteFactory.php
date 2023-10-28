@@ -21,7 +21,7 @@ class TestSuiteFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'nom_serie' => array_rand(['Tests', 'Pré-tests', 'QCM']),

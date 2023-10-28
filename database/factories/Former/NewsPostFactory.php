@@ -21,7 +21,7 @@ class NewsPostFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'nom_news' => $this->faker->words(3, true),
