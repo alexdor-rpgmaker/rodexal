@@ -10,6 +10,7 @@ use App\Former\TestSuite;
 use App\Former\TestSuiteAssignedJuror;
 use App\PreTest;
 use App\User;
+use Illuminate\Database\Eloquent\Collection;
 use Tests\Feature\FeatureTestCase;
 
 /**
@@ -27,18 +28,18 @@ class PreQualificationsRouterTest extends FeatureTestCase
         parent::refreshDatabase();
 
         $previousSession = Session::factory()->create([
-            'id_session' => 20,
+            'id_session' => 22,
         ]);
         Game::factory()->create([
-            'id_jeu' => 20,
+            'id_jeu' => 22,
             'id_session' => $previousSession,
             'statut_jeu' => 'registered',
         ]);
         $currentSession = Session::factory()->create([
-            'id_session' => 21,
+            'id_session' => 23,
         ]);
         Game::factory()->create([
-            'id_jeu' => 21,
+            'id_jeu' => 23,
             'id_session' => $currentSession,
             'statut_jeu' => 'registered',
         ]);
@@ -53,14 +54,12 @@ class PreQualificationsRouterTest extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->previousSession = Session::find(20);
-        $this->previousSessionGame = Game::find(20);
+        $this->previousSession = Session::find(22);
+        $this->previousSessionGame = Game::find(22);
 
-        $this->currentSession = Session::find(21);
-        $this->currentSessionGame = Game::find(21);
+        $this->currentSession = Session::find(23);
+        $this->currentSessionGame = Game::find(23);
 
-        // TODO: Comprendre pourquoi il y a une Session 22 alors que rien ne la crée dans ce fichier
-        // (commenter ce mock pour ce faire)
         $this->instance(
             Session::class,
             $this->partialMock(
@@ -69,6 +68,101 @@ class PreQualificationsRouterTest extends FeatureTestCase
                     ->andReturn($this->currentSession)
             )
         );
+    }
+
+    // Index
+
+    /**
+     * @test
+     * @testdox Index - If no session is asked, then returns current session game and pre-qualification
+     * Si aucune session n'est demandée, alors renvoie le jeu et la pre-qualification de la session actuelle
+     */
+    public function index_ifNoSessionIsAsked_thenReturnsCurrentSessionGameAndPreTest()
+    {
+        $preTest = PreTest::factory()->create([
+            'type' => 'pre-qualification',
+            'game_id' => $this->currentSessionGame->id_jeu,
+        ]);
+
+        $response = $this->get("/pre_qualifications");
+
+        $currentSessionGameId = $this->currentSessionGame->id_jeu;
+        $response->assertOk()
+            ->assertViewHas('session', $this->currentSession)
+            ->assertViewHas('currentSession', $this->currentSession)
+            ->assertViewHas('games.0', $this->currentSessionGame) // TODO: Fix this flacky test here also
+            ->assertViewHas("preTestsByGameId.$currentSessionGameId.0", $preTest);
+    }
+
+    /**
+     * @test
+     * @testdox Index - If previous session is asked, then returns previous session game and pre-qualification
+     * Si on demande la session précédente, alors renvoie le jeu et la pré-qualification de la session précédente
+     */
+    //    Not possible since there is only one session with Pré-Qualifications
+    //    public function index_ifPreviousSessionIsAsked_thenReturnsPreviousSessionGameAndPreTest()
+    //    {
+    //        $preTest = PreTest::factory()->create([
+    //            'type' => 'pre-qualification',
+    //            'game_id' => $this->previousSessionGame->id_jeu,
+    //        ]);
+    //
+    //        $sessionId = $this->previousSession->id_session;
+    //        $response = $this->get("/pre_qualifications?session_id=$sessionId");
+    //
+    //        $previousSessionGameId = $this->previousSessionGame->id_jeu;
+    //        $response->assertOk()
+    //            ->assertViewHas('session', $this->previousSession)
+    //            ->assertViewHas('currentSession', $this->currentSession)
+    //            ->assertViewHas('games.0', $this->previousSessionGame)
+    //            ->assertViewHas("preTestsByGameId.$previousSessionGameId.0", $preTest);
+    //    }
+
+    /**
+     * @test
+     * @testdox Index - If game is deleted, then returns nothing
+     * Si le jeu est supprimé, alors ne renvoie rien
+     */
+    public function index_ifGameIsDeleted_thenReturnsNoPreTests()
+    {
+        $this->currentSessionGame->update(['statut_jeu' => 'deleted']);
+
+        PreTest::factory()->count(2)->create([
+            'type' => 'pre-qualification',
+            'game_id' => $this->currentSessionGame->id_jeu,
+        ]);
+
+        $response = $this->get("/pre_qualifications");
+
+        $response->assertOk()
+            ->assertViewHas('games', new Collection());
+
+        // Reset modifications
+        $this->currentSessionGame->update(['statut_jeu' => 'registered']);
+    }
+
+    /**
+     * @test
+     * @testdox Index - If game is disqualified and current session step is 2, then returns this game
+     * Si un jeu est disqualifié et que l'étape de la session actuelle est 2, alors renvoie ce jeu
+     */
+    public function index_ifGameIsDisqualifiedAndCurrentSessionStepIs2_thenReturnsThisGame()
+    {
+        $this->currentSession->update(['etape' => 2]);
+        $this->currentSessionGame->update(['statut_jeu' => 'disqualified']);
+
+        PreTest::factory()->count(2)->create([
+            'type' => 'pre-qualification',
+            'game_id' => $this->currentSessionGame->id_jeu,
+        ]);
+
+        $response = $this->get("/pre_qualifications");
+
+        $response->assertOk()
+            ->assertViewHas('games.0', $this->currentSessionGame);
+
+        // Reset modifications
+        $this->currentSessionGame->update(['statut_jeu' => 'registered']);
     }
 
     // Show
@@ -173,7 +267,7 @@ class PreQualificationsRouterTest extends FeatureTestCase
         $suite = TestSuite::factory()->create([
             'id_serie' => 123,
             'is_pre_test' => 1,
-            'nom_serie' => 'Pré-Tests de 2021',
+            'nom_serie' => 'Pré-Tests de 2023',
         ]);
         TestSuiteAssignedJuror::factory()->create([
             'id_jeu' => $game->id_jeu,
@@ -254,7 +348,7 @@ class PreQualificationsRouterTest extends FeatureTestCase
         $suite = TestSuite::factory()->create([
             'id_serie' => 124,
             'is_pre_test' => 1,
-            'nom_serie' => 'Pré-Tests de 2021',
+            'nom_serie' => 'Pré-Tests de 2023',
         ]);
         TestSuiteAssignedJuror::factory()->create([
             'id_jeu' => $game->id_jeu,
@@ -308,7 +402,7 @@ class PreQualificationsRouterTest extends FeatureTestCase
         $suite = TestSuite::factory()->create([
             'id_serie' => 125,
             'is_pre_test' => 1,
-            'nom_serie' => 'Pré-Tests de 2021',
+            'nom_serie' => 'Pré-Tests de 2023',
         ]);
         TestSuiteAssignedJuror::factory()->create([
             'id_jeu' => $game->id_jeu,
@@ -370,13 +464,13 @@ class PreQualificationsRouterTest extends FeatureTestCase
         $preTestSuite = TestSuite::factory()->create([
             'id_serie' => 126,
             'is_pre_test' => 1,
-            'nom_serie' => 'Pré-Tests de 2021',
+            'nom_serie' => 'Pré-Tests de 2023',
         ]);
         // Test suite that is not a pre-test, for creating an assignment
         TestSuite::factory()->create([
             'id_serie' => 127,
             'is_pre_test' => 0,
-            'nom_serie' => 'Tests de 2021',
+            'nom_serie' => 'Tests de 2023',
         ]);
         TestSuiteAssignedJuror::factory()->create([
             'id_jeu' => $game->id_jeu,
@@ -515,7 +609,7 @@ class PreQualificationsRouterTest extends FeatureTestCase
         $suite = TestSuite::factory()->create([
             'id_serie' => 128,
             'is_pre_test' => 1,
-            'nom_serie' => 'Pré-Tests de 2021',
+            'nom_serie' => 'Pré-Tests de 2023',
         ]);
         TestSuiteAssignedJuror::factory()->create([
             'id_jeu' => $game->id_jeu,

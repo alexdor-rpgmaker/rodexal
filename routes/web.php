@@ -60,7 +60,7 @@ Route::resource('qcm', PreTestController::class)->except([
 ]);
 
 Route::resource('pre_qualifications', PreQualificationController::class)->except([
-    'index', 'destroy'
+    'destroy'
 ])->parameters([
     'pre_qualifications' => 'pre_test'
 ]);

@@ -33,7 +33,7 @@ class PreTestController extends Controller
         $sessions = Session::orderBy('id_session')->get();
         $currentSession = $this->sessionInstance::currentSession();
         $session = $request->query('session_id')
-            // Si session_id n'existe pas, retourne une erreur 500
+            // TODO: Faire que si session_id n'existe pas, ça retourne autre chose qu'une erreur 500
             ? $sessions->firstWhere('id_session', $request->query('session_id'))
             : $currentSession;
 

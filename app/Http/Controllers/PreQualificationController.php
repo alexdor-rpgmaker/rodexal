@@ -9,6 +9,7 @@ use App\Former\TestSuite;
 use App\Former\TestSuiteAssignedJuror;
 use App\Helpers\StringParser;
 use App\PreTest;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -25,6 +26,37 @@ class PreQualificationController extends Controller
         $this->sessionInstance = $sessionInstance;
 
         $this->authorizeResource(PreTest::class, 'pre_test');
+    }
+
+    public function index(Request $request)
+    {
+        $sessions = Session::orderBy('id_session')->get();
+        $currentSession = $this->sessionInstance::currentSession();
+        $session = $request->query('session_id')
+            // TODO: Faire que si session_id n'existe pas, ça retourne autre chose qu'une erreur 500
+            ? $sessions->firstWhere('id_session', $request->query('session_id'))
+            : $currentSession;
+
+        $sessionWithPreQualifications = in_array($session->id_session, Session::IDS_SESSIONS_WITH_PRE_QUALIFICATIONS);
+        abort_unless($sessionWithPreQualifications, Response::HTTP_BAD_REQUEST, "Cette session n'a pas de pré-qualifications.");
+
+        $games = Game::where('id_session', $session->id_session);
+
+        // If pre-tests are not finished, we only display pre-tests of disqualified games
+        if ($session === $currentSession && !$session->preTestsAreFinished()) {
+            $games = $games->where('statut_jeu', 'disqualified');
+        }
+
+        $games = $games->orderBy('nom_jeu')->get();
+        $preTestsByGameId = $this->fetchAndGroupPreTestsByGameId($games);
+        $games = $games->filter(fn($game) => $preTestsByGameId->has($game->id_jeu));
+
+        return view('pre_qualifications.index', [
+            'games' => $games,
+            'session' => $session,
+            'currentSession' => $currentSession,
+            'preTestsByGameId' => $preTestsByGameId
+        ]);
     }
 
     public function show(PreTest $preTest)
@@ -147,6 +179,21 @@ class PreQualificationController extends Controller
 
     // Helper
     // TODO: Factorize with PreTestController
+
+    /**
+     * @param $games
+     * @return Collection
+     */
+    private function fetchAndGroupPreTestsByGameId($games): Collection
+    {
+        $gamesId = Arr::pluck($games, 'id_jeu');
+        return PreTest::select('pre_tests.*', 'users.name')
+            ->join('users', 'users.id', '=', 'pre_tests.user_id')
+            ->whereIn('game_id', $gamesId)
+            ->orderBy('users.name')
+            ->get()
+            ->groupBy('game_id');
+    }
 
     private static function checkGameIsInUserAssignments($session, $gameId, $userId): void
     {
