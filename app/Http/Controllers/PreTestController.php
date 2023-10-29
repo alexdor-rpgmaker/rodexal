@@ -150,7 +150,6 @@ class PreTestController extends Controller
     public function update(Request $request, PreTest $preTest): JsonResponse
     {
         $validator_array = [
-            'finalThought' => 'required|in:ok,not-ok',
             'finalThoughtExplanation' => 'nullable|string',
         ];
         $fields = Arr::pluck(PreTest::QCM_FIELDS, 'id');

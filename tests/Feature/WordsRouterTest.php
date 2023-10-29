@@ -108,7 +108,7 @@ class WordsRouterTest extends FeatureTestCase
     // Edit
 
     /**
-     * @testdox On ne peut pas éditer un mot du dictionnaire si on n'est pas admin
+     * @testdox On ne peut pas modifier un mot du dictionnaire si on n'est pas admin
      */
     public function testModifierMotDuDictionnaireSiNonAdmin()
     {

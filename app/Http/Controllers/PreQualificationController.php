@@ -9,6 +9,7 @@ use App\Former\TestSuite;
 use App\Former\TestSuiteAssignedJuror;
 use App\Helpers\StringParser;
 use App\PreTest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -102,9 +103,46 @@ class PreQualificationController extends Controller
         return response()->json($preTest, Response::HTTP_OK);
     }
 
-    public function edit(PreTest $preQualification)
+    public function edit(PreTest $preTest)
     {
-        abort_if($preQualification->type != 'pre-qualification', Response::HTTP_NOT_FOUND);
+        abort_if($preTest->type != 'pre-qualification', Response::HTTP_NOT_FOUND);
+
+        $game = self::fetchGame($preTest->game_id);
+
+        $preTest->finalThought = $preTest->final_thought;
+        $preTest->finalThoughtExplanation = $preTest->final_thought_explanation;
+        return view('pre_qualifications.form', [
+            'pre_test' => $preTest,
+            'game_id' => $game->id_jeu,
+            'game_title' => $game->nom_jeu,
+            'form_method' => 'PUT',
+            'form_url' => route('pre_qualifications.update', $preTest->id),
+        ]);
+    }
+
+    public function update(Request $request, PreTest $preTest): JsonResponse
+    {
+        $validator_array = [
+            'finalThoughtExplanation' => 'nullable|string',
+        ];
+        $disqualifyingFields = Arr::pluck(PreTest::PRE_QUALIFICATIONS_DISQUALIFYING_FIELDS, 'id');
+        foreach ($disqualifyingFields as $field) {
+            $validator_array["questionnaire.$field.activated"] = 'required|boolean';
+            $validator_array["questionnaire.$field.explanation"] = 'nullable|string';
+        }
+        $notDisqualifyingFields = Arr::pluck(PreTest::PRE_QUALIFICATIONS_NOT_DISQUALIFYING_FIELDS, 'id');
+        foreach ($notDisqualifyingFields as $field) {
+            $validator_array["questionnaire.$field.activated"] = 'required|boolean';
+            $validator_array["questionnaire.$field.explanation"] = 'nullable|string';
+        }
+
+        $this->validate($request, $validator_array);
+
+        $preTest->final_thought_explanation = $request->finalThoughtExplanation;
+        $preTest->questionnaire = $request->questionnaire;
+        $preTest->save();
+
+        return response()->json($preTest, Response::HTTP_OK);
     }
 
     // Helper

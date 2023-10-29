@@ -78,7 +78,7 @@ class PreQualificationsRouterTest extends FeatureTestCase
      * @testdox Show - We can see a filled pre-qualification
      * On peut voir une pré-qualification remplie
      */
-    public function show_affichagePreQualification()
+    public function show_displayPreQualification()
     {
         $game = Game::factory()->create([
             'id_session' => $this->currentSession->id_session,
@@ -95,8 +95,8 @@ class PreQualificationsRouterTest extends FeatureTestCase
 
     /**
      * @test
-     * @testdox Show - We cannot see a filled qcm
-     * On ne peut pas voir un qcm rempli
+     * @testdox Show - This URL is not accurate to read a filled QCM
+     * Ce n'est pas la bonne URL pour voir un QCM rempli
      */
     public function show_ifQcm_thenNotFound()
     {
@@ -404,6 +404,247 @@ class PreQualificationsRouterTest extends FeatureTestCase
             'game_id' => $unsavedPreTest->game_id,
             'final_thought' => 'ok',
             'final_thought_explanation' => null,
+            'type' => 'pre-qualification',
+        ]);
+    }
+
+    // Edit
+
+    /**
+     * @test
+     * @testdox Edit - This URL is not accurate to edit a filled QCM
+     * Ce n'est pas la bonne URL pour modifier un QCM rempli
+     */
+    public function edit_ifQcm_thenNotFound()
+    {
+        $user = User::factory()->jury()->create();
+        $preTest = PreTest::factory()->create([
+            'type' => 'qcm',
+            'user_id' => $user->id,
+            'game_id' => 3,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("/pre_qualifications/{$preTest->id}/editer");
+
+        $response->assertNotFound();
+    }
+
+    /**
+     * @test
+     * @testdox Edit - If user is not juror, then impossible to edit a pre-qualification
+     * On ne peut pas modifier une pré-qualification si on est un membre régulier, créateur de celle-ci
+     */
+    public function edit_ifNotJuror_thenForbidden()
+    {
+        $user = User::factory()->create();
+        $preTest = PreTest::factory()->create([
+            'type' => 'pre-qualification',
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("/pre_qualifications/{$preTest->id}/editer");
+
+        $response->assertForbidden()
+            ->assertSeeText('Vous devez être un juré pour modifier une pré-qualif/un QCM !');
+    }
+
+    /**
+     * @test
+     * @testdox Edit - If user has not created pre-qualification then forbidden
+     * On ne peut pas modifier une pré-qualification si on est un juré, non créateur de la pré-qualification
+     */
+    public function edit_ifUserHasNotCreatedQcm_thenForbidden()
+    {
+        $user = User::factory()->jury()->create();
+        $preTest = PreTest::factory()->create([
+            'type' => 'pre-qualification',
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("/pre_qualifications/{$preTest->id}/editer");
+
+        $response->assertForbidden()
+            ->assertSeeText("Vous devez être l'auteur de la pré-qualif/du QCM pour pouvoir la/le modifier !");
+    }
+
+    /**
+     * @test
+     * @testdox Edit - If juror has created the pre-qualification, then it is possible to edit it
+     * On peut modifier une pre-qualification si on est le créateur de la pre-qualification
+     */
+    public function edit_ifJurorHasCreatedQcm_thenOk()
+    {
+        $user = User::factory()->jury()->create();
+        $preTest = PreTest::factory()->create([
+            'type' => 'pre-qualification',
+            'user_id' => $user->id,
+            'game_id' => 3,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("/pre_qualifications/{$preTest->id}/editer");
+
+        $response->assertOk();
+    }
+
+    /**
+     * @test
+     * @testdox Edit - If user is admin, then it is possible to edit the pre-qualification of another
+     * On peut modifier une pré-qualification si on est admin et non créateur
+     */
+    public function edit_ifUserIsAdmin_thenOk()
+    {
+        $member = Member::factory()->create([
+            'id_membre' => 890,
+        ]);
+        $user = User::factory()->admin()->create([
+            'id' => $member->id_membre,
+        ]);
+
+        $game = Game::factory()->create([
+            'id_jeu' => 7,
+            'id_session' => $this->currentSession->id_session,
+        ]);
+        $juror = Juror::factory()->create([
+            'id_membre' => $member->id_membre,
+            'id_session' => $this->currentSession->id_session,
+            'statut_jury' => 1,
+        ]);
+        $suite = TestSuite::factory()->create([
+            'id_serie' => 128,
+            'is_pre_test' => 1,
+            'nom_serie' => 'Pré-Tests de 2021',
+        ]);
+        TestSuiteAssignedJuror::factory()->create([
+            'id_jeu' => $game->id_jeu,
+            'id_jury' => $juror->id_jury,
+            'id_serie' => $suite->id_serie,
+            'statut_jeu_jure' => 2,
+        ]);
+        $preTest = PreTest::factory()->create([
+            'type' => 'pre-qualification',
+            'game_id' => $game->id_jeu,
+            'user_id' => $member->id_membre,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("/pre_qualifications/{$preTest->id}/editer");
+
+        $response->assertOk();
+    }
+
+    // Update
+
+    /**
+     * @test
+     * @testdox Update - If user is not juror, then impossible to update a pre-qualification
+     * On ne peut pas modifier une pre-qualification si on est un membre régulier, créateur de celle-ci
+     */
+    public function update_ifNotJuror_thenForbidden()
+    {
+        $user = User::factory()->create();
+        $preTest = PreTest::factory()->create([
+            'type' => 'pre-qualification',
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->put("/pre_qualifications/{$preTest->id}");
+
+        $response->assertForbidden()
+            ->assertSeeText('Vous devez être un juré pour modifier une pré-qualif/un QCM !');
+    }
+
+    /**
+     * @test
+     * @testdox Update - If user has not created the pre-qualification then forbidden
+     * On ne peut pas modifier une pré-qualification si on est un juré, non créateur de la pré-qualification
+     */
+    public function update_ifUserHasNotCreatedQcm_thenForbidden()
+    {
+        $user = User::factory()->jury()->create();
+        $preTest = PreTest::factory()->create([
+            'type' => 'pre-qualification',
+        ]);
+
+        $response = $this->actingAs($user)
+            ->put("/pre_qualifications/{$preTest->id}");
+
+        $response->assertForbidden()
+            ->assertSeeText("Vous devez être l'auteur de la pré-qualif/du QCM pour pouvoir la/le modifier !");
+    }
+
+    /**
+     * @test
+     * @testdox Update - If fields are missing when updating a pre-qualification then 422 error
+     * On a une erreur 422 quand il manque des paramètres pour mettre une pré-qualification à jour, si on est admin
+     */
+    public function update_ifMissingFields_thenUnprocessableEntityError()
+    {
+        $user = User::factory()->admin()->create();
+        $preTest = PreTest::factory()->create([
+            'type' => 'pre-qualification',
+        ]);
+        $unsavedPreTest = PreTest::factory()->make([
+            'type' => 'pre-qualification',
+        ]);
+
+        $response = $this->actingAs($user)
+            ->put("/pre_qualifications/{$preTest->id}", [
+                'finalThoughtExplanation' => $unsavedPreTest->final_thought_explanation,
+            ], [
+                'Accept' => 'application/json',
+            ]);
+
+        $response->assertUnprocessable()
+            ->assertJsonPath(
+                "message",
+                "Le champ questionnaire.abusive bugs.activated est obligatoire. (and 13 more errors)"
+            );
+        $this->assertDatabaseHas('pre_tests', [
+            'final_thought_explanation' => $preTest->final_thought_explanation,
+            'type' => 'pre-qualification',
+        ]);
+        $this->assertDatabaseMissing('pre_tests', [
+            'final_thought_explanation' => $unsavedPreTest->final_thought_explanation,
+            'type' => 'pre-qualification',
+        ]);
+    }
+
+    /**
+     * @test
+     * @testdox Update - If everything is OK, the pre-qualification is updated
+     * On peut mettre à jour une pré-qualification si on est juré et créateur
+     */
+    public function update_ifEverythingIsOk_thenOk()
+    {
+        $user = User::factory()->jury()->create();
+        $preTest = PreTest::factory()->create([
+            'type' => 'pre-qualification',
+            'user_id' => $user->id,
+            'final_thought' => 'ok',
+        ]);
+        $newPreTest = PreTest::factory()->make([
+            'type' => 'pre-qualification',
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->put("/pre_qualifications/{$preTest->id}", [
+                'gameId' => $newPreTest->game_id,
+                'finalThought' => 'not-ok',
+                'finalThoughtExplanation' => $newPreTest->final_thought_explanation,
+                'questionnaire' => $newPreTest->questionnaire,
+            ]);
+
+        $response->assertOk();
+        $this->assertDatabaseHas('pre_tests', [
+            'user_id' => $user->id,
+            'game_id' => $preTest->game_id,
+            'final_thought' => 'ok',
+            'final_thought_explanation' => $newPreTest->final_thought_explanation,
             'type' => 'pre-qualification',
         ]);
     }

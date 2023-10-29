@@ -172,7 +172,7 @@ class PreTestsRouterTest extends FeatureTestCase
      * @testdox Show - We can see a filled QCM
      * On peut voir un QCM rempli
      */
-    public function show_affichageQcm()
+    public function show_displayQcm()
     {
         $game = Game::factory()->create([
             'id_session' => $this->currentSession->id_session,
@@ -189,8 +189,8 @@ class PreTestsRouterTest extends FeatureTestCase
 
     /**
      * @test
-     * @testdox Show - We cannot see a filled pre-qualification
-     * On ne peut pas voir une pré-qualification remplie
+     * @testdox Show - This URL is not accurate to read a filled pre-qualification
+     *  Ce n'est pas la bonne URL pour voir une pré-qualification remplie
      */
     public function show_ifPreQualification_thenNotFound()
     {
@@ -506,6 +506,26 @@ class PreTestsRouterTest extends FeatureTestCase
 
     /**
      * @test
+     * @testdox Edit - This URL is not accurate to edit a filled pre-qualification
+     * Ce n'est pas la bonne URL pour modifier une pré-qualification rempli
+     */
+    public function edit_ifQcm_thenNotFound()
+    {
+        $user = User::factory()->jury()->create();
+        $preTest = PreTest::factory()->create([
+            'type' => 'pre-qualification',
+            'user_id' => $user->id,
+            'game_id' => 3,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("/qcm/{$preTest->id}/editer");
+
+        $response->assertNotFound();
+    }
+
+    /**
+     * @test
      * @testdox Edit - If user is not juror, then impossible to edit a QCM
      * On ne peut pas modifier un QCM si on est un membre régulier, créateur du QCM
      */
@@ -634,7 +654,7 @@ class PreTestsRouterTest extends FeatureTestCase
     /**
      * @test
      * @testdox Update - If user has not created QCM then forbidden
-     * On ne peut pas éditer un QCM si on est un juré, non créateur du QCM
+     * On ne peut pas modifier un QCM si on est un juré, non créateur du QCM
      */
     public function update_ifUserHasNotCreatedQcm_thenForbidden()
     {
@@ -652,10 +672,10 @@ class PreTestsRouterTest extends FeatureTestCase
 
     /**
      * @test
-     * @testdox Update - If fields are missing then redirect
-     * On est redirigés quand il manque des paramètres pour mettre un QCM à jour, si on est admin
+     * @testdox Update - If fields are missing then 422 error
+     * On a une erreur 422 quand il manque des paramètres pour mettre un QCM à jour, si on est admin
      */
-    public function update_ifMissingFields_thenRedirect()
+    public function update_ifMissingFields_thenUnprocessableEntityError()
     {
         $user = User::factory()->admin()->create();
         $preTest = PreTest::factory()->create([
@@ -668,9 +688,15 @@ class PreTestsRouterTest extends FeatureTestCase
         $response = $this->actingAs($user)
             ->put("/qcm/{$preTest->id}", [
                 'finalThoughtExplanation' => $unsavedPreTest->final_thought_explanation,
+            ], [
+                'Accept' => 'application/json',
             ]);
 
-        $response->assertRedirect();
+        $response->assertUnprocessable()
+            ->assertJsonPath(
+                "message",
+                "Le champ questionnaire.not autonomous.activated est obligatoire. (and 8 more errors)"
+            );
         $this->assertDatabaseHas('pre_tests', [
             'final_thought_explanation' => $preTest->final_thought_explanation,
             'type' => 'qcm',
