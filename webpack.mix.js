@@ -18,7 +18,7 @@ mix
   .sass('resources/sass/app.scss', 'public/css')
   .sass('resources/sass/dictionary.scss', 'public/css')
   .sass('resources/sass/games.scss', 'public/css')
-  .sass('resources/sass/pre_tests.scss', 'public/css')
+  .sass('resources/sass/qcm.scss', 'public/css')
   .sass('resources/sass/pre_qualifications.scss', 'public/css')
   .sass('resources/sass/podcasts.scss', 'public/css')
 

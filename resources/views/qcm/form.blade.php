@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', "$game_title - Pré-test")
+@section('title', "$game_title - QCM")
 
 @section('content')
     <div class="container">

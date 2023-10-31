@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Api\V0;
 
-use App\PreTest;
 use App\Former\Game;
 use App\Former\Session;
 use App\Http\Controllers\Controller;
-
-use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
+use App\PreTest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class PreTestApiController extends Controller
 {
@@ -34,21 +32,11 @@ class PreTestApiController extends Controller
             'id',
             'user_id',
             'game_id',
-            'questionnaire',
             'final_thought',
             'created_at',
             'updated_at'
         )->whereIn('game_id', $gamesId)
             ->get();
-
-        $fields = Arr::pluck(PreTest::QCM_FIELDS, 'id');
-        $preTests->map(function ($preTest) use ($fields) {
-            foreach ($fields as $field) {
-                $preTest[Str::snake($field)] = Arr::get($preTest, "questionnaire.$field.activated");
-            }
-            Arr::forget($preTest, 'questionnaire');
-            return $preTest;
-        });
 
         return response()->json($preTests);
     }

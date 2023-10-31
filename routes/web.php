@@ -1,23 +1,13 @@
 <?php /** @noinspection PhpUndefinedClassInspection */
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MusicController;
 use App\Http\Controllers\PodcastEpisodeController;
-use App\Http\Controllers\PreQualificationController;
-use App\Http\Controllers\PreTestController;
+use App\Http\Controllers\PreTests\PreQualificationController;
+use App\Http\Controllers\PreTests\PreTestController;
+use App\Http\Controllers\PreTests\QcmController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WordController;
 use App\PodcastEpisode;
@@ -53,14 +43,16 @@ Route::resource('dictionnaire', WordController::class)->except([
     'dictionnaire' => 'word'
 ]);
 
-Route::resource('qcm', PreTestController::class)->except([
-    'destroy'
+Route::resource('pre_tests', PreTestController::class)->only([
+    'index'
+]);
+Route::resource('qcm', QcmController::class)->except([
+    'index', 'destroy'
 ])->parameters([
     'qcm' => 'pre_test'
 ]);
-
 Route::resource('pre_qualifications', PreQualificationController::class)->except([
-    'destroy'
+    'index', 'destroy'
 ])->parameters([
     'pre_qualifications' => 'pre_test'
 ]);

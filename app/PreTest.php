@@ -171,13 +171,14 @@ class PreTest extends MainModel
     public function explanationsCount(): int
     {
         $count = 0;
-        foreach (self::QCM_FIELDS as $field) {
-            if (Arr::has($this->questionnaire, $field['id'])) {
-                if (!empty($this->questionnaire[$field['id']]['explanation'])) {
-                    $count++;
-                }
+
+        $explanations = Arr::pluck($this->questionnaire, 'explanation');
+        foreach ($explanations as $explanation) {
+            if (!empty($explanation)) {
+                $count++;
             }
         }
+
         if (!empty($this->final_thought_explanation)) {
             $count++;
         }

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', "$game_title - Pré-qualification")
+@section('title', "$game_title - Pré-Qualification")
 
 @section('content')
     <div class="container">
@@ -8,7 +8,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        Pré-qualification pour le jeu <em>{{ $game_title }}</em>
+                        Pré-Qualification pour le jeu <em>{{ $game_title }}</em>
                     </div>
 
                     <div class="card-body">

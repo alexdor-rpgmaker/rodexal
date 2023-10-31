@@ -53,6 +53,27 @@ class PreTestTest extends TestCase
         $this->assertEquals(3, $actualExplanationsCount);
     }
 
+    /**
+     * @test
+     * @testdox explanationsCount - If it is a pre-qualification, then it counts the questionnaire new fields
+     * Si c'est une pré-qualification, alors compte les nouveaux champs du questionnaire
+     */
+    public function explanationsCount_ifPreQualification_thenCountsTheQuestionnaireNewFields()
+    {
+        $questionnaire = self::questionnaireNoActivatedFieldsNoExplanations();
+        $questionnaire['notForWindows']['explanation'] = "My Windows crash because of this game";
+        $questionnaire['painfulHandling']['explanation'] = "The character seems to dance";
+        $preTest = PreTest::factory()->make([
+            'type' => 'pre-qualification',
+            'final_thought_explanation' => "This game is lame",
+            'questionnaire' => $questionnaire
+        ]);
+
+        $actualExplanationsCount = $preTest->explanationsCount();
+
+        $this->assertEquals(3, $actualExplanationsCount);
+    }
+
     // questionnaireHasActivatedFields
 
     /**

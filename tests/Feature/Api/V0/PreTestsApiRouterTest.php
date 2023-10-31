@@ -53,7 +53,7 @@ class PreTestsApiRouterTest extends FeatureTestCase
 
         self::createOtherSessionGameAndPreTest();
 
-        $response = $this->get('/api/v0/qcm?session_id=21');
+        $response = $this->get('/api/v0/pre_tests?session_id=21');
 
         $response->assertOk()
             ->assertJsonCount(3)

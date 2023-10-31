@@ -5,7 +5,7 @@
 @stop
 
 @push('stylesheets')
-    <link href="{{ asset('css/pre_tests.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/qcm.css') }}" rel="stylesheet">
 @endpush
 
 @section('content')
