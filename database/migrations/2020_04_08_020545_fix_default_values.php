@@ -26,7 +26,7 @@ class FixDefaultValues extends Migration
 //            DB::statement('ALTER TABLE ' . $table . ' ENGINE = InnoDB');
 //        }
 
-        // TODO when old app API is not used any more
+        // TODO: Delete the OAuth2 tables in former database when the user login is done directly on the new app
         // Schema::connection(self::FORMER_APP_DATABASE)->dropIfExists('oauth_authorization_codes');
         // Schema::connection(self::FORMER_APP_DATABASE)->dropIfExists('oauth_clients');
         // Schema::connection(self::FORMER_APP_DATABASE)->dropIfExists('oauth_refresh_tokens');
