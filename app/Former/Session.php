@@ -34,9 +34,9 @@ class Session extends FormerModel
     ];
 
     // TODO: Save and fetch from database
-    const IDS_SESSIONS_WITH_QCM = [19, 20, 21, 22];
+    const IDS_SESSIONS_WITH_QCM = [19, 20, 21, 22, 25];
     const IDS_SESSIONS_WITH_PRE_QUALIFICATIONS = [23];
-    const IDS_SESSIONS_WITH_PRE_TESTS = [19, 20, 21, 22, 23]; // Not entirely true, but noone will notice :)
+    const IDS_SESSIONS_WITH_PRE_TESTS = [19, 20, 21, 22, 23, 25]; // Not entirely true, but noone will notice :)
 
     public function allowsGamesRegistration(): bool
     {
