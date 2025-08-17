@@ -174,6 +174,7 @@ export default {
         'RPG Maker 2003',
         'Rpg maker 95',
         'RPG Maker MV',
+        'RPG Maker MZ',
         'RPG Maker VX',
         'RPG Maker VX Ace',
         'RPG Maker XP',

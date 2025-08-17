@@ -40,11 +40,22 @@ class Game extends FormerModel
         'date_inscription' => 'datetime',
     ];
 
+    // TODO: Add these (from previous sessions)?
+    //'adventure game studio',
+    //'AINSI',
+    //'Klik & Game',
+    //'MMF2',
+    //'Mugen',
+    //'Multimedia Fusion 2',
+    //'The Games Factory 1.06',
     const SOFTWARE_LIST = [
         'Clickteam Fusion 2.5',
         'Game Maker Studio 2',
+        'RPG Maker 95',
+        'RPG Maker 2000',
         'RPG Maker 2003',
         'RPG Maker MV',
+        'RPG Maker MZ',
         'RPG Maker VX',
         'RPG Maker VX Ace',
         'RPG Maker XP',
