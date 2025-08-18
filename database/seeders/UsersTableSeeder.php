@@ -8,20 +8,20 @@ use Illuminate\Support\Facades\DB;
 
 class UsersTableSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         DB::table('users')->insert([
             [
                 'name' => 'Alex RuTiPa',
                 'email' => 'equipe@alexdor.info',
                 'password' => bcrypt('1234abcd5678'),
-                'rank' => 6
+                'user_rank' => 6
             ],
             [
                 'name' => Str::random(10),
                 'email' => Str::random(10) . '@gmail.com',
                 'password' => bcrypt('secret'),
-                'rank' => 1
+                'user_rank' => 1
             ]
         ]);
     }

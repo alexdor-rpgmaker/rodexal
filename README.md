@@ -1,4 +1,4 @@
-# Alex d'or 2019-2022
+# Alex d'or 2019-2025
 
 Construire collaborativement le nouveau site des [Alex d'or](https://www.alexdor.info).
 
@@ -6,7 +6,7 @@ Ce projet utilise les frameworks [Laravel](https://laravel.com) et [Vue](https:/
 
 # Installation
 
-(A déplacer dans [INSTALLATION.md](INSTALLATION.md).)
+(À déplacer dans [INSTALLATION.md](INSTALLATION.md).)
 
 ```bash
 # Cloner le dépot
@@ -19,21 +19,13 @@ composer install
 npm install
 ```
 
-Il faut avoir une instance mysql active, et se créer deux bases de données : rodexal et rodexal_test. (Voir une documentation mysql si besoin.)
-
-Il faut ensuite créer et remplir le fichier `.env` sur la base du fichier `.env.example`, notamment les informations concernant la base de données (DB_DATABASE, DB_USERNAME, DB_PASSWORD, ...). Faire de même pour le fichier `.env.dusk` (utilisé par les tests de navigateur).
-
-```bash
-# Lancer les migrations de base de données
-php artisan migrate
-
-# Ajouter des fausses données dans la base de données
-php artisan db:seed
-```
+Il faut ensuite créer et remplir le fichier `.env` sur la base du fichier `.env.example`, 
+notamment les informations concernant la base de données (DB_DATABASE, DB_USERNAME, DB_PASSWORD, ...).
+Faire de même pour le fichier `.env.dusk` (utilisé par les tests de navigateur).
 
 # Développement
 
-(A déplacer dans [CONTRIBUTING.md](CONTRIBUTING.md).)
+(À déplacer dans [CONTRIBUTING.md](CONTRIBUTING.md).)
 
 ## Lancement du serveur
 

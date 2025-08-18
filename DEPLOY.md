@@ -20,19 +20,19 @@ Il est possible de faire des actions sur ces environnements en ligne de commande
 
 Si vous avez Homebrew, vous pouvez installer le CLI comme ceci :
 
-```shell script
+```bash
 brew tap heroku/brew && brew install heroku
 ```
 
 Une fois installé, vous pouvez vous connecter à votre compte Heroku avec la commande suivante :
 
-```shell script
+```bash
 heroku login
 ```
 
 Par exemple, il est possible d'avoir accès aux logs de l'application :
 
-```shell script
+```bash
 heroku logs -t -a new-alexdor-staging
 # ou
 heroku logs -t -a new-alexdor
@@ -42,7 +42,7 @@ heroku logs -t -a new-alexdor
 
 Les rake tasks peuvent être déclenchées manuellement :
 
-```shell script
+```bash
 heroku run rails ma_task_1 -a new-alexdor-staging
 ```
 
@@ -50,7 +50,7 @@ heroku run rails ma_task_1 -a new-alexdor-staging
 
 Ajouter l'environnement de production dans vos remotes git :
 
-```shell script
+```bash
 heroku git:remote --remote heroku-demo -a new-alexdor-staging
 heroku git:remote --remote heroku-production -a new-alexdor
 ```
@@ -65,7 +65,7 @@ _/!\ Le code déployé en production doit être du code qui a été mergé sur `
 
 Une fois que tout est bien configuré, il est possible de déployer en faisant un simple `git push` :
 
-```shell script
+```bash
 git push heroku-demo master
 # ou
 git push heroku-production master
@@ -75,7 +75,7 @@ Dans certains cas, il est nécessaire d'accompagner une mise en production d'une
 
 Il peut donc être intéressant de mettre l'application en mode maintenance, lancer ces actions, puis retirer le mode maintenance :
 
-```shell script
+```bash
 git push heroku-production master && 
 heroku maintenance:on -a new-alexdor && 
 heroku run rails db:migrate ma_task_1 ma_task2 -a new-alexdor && 

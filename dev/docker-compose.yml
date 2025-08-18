@@ -1,0 +1,36 @@
+services:
+
+  rodexal-db:
+    image: mysql:8.4
+    container_name: rodexal-db-container
+    restart: always
+    environment:
+      MYSQL_DATABASE: rodexal_db_name
+      MYSQL_USER: rodexal_db_user
+      MYSQL_PASSWORD: rodexal_db_password
+      MYSQL_ROOT_PASSWORD: rodexal_db_root_password # For testing purposes only
+    ports:
+      - "3308:3306"
+
+  # URL is http://localhost:8088 and not http://phpmyadmin.test
+  rodexal-phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: rodexal-pma-container
+    platform: linux/amd64
+    restart: always
+    environment:
+      PMA_HOST: rodexal-db
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 10M
+    ports:
+      - "8088:80"
+
+  rodexal-smtp:
+    image: maildev/maildev:2.1.0
+    container_name: rodexal-maildev-container
+    platform: linux/amd64
+    restart: always
+    command: ["bin/maildev", "--web", "8080", "--smtp", "2525"]
+    ports:
+      - "9988:8080"
+      - "2528:2525"

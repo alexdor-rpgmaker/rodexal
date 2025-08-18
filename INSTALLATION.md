@@ -4,25 +4,46 @@
 
 Si vous avez bien renseigné une clé SSH dans vos paramètres GitHub, vous pouvez cloner le dépôt de Rodexal comme suit :
 
-```shell script
+```bash
 git clone git@github.com:alexdor-rpgmaker/rodexal.git
 ```
 
 ## Installer les dépendances
 
+```bash
 # Installer les dépendances Composer
 composer install
 
 # Installer les dépendances NPM
 npm install
+```
 
 ## Mettre en place une base de données
 
-### a) Installer et démarrer MySQL
+Si vous n'avez pas encore Docker sur votre machine, il faut l'installer. [Télécharger Docker](https://www.docker.com/products/docker-desktop).
 
-MySQL est le SGBD utilisé pour le projet. Il faut donc tout d'abord l'avoir installé sur sa machine.
+Lancer les serveurs avec ce docker-compose :
 
-Via Homebrew : `brew install mysql`
+```bash
+# Lancer le docker-compose de cette app
+docker-compose -f dev/docker-compose.yml up --build
 
-Une fois installé, il est possible de démarrer le démon mysql de deux manières :
-- En automatique : `brew services start mysql` (sera toujours en fonctionnement tant qu'il n'est pas arrêté par `brew services stop mysql`)
+# Lancer le docker-compose de l'app de 2011
+cd <path>/<to>/<alexdor_2011>
+docker-compose -f dev/docker-compose.yml up --build
+```
+
+Cela démarre :
+- Une base de données MySQL
+- Une interface d'administration BDD (Phpmyadmin) sur http://localhost:8088
+- Un faux serveur de mail (Maildev)
+
+Il faut aussi se créer une base de données de test `rodexal_test`. (Voir une documentation mysql si besoin.)
+
+```bash
+# Lancer les migrations de base de données
+php artisan migrate
+
+# Ajouter des fausses données dans la base de données
+php artisan db:seed
+```
