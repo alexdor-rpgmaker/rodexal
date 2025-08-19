@@ -14,7 +14,7 @@ class CreatePreTestsTable extends Migration
             $table->unsignedInteger('game_id')->nullable(false);
             $table->text('questionnaire')->nullable(false);
             $table->boolean('final_thought')->nullable(false);
-            $table->text('final_thought_explanation')->nullable(true);
+            $table->text('final_thought_explanation')->nullable();
             $table->timestamps();
 
             $table->unique(['user_id', 'game_id']);

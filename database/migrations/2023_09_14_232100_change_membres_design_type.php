@@ -12,7 +12,7 @@ class ChangeMembresDesignType extends Migration
     public function up(): void
     {
         Schema::connection(self::FORMER_APP_DATABASE)->table('membres', function (Blueprint $table) {
-            $table->string('design')->comment('')->nullable()->change();
+            $table->string('design')->default('5')->comment('')->nullable()->change();
         });
 
         DB::connection(self::FORMER_APP_DATABASE)->update(

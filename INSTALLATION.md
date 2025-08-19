@@ -10,6 +10,8 @@ git clone git@github.com:alexdor-rpgmaker/rodexal.git
 
 ## Installer les dépendances
 
+Avoir une version de php minimum 8.2, ainsi que Composer et Node.js installés sur votre machine.
+
 ```bash
 # Installer les dépendances Composer
 composer install

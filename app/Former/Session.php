@@ -63,9 +63,8 @@ class Session extends FormerModel
 
     public function gamesRegistrationEndsInLessThanSevenDays(): bool
     {
-        $absolute = false;
-        $daysBeforeGamesRegistrationEnd = Carbon::now()->diffInDays($this->date_cloture_inscriptions, $absolute);
-        return $daysBeforeGamesRegistrationEnd >= 0 && $daysBeforeGamesRegistrationEnd < 7;
+        $daysBeforeGamesRegistrationEnd = Carbon::now()->startOfDay()->diffInDays($this->date_cloture_inscriptions);
+        return $daysBeforeGamesRegistrationEnd >= 0 && $daysBeforeGamesRegistrationEnd <= 7;
     }
 
     public function name(): string

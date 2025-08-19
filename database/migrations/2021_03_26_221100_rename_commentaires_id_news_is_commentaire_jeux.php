@@ -43,7 +43,7 @@ class RenameCommentairesIdNewsIsCommentaireJeux extends Migration
         });
 
         Schema::connection(self::FORMER_APP_DATABASE)->table('commentaires', function (Blueprint $table) {
-            $table->boolean('is_commentaire_jeu')->nullable(false)->change();
+            $table->boolean('is_commentaire_jeu')->nullable(false)->default(false)->change();
         });
 
         Schema::connection(self::FORMER_APP_DATABASE)->table('membres', function (Blueprint $table) {
