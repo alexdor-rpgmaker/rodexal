@@ -1,4 +1,4 @@
-import GameRow from '~/resources/js/components/games/GameRow.vue'
+import GameRow from '@/components/games/GameRow.vue'
 import { shallowMount } from '@vue/test-utils'
 
 describe('GameRow', () => {
@@ -95,8 +95,7 @@ describe('GameRow', () => {
       const gameMakers = wrapper.find('.makers')
       expect(gameMakers.text()).toEqual('IndieDev Team : Jack, Jones')
       const linksHref = gameMakers
-        .findAll('a')
-        .wrappers.map(a => a.attributes('href'))
+        .findAll('a').map(a => a.attributes('href'))
       expect(linksHref).toEqual([
         'https://former-app/?p=profil&membre=25'
       ])

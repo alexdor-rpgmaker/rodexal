@@ -33,7 +33,7 @@ Une fois la Pull Request validée et recettée par la team, elle sera mergée su
 
 ### PhpUnit
 ### Dusk
-### Jest
+### Vitest
 
 ## Chantiers à instruire
 

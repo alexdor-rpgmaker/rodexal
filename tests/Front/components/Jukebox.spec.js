@@ -1,24 +1,23 @@
-// TODO
-// import Jukebox from '~/resources/js/components/Jukebox.vue'
+// import Jukebox from '@/components/Jukebox.vue'
 import { shallowMount } from '@vue/test-utils'
 
 describe('Jukebox', () => {
   const methods = {
-    fetchMusics: jest.fn(),
-    initializeAmplitude: jest.fn(),
-    playCallback: jest.fn(),
-    durationChangeCallback: jest.fn(),
-    songChangeCallback: jest.fn(),
-    toggleRepeat: jest.fn(),
-    toggleShuffle: jest.fn(),
-    changeMusicFromSelector: jest.fn(),
-    changeSongPlayedPercentage: jest.fn(),
-    changeVolume: jest.fn(),
-    previous: jest.fn(),
-    playPause: jest.fn(),
-    next: jest.fn(),
-    formatMusicForJukebox: jest.fn(),
-    formatMusicForAmplitude: jest.fn()
+    fetchMusics: vi.fn(),
+    initializeAmplitude: vi.fn(),
+    playCallback: vi.fn(),
+    durationChangeCallback: vi.fn(),
+    songChangeCallback: vi.fn(),
+    toggleRepeat: vi.fn(),
+    toggleShuffle: vi.fn(),
+    changeMusicFromSelector: vi.fn(),
+    changeSongPlayedPercentage: vi.fn(),
+    changeVolume: vi.fn(),
+    previous: vi.fn(),
+    playPause: vi.fn(),
+    next: vi.fn(),
+    formatMusicForJukebox: vi.fn(),
+    formatMusicForAmplitude: vi.fn()
   }
 
   describe('When component is mounted', () => {

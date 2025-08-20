@@ -1,13 +1,16 @@
-import Vue from 'vue'
+import './bootstrap';
+import '../sass/app.scss';
 
-require('./bootstrap')
+import { createApp } from 'vue';
+
+const app = createApp({})
 
 // Declare Vue.js components from folder components/ recursively
-const files = require.context('./', true, /\.vue$/i)
-files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+const components = import.meta.glob('./components/**/*.vue', { eager: true })
+for (const path in components) {
+  const component = components[path].default
+  const name = path.split('/').pop().replace('.vue', '')
+  app.component(name, component)
+}
 
-new Vue({
-  el: '#wrap'
-})
-
-window.Vue = Vue
+app.mount('#vue-app')

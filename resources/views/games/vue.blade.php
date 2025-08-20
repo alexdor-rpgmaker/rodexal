@@ -32,7 +32,7 @@
         </p>
 
         <div id="games-wrapper">
-            <games-list :session='@json($selectedSession ? $selectedSession->id_session : null)'></games-list>
+            <games-list :init-session='@json($selectedSession ? $selectedSession->id_session : null)'></games-list>
         </div>
     </div>
 @stop

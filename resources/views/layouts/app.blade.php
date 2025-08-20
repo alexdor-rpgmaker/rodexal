@@ -16,7 +16,7 @@
       @endif
     </title>
 
-    <script src="{{  mix('js/app.js') }}" defer></script>
+    @vite(['resources/js/app.js'])
     @stack('scripts')
 
     <!-- Font Awesome -->
@@ -119,7 +119,7 @@
     <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/vendor/custom.modernizr.js"></script>
   </head>
   <body>
-    <div id="wrap">
+    <div id="vue-app">
       <nav class="top-bar">
         <ul class="title-area">
           <!-- Title Area -->

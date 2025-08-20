@@ -1,50 +1,76 @@
 <template>
-  <form method="POST" @submit.prevent="submit">
+  <form
+    method="POST"
+    @submit.prevent="submit"
+  >
     <h2>Check-up</h2>
-    <template v-if="!loaded">Chargement...
-      <img src="https://www.alexdor.info/design/divers/Alex.gif" alt="Alex Rutipa qui marche">
+    <template v-if="!loaded">
+      Chargement...
+      <img
+        src="https://www.alexdor.info/design/divers/Alex.gif"
+        alt="Alex Rutipa qui marche"
+      >
     </template>
     <template v-else>
-      <div class="row" v-for="question in questions" :key="question.id">
+      <div
+        v-for="question in questions"
+        :key="question.id"
+        class="row"
+      >
         <template v-if="fields.questionnaire[question.id]">
           <div class="col-sm-12">
             <div class="form-check">
               <input
-                  class="form-check-input"
-                  type="checkbox"
-                  :name="question.id"
-                  :id="question.id"
-                  v-model="fields.questionnaire[question.id].activated"
+                :id="question.id"
+                v-model="fields.questionnaire[question.id].activated"
+                class="form-check-input"
+                type="checkbox"
+                :name="question.id"
               >
-              <label class="form-check-label" :for="question.id">{{ question.label }}</label>
+              <label
+                class="form-check-label"
+                :for="question.id"
+              >{{ question.label }}</label>
               <div
-                  class="field-description"
-                  v-if="question.fieldDescription"
-              >{{ question.fieldDescription }}
+                v-if="question.fieldDescription"
+                class="field-description"
+              >
+                {{ question.fieldDescription }}
               </div>
-              <div class="field-description" v-if="question.word">
+              <div
+                v-if="question.word"
+                class="field-description"
+              >
                 => Définition de
                 <a :href="'/dictionnaire#' + question.word">{{ question.word }}</a>
               </div>
               <div
-                  v-if="errors && errors[question.id]"
-                  class="text-danger"
-              >{{ errors[question.label][0] }}
+                v-if="errors && errors[question.id]"
+                class="text-danger"
+              >
+                {{ errors[question.label][0] }}
               </div>
             </div>
-            <div class="checkbox-precision" v-if="fields.questionnaire[question.id].activated">
-              <label :for="'explanation-' + question.id" class="form-label">Précisions</label>
+            <div
+              v-if="fields.questionnaire[question.id].activated"
+              class="checkbox-precision"
+            >
+              <label
+                :for="'explanation-' + question.id"
+                class="form-label"
+              >Précisions</label>
               <input
-                  type="text"
-                  :name="'explanation-' + question.id"
-                  :id="'explanation-' + question.id"
-                  v-model="fields.questionnaire[question.id].explanation"
-                  style="width: 100%"
+                :id="'explanation-' + question.id"
+                v-model="fields.questionnaire[question.id].explanation"
+                type="text"
+                :name="'explanation-' + question.id"
+                style="width: 100%"
               >
               <div
-                  v-if="errors && errors[question.id + 'Explanation']"
-                  class="text-danger"
-              >{{ errors[question.id + 'Explanation'][0] }}
+                v-if="errors && errors[question.id + 'Explanation']"
+                class="text-danger"
+              >
+                {{ errors[question.id + 'Explanation'][0] }}
               </div>
             </div>
           </div>
@@ -55,48 +81,70 @@
       <div class="row">
         <div class="col-sm-12">
           <template v-if="editing">
-            <input type="hidden" name="finalThought" v-model="fields.finalThought">
+            <input
+              v-model="fields.finalThought"
+              type="hidden"
+              name="finalThought"
+            >
             <span v-if="fields.finalThought === 'ok'">Conforme</span>
             <span v-else>Non conforme</span>
           </template>
           <template v-else>
             <div class="form-check form-check-inline">
               <input
-                  class="form-check-input"
-                  type="radio"
-                  name="finalThought"
-                  id="finalThought-ok"
-                  v-model="fields.finalThought"
-                  value="ok"
+                id="finalThought-ok"
+                v-model="fields.finalThought"
+                class="form-check-input"
+                type="radio"
+                name="finalThought"
+                value="ok"
               >
-              <label class="form-check-label" for="finalThought-ok">Conforme</label>
+              <label
+                class="form-check-label"
+                for="finalThought-ok"
+              >Conforme</label>
             </div>
             <div class="form-check form-check-inline">
               <input
-                  class="form-check-input"
-                  type="radio"
-                  name="finalThought"
-                  id="finalThought-not-ok"
-                  v-model="fields.finalThought"
-                  value="not-ok"
+                id="finalThought-not-ok"
+                v-model="fields.finalThought"
+                class="form-check-input"
+                type="radio"
+                name="finalThought"
+                value="not-ok"
               >
-              <label class="form-check-label" for="finalThought-not-ok">Non conforme</label>
+              <label
+                class="form-check-label"
+                for="finalThought-not-ok"
+              >Non conforme</label>
             </div>
           </template>
-          <div v-if="errors && errors.finalThought" class="text-danger">{{ errors.finalThought[0] }}</div>
-          <div class="final-thought-precision" v-if="fields.finalThought === 'not-ok'">
-            <label for="finalThoughtPrecision" class="form-label">Précisions</label>
+          <div
+            v-if="errors && errors.finalThought"
+            class="text-danger"
+          >
+            {{ errors.finalThought[0] }}
+          </div>
+          <div
+            v-if="fields.finalThought === 'not-ok'"
+            class="final-thought-precision"
+          >
+            <label
+              for="finalThoughtPrecision"
+              class="form-label"
+            >Précisions</label>
 
             <textarea
-                class="form-control"
-                name="finalThoughtPrecision"
-                id="finalThoughtPrecision"
-                v-model="fields.finalThoughtExplanation"
-            ></textarea>
+              id="finalThoughtPrecision"
+              v-model="fields.finalThoughtExplanation"
+              class="form-control"
+              name="finalThoughtPrecision"
+            />
             <div
-                v-if="errors && errors.finalThoughtExplanation"
-                class="text-danger"
-            >{{ errors.finalThoughtExplanation[0] }}
+              v-if="errors && errors.finalThoughtExplanation"
+              class="text-danger"
+            >
+              {{ errors.finalThoughtExplanation[0] }}
             </div>
           </div>
         </div>
@@ -104,80 +152,105 @@
 
       <div class="row mt-3">
         <div class="col-md-12 text-center">
-          <button type="submit" class="submit bouton mb-0">Envoyer</button>
+          <button
+            type="submit"
+            class="submit bouton mb-0"
+          >
+            Envoyer
+          </button>
         </div>
       </div>
     </template>
   </form>
 </template>
 
-<script>
-import FormMixin from '../FormMixin'
+<script setup>
+import { ref, computed } from 'vue'
 
-// noinspection JSUnusedGlobalSymbols
-export default {
-  props: {
-    questions: {
-      type: Array,
-      required: true
-    },
-    gameId: {
-      type: Number,
-      required: true
-    },
-    preTest: {
-      type: Object,
-      required: false
-    },
-    initMethod: {
-      type: String,
-      required: false
-    },
-    initAction: {
-      type: String,
-      required: false
-    },
-    initRedirection: {
-      type: String,
-      required: false
-    }
+const props = defineProps({
+  questions: {
+    type: Array,
+    required: true
   },
-  mixins: [FormMixin],
-  data() {
-    return {
-      fields: this.fillFields(),
-      method: this.initMethod || 'POST',
-      action: this.initAction || '/',
-      redirection: this.initRedirection || ''
-    }
+  gameId: {
+    type: Number,
+    required: true
   },
-  computed: {
-    editing() {
-      return this.method === 'PUT'
-    }
+  preTest: {
+    type: Object,
+    required: false,
+    default: null
   },
-  methods: {
-    fillFields() {
-      const questionnaire = {}
-      this.questions.forEach(question => {
-        questionnaire[question.id] = {
-          activated: false,
-          explanation: null
+  initMethod: {
+    type: String,
+    required: false,
+    default: 'POST'
+  },
+  initAction: {
+    type: String,
+    required: false,
+    default: null
+  },
+  initRedirection: {
+    type: String,
+    required: false,
+    default: null
+  }
+})
+
+const loaded = ref(true)
+const success = ref(false)
+const errors = ref({})
+const fields = ref(fillFields())
+const method = ref(props.initMethod)
+const action = ref(props.initAction || '/')
+const redirection = ref(props.initRedirection || '')
+const editing = computed(() => method.value === 'PUT')
+
+function submit() {
+  if (loaded.value) {
+    loaded.value = false
+    success.value = false
+    errors.value = {}
+    axios({
+      method: method.value,
+      url: action.value,
+      data: fields.value
+    })
+      .then(() => {
+        if (redirection.value !== '') {
+          window.location.replace(redirection.value)
+        }
+        fields.value = fillFields()
+        success.value = true
+        loaded.value = true
+      })
+      .catch(error => {
+        loaded.value = true
+        if (error.response && error.response.status === 422) {
+          errors.value = error.response.data.errors || {}
         }
       })
-      // noinspection UnnecessaryLocalVariableJS
-      const fields =
-          this.initMethod === 'PUT'
-            ? this.preTest
-            : {
-                questionnaire,
-                gameId: this.gameId,
-                finalThought: null,
-                finalThoughtExplanation: null
-              }
-      return fields
-    }
   }
+}
+
+function fillFields() {
+  const questionnaire = {}
+  props.questions.forEach(question => {
+    questionnaire[question.id] = {
+      activated: false,
+      explanation: null
+    }
+  })
+
+  return props.initMethod === 'PUT'
+    ? props.preTest
+    : {
+      questionnaire,
+      gameId: props.gameId,
+      finalThought: null,
+      finalThoughtExplanation: null
+    }
 }
 </script>
 

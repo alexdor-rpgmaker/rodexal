@@ -1,4 +1,4 @@
-import SelectSoftware from '~/resources/js/components/games/SelectSoftware.vue'
+import SelectSoftware from '@/components/games/SelectSoftware.vue'
 import { shallowMount } from '@vue/test-utils'
 
 describe('SelectSoftware', () => {

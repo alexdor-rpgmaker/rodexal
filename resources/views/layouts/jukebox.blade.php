@@ -10,7 +10,7 @@
 
     <title>{{ config('app.name', "Alex d'or") }}</title>
 
-    <script src="{{  mix('js/app.js') }}" defer></script>
+    @vite(['resources/js/app.js'])
     @stack('scripts')
 
     <!-- Font Awesome -->
@@ -88,7 +88,7 @@
     <script src="{{ env('FORMER_APP_URL') }}/design/2013-alexre/foundation/js/vendor/custom.modernizr.js"></script>
   </head>
   <body style="margin-bottom: 0;">
-    <div id="wrap">
+    <div id="vue-app">
       <div class="row" id="mainrow">
         <main class="py-4">
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

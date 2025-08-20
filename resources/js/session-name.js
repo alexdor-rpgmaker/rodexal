@@ -1,5 +1,8 @@
-export default (sessionId) => {
-  let sessionName = (sessionId < 10) ? '0' + sessionId : sessionId
+// noinspection JSUnusedGlobalSymbols
+export default (givenSessionId) => {
+  const sessionId = parseInt(givenSessionId, 10)
+  let sessionName = String(sessionId + 2000)
+
   if (sessionId === 3) {
     sessionName += '-2004'
   }
@@ -16,5 +19,5 @@ export default (sessionId) => {
     sessionName += '-2024'
   }
 
-  return '20' + sessionName
+  return sessionName
 }

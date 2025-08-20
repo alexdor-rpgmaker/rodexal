@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import PreQualificationsForm from '~/resources/js/components/PreQualificationsForm.vue'
+import PreQualificationsForm from '@/components/PreQualificationsForm.vue'
 
 describe('PreQualificationsForm', () => {
   const gameId = 115
@@ -41,9 +41,9 @@ describe('PreQualificationsForm', () => {
           propsData
         })
 
-        expect(wrapper.vm.$data.method).toEqual('PUT')
-        expect(wrapper.vm.$data.action).toEqual('/game/advice')
-        expect(wrapper.vm.$data.redirection).toEqual('/')
+        expect(wrapper.vm.method).toEqual('PUT')
+        expect(wrapper.vm.action).toEqual('/game/advice')
+        expect(wrapper.vm.redirection).toEqual('/')
       })
     })
 
@@ -58,9 +58,9 @@ describe('PreQualificationsForm', () => {
           }
         })
 
-        expect(wrapper.vm.$data.method).toEqual('POST')
-        expect(wrapper.vm.$data.action).toEqual('/')
-        expect(wrapper.vm.$data.redirection).toEqual('')
+        expect(wrapper.vm.method).toEqual('POST')
+        expect(wrapper.vm.action).toEqual('/')
+        expect(wrapper.vm.redirection).toEqual('')
       })
     })
   })
@@ -140,7 +140,7 @@ describe('PreQualificationsForm', () => {
 
         wrapper.vm.fillFields()
 
-        expect(wrapper.vm.$data.fields).toEqual({
+        expect(wrapper.vm.fields).toEqual({
           questionnaire: {
             notAutonomous: {
               activated: false,
@@ -166,7 +166,7 @@ describe('PreQualificationsForm', () => {
 
         wrapper.vm.fillFields()
 
-        expect(wrapper.vm.$data.fields).toEqual(initPreQualification)
+        expect(wrapper.vm.fields).toEqual(initPreQualification)
       })
     })
   })

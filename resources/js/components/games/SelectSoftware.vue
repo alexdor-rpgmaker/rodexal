@@ -1,17 +1,16 @@
 <template>
   <div class="software-form-group">
     <div class="row mb-2">
-      <!--suppress HtmlFormInputWithoutLabel -->
       <select
-          id="software-list"
-          class="form-select"
-          v-model="selectedSoftware"
-          :disabled="!registrationAllowed"
+        id="software-list"
+        v-model="selectedSoftware"
+        class="form-select"
+        :disabled="!registrationAllowed"
       >
         <option
-            v-for="software in softwareList"
-            :value="software"
-            :key="software"
+          v-for="software in softwareList"
+          :key="software"
+          :value="software"
         >
           {{ software }}
         </option>
@@ -22,77 +21,73 @@
     </div>
     <template v-if="otherSoftwareInputDisplayed">
       <div class="row">
-        <!--suppress HtmlFormInputWithoutLabel -->
         <input
-            type="text"
-            id="other-software"
-            class="form-control"
-            v-model="otherSoftware"
-            :disabled="!registrationAllowed"
-        />
+          id="other-software"
+          v-model="otherSoftware"
+          type="text"
+          class="form-control"
+          :disabled="!registrationAllowed"
+        >
       </div>
     </template>
 
     <!-- This input is the only one taken into account for the form -->
-    <!--suppress HtmlFormInputWithoutLabel -->
     <input
-        type="hidden"
-        id="software"
-        name="software"
-        class="input_text_large"
-        :value="resolvedSoftware"
-    />
+      id="software"
+      type="hidden"
+      name="software"
+      class="input_text_large"
+      :value="resolvedSoftware"
+    >
   </div>
 </template>
 
-<script>
-// noinspection JSUnusedGlobalSymbols
-export default {
-  data() {
-    return {
-      selectedSoftware: '',
-      otherSoftware: ''
-    }
-  },
-  props: {
-    initialSoftware: {
-      type: String
-    },
-    softwareList: {
-      type: Array,
-      required: true
-    },
-    registrationAllowed: {
-      type: Boolean,
-      required: true
-    }
-  },
-  beforeMount() {
-    if (this.initialSoftware) {
-      if (this.softwareList.includes(this.initialSoftware)) {
-        this.selectedSoftware = this.initialSoftware
-      } else {
-        this.selectedSoftware = 'other'
-        this.otherSoftware = this.initialSoftware
-      }
-    } else {
-      this.selectedSoftware = this.softwareList[0]
-    }
-  },
-  computed: {
-    selectedSoftwareIsInDropdown() {
-      return this.selectedSoftware && this.softwareList.includes(this.selectedSoftware)
-    },
-    otherSoftwareInputDisplayed() {
-      return this.selectedSoftware && !this.selectedSoftwareIsInDropdown
-    },
-    resolvedSoftware() {
-      if (this.selectedSoftwareIsInDropdown) {
-        return this.selectedSoftware
-      }
+<script setup>
+import { computed, onBeforeMount, ref } from 'vue'
 
-      return this.otherSoftware
-    }
+const props = defineProps({
+  initialSoftware: {
+    type: String,
+    required: false,
+    default: null
+  },
+  softwareList: {
+    type: Array,
+    required: true
+  },
+  registrationAllowed: {
+    type: Boolean,
+    required: true
   }
-}
+})
+
+const selectedSoftware = ref('')
+const otherSoftware = ref('')
+
+const selectedSoftwareIsInDropdown = computed(() =>
+  selectedSoftware.value && props.softwareList.includes(selectedSoftware.value)
+)
+
+const otherSoftwareInputDisplayed = computed(() =>
+  selectedSoftware.value && !selectedSoftwareIsInDropdown.value
+)
+
+const resolvedSoftware = computed(() =>
+  selectedSoftwareIsInDropdown.value
+    ? selectedSoftware.value
+    : otherSoftware.value
+)
+
+onBeforeMount(() => {
+  if (props.initialSoftware) {
+    if (props.softwareList.includes(props.initialSoftware)) {
+      selectedSoftware.value = props.initialSoftware
+    } else {
+      selectedSoftware.value = 'other'
+      otherSoftware.value = props.initialSoftware
+    }
+  } else {
+    selectedSoftware.value = props.softwareList[0]
+  }
+})
 </script>

@@ -1,93 +1,207 @@
+/* global window */
+
 import axios from 'axios'
-import GamesList from '~/resources/js/components/games/GamesList.vue'
-import { shallowMount } from '@vue/test-utils'
-
-jest.mock('axios')
-global.axios = axios
-
-const windowScroll = jest.fn()
-window.scrollTo = windowScroll
+import GamesList from '@/components/games/GamesList.vue'
+import { flushPromises, shallowMount } from '@vue/test-utils'
+import AxiosMockAdapter from 'axios-mock-adapter'
 
 describe('GamesList', () => {
+  const axiosMock = new AxiosMockAdapter(axios)
+
+  const windowScroll = vi.fn()
+  window.scrollTo = windowScroll
+
   const propsData = {
-    session: null
+    initSession: null
   }
 
-  beforeEach(() => {
-    const apiResponseBody = {
-      meta: {},
-      data: []
-    }
-    axios.mockResolvedValue({
-      data: apiResponseBody
-    })
+  beforeEach(async () => {
+    axiosMock.reset()
   })
 
   describe('When component is mounted', () => {
-    it('fetches games from API', () => {
-      const fetchGames = jest.fn()
-      shallowMount(GamesList, {
-        propsData,
-        methods: {
-          fetchGames
-        }
+    beforeEach(async () => {
+      await mockGamesRequest({
+        meta: {
+          current_page: 2,
+          last_page: 5,
+          total: 10
+        },
+        data: [{ title: 'game-3', awards: [] }, { title: 'game-4', awards: [] }]
       })
+    })
 
-      expect(fetchGames).toHaveBeenCalled()
+    it('stores information in component', async () => {
+      // When
+      const wrapper = shallowMount(GamesList, { propsData })
+      await flushPromises()
+
+      // Then
+      expect(wrapper.vm.games).toEqual([
+        { title: 'game-3', awards: [] },
+        { title: 'game-4', awards: [] }
+      ])
+      expect(wrapper.vm.page).toEqual(2)
+      expect(wrapper.vm.totalPagesCount).toEqual(5)
+      expect(wrapper.vm.totalResultsCount).toEqual(10)
+      expect(wrapper.vm.resultsCountOnThisPage).toEqual(2)
+    })
+
+    describe('without parameters', () => {
+      it('fetches games from API (page 1 and default sort)', async () => {
+        // When
+        shallowMount(GamesList, { propsData })
+        await flushPromises()
+
+        // Then
+        expect(axiosMock.history.get.length).toBe(1)
+        expect(axiosMock.history.get[0].params).toEqual({
+          page: 1,
+          sort: 'awards_count:desc,title:asc'
+        })
+      })
+    })
+
+    describe('with a session props', () => {
+      it('fetches games from API with page, session and session sort parameters', async () => {
+        // When
+        shallowMount(GamesList, { propsData: { initSession: 17 } })
+        await flushPromises()
+
+        // Then
+        expect(axiosMock.history.get.length).toBe(1)
+        expect(axiosMock.history.get[0].params).toEqual({
+          page: 1,
+          session_id: 17,
+          sort: 'awards_count:desc,title:asc'
+        })
+      })
+    })
+
+    describe('with all parameters', () => {
+      it('fetches games from API with all other parameters', async () => {
+        const wrapper = shallowMount(GamesList, { propsData })
+        await flushPromises()
+
+        await mockGamesRequest({
+          meta: {
+            current_page: 2,
+            last_page: 5,
+            total: 10
+          },
+          data: [{ title: 'game-3', awards: [] }, { title: 'game-4', awards: [] }]
+        })
+
+        // TODO: Simulate user interaction instead of setting data directly
+        wrapper.vm.query = 'rutipa'
+        wrapper.vm.selectedSort = 'title'
+        wrapper.vm.sortDirection = 'asc'
+        wrapper.vm.selectedSession = '15'
+        wrapper.vm.withDownloadLinks = true
+        wrapper.vm.selectedSoftware = 'RPG Maker 2003'
+
+        // When
+        await wrapper.vm.fetchGames()
+
+        // Then
+        expect(axiosMock.history.get.length).toBe(2)
+        expect(axiosMock.history.get[1].params).toEqual({
+          page: 2,
+          q: 'rutipa',
+          software: 'RPG Maker 2003',
+          session_id: '15',
+          sort: 'title:asc',
+          download_links: 'any'
+        })
+      })
     })
   })
 
   describe('Page buttons', () => {
     describe('when there is only one page', () => {
-      it('has no navigation bar', () => {
-        const wrapper = shallowMount(GamesList, {
-          data: () => ({
-            page: 1,
-            totalPagesCount: 1
-          })
+      it('has no navigation bar', async () => {
+        await mockGamesRequest({
+          meta: {
+            current_page: 1,
+            last_page: 1,
+            total: 0
+          },
+          data: []
         })
 
+        // When
+        const wrapper = shallowMount(GamesList, { propsData })
+        await flushPromises()
+
+        // Then
         expect(wrapper.find('ul.pagination').exists()).toEqual(false)
       })
     })
 
-    describe('when current page is the first but not the last', () => {
-      it('disables previous button', () => {
-        const wrapper = shallowMount(GamesList, {
-          data: () => ({
-            page: 1,
-            totalPagesCount: 10
-          })
+    describe('when current page is the first and not the last', () => {
+      it('disables previous button', async () => {
+        mockGamesRequest({
+          meta: {
+            current_page: 1,
+            last_page: 10,
+            total: 200
+          },
+          data: []
         })
 
+        // When
+        const wrapper = shallowMount(GamesList, {
+          propsData
+        })
+        await flushPromises()
+
+        // Then
         expect(wrapper.find('.previous').classes('disabled')).toEqual(true)
         expect(wrapper.find('.next').classes('disabled')).toEqual(false)
       })
     })
 
     describe('when current page is neither the first nor the last', () => {
-      it('does not disable buttons', () => {
-        const wrapper = shallowMount(GamesList, {
-          data: () => ({
-            page: 5,
-            totalPagesCount: 10
-          })
+      it('does not disable buttons', async () => {
+        mockGamesRequest({
+          meta: {
+            current_page: 5,
+            last_page: 10,
+            total: 200
+          },
+          data: []
         })
 
+        // When
+        const wrapper = shallowMount(GamesList, {
+          propsData
+        })
+        await flushPromises()
+
+        // Then
         expect(wrapper.find('.previous').classes('disabled')).toEqual(false)
         expect(wrapper.find('.next').classes('disabled')).toEqual(false)
       })
     })
 
     describe('when current page is the last and not the first', () => {
-      it('disables next button', () => {
-        const wrapper = shallowMount(GamesList, {
-          data: () => ({
-            page: 10,
-            totalPagesCount: 10
-          })
+      it('disables next button', async () => {
+        mockGamesRequest({
+          meta: {
+            current_page: 10,
+            last_page: 10,
+            total: 200
+          },
+          data: []
         })
 
+        // When
+        const wrapper = shallowMount(GamesList, {
+          propsData
+        })
+        await flushPromises()
+
+        // Then
         expect(wrapper.find('.previous').classes('disabled')).toEqual(false)
         expect(wrapper.find('.next').classes('disabled')).toEqual(true)
       })
@@ -95,248 +209,254 @@ describe('GamesList', () => {
   })
 
   describe('.gamesCount()', () => {
-    describe('when results count equals total results count (less than two pages)', () => {
-      it('displays X', () => {
+    describe('when there is only one page of results', () => {
+      it('only displays the number of games on this page', async () => {
+        mockGamesRequest({
+          meta: {
+            current_page: 1,
+            last_page: 1,
+            total: 2
+          },
+          data: [{ title: 'game-1', awards: [] }, { title: 'game-2', awards: [] }]
+        })
+
+        // When
         const wrapper = shallowMount(GamesList, {
-          data: () => ({
-            totalResultsCount: 2,
-            resultsCountOnThisPage: 2
-          })
+          propsData
         })
+        await flushPromises()
 
-        expect(wrapper.vm.gamesCount).toEqual(2)
+        // Then
+        expect(wrapper.vm.gamesCount).toEqual('2')
       })
     })
 
-    describe('when results count does not equal total results count (more than one page)', () => {
-      it('displays X sur Y', () => {
+    describe('when there is more than one page', () => {
+      it('displays the number of games on this page and the total on every pages', async () => {
+        mockGamesRequest({
+          meta: {
+            current_page: 2,
+            last_page: 4,
+            total: 8
+          },
+          data: [{ title: 'game-3', awards: [] }, { title: 'game-4', awards: [] }]
+        })
+
+        // When
         const wrapper = shallowMount(GamesList, {
-          data: () => ({
-            totalResultsCount: 5,
-            resultsCountOnThisPage: 2
-          })
+          propsData
         })
+        await flushPromises()
 
-        expect(wrapper.vm.gamesCount).toEqual('2 sur 5')
-      })
-    })
-  })
-
-  describe('.fetchGames()', () => {
-    function createWrapperWithParams(params) {
-      const wrapper = shallowMount(GamesList, params)
-      const apiResponseBody = {
-        meta: {
-          current_page: 2,
-          last_page: 5,
-          total: 150
-        },
-        data: [{ title: 'game-1' }, { title: 'game-2' }]
-      }
-      axios.mockClear().mockResolvedValue({
-        data: apiResponseBody
-      })
-      return wrapper
-    }
-
-    it('stores pagination information in component', async () => {
-      const wrapper = createWrapperWithParams({ propsData })
-
-      await wrapper.vm.fetchGames()
-
-      expect(wrapper.vm.$data.page).toEqual(2)
-      expect(wrapper.vm.$data.totalPagesCount).toEqual(5)
-      expect(wrapper.vm.$data.totalResultsCount).toEqual(150)
-      expect(wrapper.vm.$data.resultsCountOnThisPage).toEqual(2)
-    })
-
-    it('stores games information in component', async () => {
-      const wrapper = createWrapperWithParams({ propsData })
-
-      await wrapper.vm.fetchGames()
-
-      expect(wrapper.vm.$data.games).toEqual([
-        { title: 'game-1' },
-        { title: 'game-2' }
-      ])
-    })
-
-    describe('without parameters', () => {
-      it('fetches games from API only with page and session sort parameters', async () => {
-        const wrapper = createWrapperWithParams({ propsData })
-
-        await wrapper.vm.fetchGames()
-
-        expect(axios).toHaveBeenCalledTimes(1)
-        expect(axios).toHaveBeenCalledWith({
-          params: {
-            page: 1,
-            sort: 'awards_count:desc,title:asc'
-          },
-          url: '/api/v0/games'
-        })
-      })
-    })
-
-    describe('with a session props', () => {
-      it('fetches games from API with page, session and session sort parameters', async () => {
-        const wrapper = createWrapperWithParams({
-          propsData: { ...propsData, session: 17 }
-        })
-
-        await wrapper.vm.fetchGames()
-
-        expect(axios).toHaveBeenCalledTimes(1)
-        expect(axios).toHaveBeenCalledWith({
-          params: {
-            page: 1,
-            session_id: 17,
-            sort: 'awards_count:desc,title:asc'
-          },
-          url: '/api/v0/games'
-        })
-      })
-    })
-
-    describe('with all parameters', () => {
-      it('fetches games from API with all other parameters', async () => {
-        const wrapper = createWrapperWithParams({
-          propsData,
-          data: () => ({
-            query: 'rutipa',
-            selectedSoftware: 'RPG Maker 2003',
-            selectedSession: '15',
-            selectedSort: 'title',
-            sortDirection: 'asc',
-            withDownloadLinks: true
-          })
-        })
-
-        await wrapper.vm.fetchGames()
-
-        expect(axios).toHaveBeenCalledTimes(1)
-        expect(axios).toHaveBeenCalledWith({
-          params: {
-            page: 1,
-            q: 'rutipa',
-            software: 'RPG Maker 2003',
-            session_id: '15',
-            sort: 'title:asc',
-            download_links: 'any'
-          },
-          url: '/api/v0/games'
-        })
+        // Then
+        expect(wrapper.vm.gamesCount).toEqual('2 sur 8')
       })
     })
   })
 
   describe('.search()', () => {
     it('resets page to 1 and fetches games', async () => {
-      const fetchGames = jest.fn()
-      const wrapper = shallowMount(GamesList, {
-        propsData,
-        data: () => ({ page: 3 }),
-        methods: {
-          fetchGames
-        }
+      await mockGamesRequest({
+        meta: {
+          current_page: 3,
+          last_page: 3,
+          total: 6
+        },
+        data: [{ title: 'game-5', awards: [] }, { title: 'game-6', awards: [] }]
       })
 
+      const wrapper = shallowMount(GamesList, {
+        propsData
+      })
+      await flushPromises()
+
+      // When
+      await mockGamesRequest({
+        meta: {
+          current_page: 1,
+          last_page: 3,
+          total: 6
+        },
+        data: [{ title: 'game-1', awards: [] }, { title: 'game-2', awards: [] }]
+      })
       await wrapper.vm.search()
 
-      expect(fetchGames).toHaveBeenCalled()
-      expect(wrapper.vm.$data.page).toEqual(1)
+      // Then
+      expect(wrapper.vm.page).toEqual(1)
     })
   })
 
   describe('.previousPage()', () => {
     it('decreases page to 2, fetches games and scrolls window', async () => {
-      const fetchGames = jest.fn()
-      const wrapper = shallowMount(GamesList, {
-        propsData,
-        data: () => ({ page: 3 }),
-        methods: {
-          fetchGames
-        }
+      await mockGamesRequest({
+        meta: {
+          current_page: 3,
+          last_page: 3,
+          total: 6
+        },
+        data: [{ title: 'game-5', awards: [] }, { title: 'game-6', awards: [] }]
       })
 
+      const wrapper = shallowMount(GamesList, {
+        propsData
+      })
+
+      // When
+      await mockGamesRequest({
+        meta: {
+          current_page: 2,
+          last_page: 3,
+          total: 6
+        },
+        data: [{ title: 'game-3', awards: [] }, { title: 'game-4', awards: [] }]
+      })
       await wrapper.vm.previousPage()
 
-      expect(fetchGames).toHaveBeenCalled()
-      expect(wrapper.vm.$data.page).toEqual(2)
+      // Then
+      expect(wrapper.vm.page).toEqual(2)
       expect(windowScroll).toHaveBeenCalledWith(0, 0)
     })
   })
 
   describe('.nextPage()', () => {
     it('increases page to 4, fetches games and scrolls window', async () => {
-      const fetchGames = jest.fn()
-      const wrapper = shallowMount(GamesList, {
-        propsData,
-        data: () => ({ page: 3 }),
-        methods: {
-          fetchGames
-        }
+      await mockGamesRequest({
+        meta: {
+          current_page: 3,
+          last_page: 4,
+          total: 8
+        },
+        data: [{ title: 'game-5', awards: [] }, { title: 'game-6', awards: [] }]
       })
 
+      const wrapper = shallowMount(GamesList, {
+        propsData
+      })
+
+      // When
+      await mockGamesRequest({
+        meta: {
+          current_page: 4,
+          last_page: 4,
+          total: 8
+        },
+        data: [{ title: 'game-7', awards: [] }, { title: 'game-8', awards: [] }]
+      })
       await wrapper.vm.nextPage()
 
-      expect(fetchGames).toHaveBeenCalled()
-      expect(wrapper.vm.$data.page).toEqual(4)
+      // Then
+      expect(wrapper.vm.page).toEqual(4)
       expect(windowScroll).toHaveBeenCalledWith(0, 0)
     })
   })
 
   describe('.sortBy(sortParam)', () => {
-    it('sorts by title in ascending direction', async () => {
-      const search = jest.fn()
-      const wrapper = shallowMount(GamesList, {
-        propsData,
-        data: () => ({ selectedSort: 'session', sortDirection: 'asc' }),
-        methods: {
-          search
-        }
+    beforeEach(async () => {
+      await mockGamesRequest({
+        meta: {
+          current_page: 2,
+          last_page: 5,
+          total: 10
+        },
+        data: [{ title: 'game-3', awards: [] }, { title: 'game-4', awards: [] }]
       })
+    })
 
+    it('sorts by title in ascending direction', async () => {
+      const wrapper = shallowMount(GamesList, { propsData })
+      await flushPromises()
+
+      // TODO: Simulate user interaction instead of setting data directly
+      wrapper.vm.selectedSort = 'session'
+      wrapper.vm.sortDirection = 'asc'
+
+      // When
+      await mockGamesRequest({
+        meta: {
+          current_page: 2,
+          last_page: 5,
+          total: 10
+        },
+        data: [{ title: 'game-3', awards: [] }, { title: 'game-4', awards: [] }]
+      })
       await wrapper.vm.sortBy('title')
 
-      expect(search).toHaveBeenCalled()
-      expect(wrapper.vm.$data.selectedSort).toEqual('title')
-      expect(wrapper.vm.$data.sortDirection).toEqual('asc')
+      // Then
+      expect(axiosMock.history.get.length).toBe(2)
+      expect(axiosMock.history.get[1].params.sort).toEqual('title:asc')
     })
 
     it('sorts by title in descending direction', async () => {
-      const search = jest.fn()
-      const wrapper = shallowMount(GamesList, {
-        propsData,
-        data: () => ({ selectedSort: 'title', sortDirection: 'asc' }),
-        methods: {
-          search
-        }
-      })
+      const wrapper = shallowMount(GamesList, { propsData })
+      await flushPromises()
 
+      // TODO: Simulate user interaction instead of setting data directly
+      wrapper.vm.selectedSort = 'title'
+      wrapper.vm.sortDirection = 'asc'
+
+      // When
+      await mockGamesRequest({
+        meta: {
+          current_page: 2,
+          last_page: 5,
+          total: 10
+        },
+        data: [{ title: 'game-4', awards: [] }, { title: 'game-3', awards: [] }]
+      })
       await wrapper.vm.sortBy('title')
 
-      expect(search).toHaveBeenCalled()
-      expect(wrapper.vm.$data.selectedSort).toEqual('title')
-      expect(wrapper.vm.$data.sortDirection).toEqual('desc')
+      // Then
+      expect(axiosMock.history.get.length).toBe(2)
+      expect(axiosMock.history.get[1].params.sort).toEqual('title:desc')
     })
   })
 
   describe('.sessionName(id)', () => {
-    it('returns the accurate session name', () => {
+    beforeEach(async () => {
+      await mockGamesRequest({
+        meta: {
+          current_page: 1,
+          last_page: 1,
+          total: 0
+        },
+        data: []
+      })
+    })
+
+    it.each([
+      { input: '3', expected: 'Session 2003-2004' },
+      { input: '17', expected: 'Session 2017-2018' },
+      { input: '19', expected: 'Session 2019' },
+      { input: '23', expected: 'Session 2023-2024' },
+      { input: '25', expected: 'Session 2025' }
+    ])('session $input is named $expected', ({ input, expected }) => {
       const wrapper = shallowMount(GamesList, {
         propsData
       })
 
-      expect(wrapper.vm.sessionName(3)).toEqual('Session 2003-2004')
-      expect(wrapper.vm.sessionName(17)).toEqual('Session 2017-2018')
-      expect(wrapper.vm.sessionName(19)).toEqual('Session 2019')
+      expect(wrapper.vm.sessionName(input)).toBe(expected)
     })
   })
 
   describe('.formatGameForList(gameDto)', () => {
+    beforeEach(async () => {
+      await mockGamesRequest({
+        meta: {
+          current_page: 1,
+          last_page: 1,
+          total: 0
+        },
+        data: []
+      })
+    })
+
     it('returns the accurate game object', () => {
-      const gameDto = {
+      const wrapper = shallowMount(GamesList, {
+        propsData
+      })
+
+      // When
+      const game = wrapper.vm.formatGameForList({
         id: 1,
         title: 'Adventure of Lolo',
         authors: [
@@ -358,7 +478,7 @@ describe('GamesList', () => {
           {
             status: 'awarded',
             award_level: null,
-            category_name: "Alex d'or"
+            category_name: 'Alex d\'or'
           },
           {
             status: 'nominated',
@@ -366,14 +486,9 @@ describe('GamesList', () => {
             category_name: 'Alex du gameplay'
           }
         ]
-      }
-
-      const wrapper = shallowMount(GamesList, {
-        propsData
       })
 
-      const game = wrapper.vm.formatGameForList(gameDto)
-
+      // Then
       expect(game).toEqual({
         id: 1,
         title: 'Adventure of Lolo',
@@ -395,16 +510,22 @@ describe('GamesList', () => {
         awards: [
           {
             status: 'awarded',
-            award_level: null,
-            category_name: "Alex d'or"
+            awardLevel: null,
+            categoryName: 'Alex d\'or'
           },
           {
             status: 'nominated',
-            award_level: null,
-            category_name: 'Alex du gameplay'
+            awardLevel: null,
+            categoryName: 'Alex du gameplay'
           }
         ]
       })
     })
   })
+
+  function mockGamesRequest(responseMock = {}) {
+    return axiosMock
+      .onGet('/api/v0/games')
+      .replyOnce(200, responseMock)
+  }
 })

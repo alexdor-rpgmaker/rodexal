@@ -1,49 +1,49 @@
 <template>
-  <!--suppress HtmlFormInputWithoutLabel -->
-  <select id="session-change" v-model="selectedSessionId" @change="changeSession">
+  <select
+    id="session-change"
+    v-model="selectedSessionId"
+    @change="changeSession"
+  >
     <option
-        v-for="sessionId in sessionIds"
-        :value="sessionId"
-        :key="sessionId"
-      >
+      v-for="sessionId in sessionIds"
+      :key="sessionId"
+      :value="sessionId"
+    >
       Session {{ nameFromId(sessionId) }}
     </option>
   </select>
 </template>
 
-<script>
-import sessionName from '../session-name'
+<script setup>
+import { onBeforeMount, ref } from 'vue'
+import sessionName from '@/session-name'
 
-// noinspection JSUnusedGlobalSymbols
-export default {
-  props: {
-    initialSessionId: {
-      type: Number,
-      required: false
-    },
-    sessionIds: {
-      type: Array,
-      required: true
-    }
+const props = defineProps({
+  initialSessionId: {
+    type: Number,
+    required: false,
+    default: null
   },
-  data() {
-    return {
-      selectedSessionId: null
-    }
-  },
-  beforeMount() {
-    this.selectedSessionId = this.initialSessionId || this.sessionIds[this.sessionIds.length - 1]
-  },
-  methods: {
-    nameFromId(sessionId) {
-      return sessionName(sessionId)
-    },
-    changeSession() {
-      const searchParams = new URLSearchParams(window.location.search)
-      searchParams.set('session_id', this.selectedSessionId)
-      window.location.search = searchParams.toString()
-    }
+  sessionIds: {
+    type: Array,
+    required: true
   }
+})
+
+const selectedSessionId = ref(null)
+
+onBeforeMount(() => {
+  selectedSessionId.value = props.initialSessionId ?? props.sessionIds[props.sessionIds.length - 1]
+})
+
+function nameFromId(sessionId) {
+  return sessionName(sessionId)
+}
+
+function changeSession() {
+  const searchParams = new URLSearchParams(window.location.search)
+  searchParams.set('session_id', selectedSessionId.value)
+  window.location.search = searchParams.toString()
 }
 </script>
 

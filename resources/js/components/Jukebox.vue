@@ -1,21 +1,42 @@
 <template>
-  <div id="jukebox" v-if="scriptLoaded">
-    <select @change="changeMusicFromSelector" class="music-selector" ref="musicSelector">
-      <option selected="selected" :value="selectorHeading">--- Choix de la musique ---</option>
-      <option v-for="(music, index) in musics" :key="index" :value="index">{{ music.title }}</option>
+  <div
+    v-if="scriptLoaded"
+    id="jukebox"
+  >
+    <select
+      ref="musicSelector"
+      class="music-selector"
+      @change="changeMusicFromSelector"
+    >
+      <option
+        selected="selected"
+        :value="selectorHeading"
+      >
+        --- Choix de la musique ---
+      </option>
+      <option
+        v-for="(music, index) in musics"
+        :key="index"
+        :value="index"
+      >
+        {{ music.title }}
+      </option>
     </select>
     <div class="current-music-player">
       <div class="song-slider">
-        <span class="amplitude-current-time"></span>
+        <span class="amplitude-current-time" />
 
         <input
           type="range"
           value="0"
           class="slider amplitude-song-slider"
           @input="changeSongPlayedPercentage"
-        />
+        >
 
-        <span class="current-music-time" v-if="playOrPause">{{ currentMusicDuration }}</span>
+        <span
+          v-if="playOrPause"
+          class="current-music-time"
+        >{{ currentMusicDuration }}</span>
         <span v-else>00:00</span>
       </div>
 
@@ -24,61 +45,86 @@
           <a
             class="command repeat"
             title="Répéter"
-            :class="{ active: repeat }"
+            :class="{ active: repeat.value }"
             @click="toggleRepeat"
           >
-            <i class="fas fa-redo-alt"></i>
+            <i class="fas fa-redo-alt" />
           </a>
           <a
             class="command shuffle"
             title="Aléatoire"
-            :class="{ active: shuffle }"
+            :class="{ active: shuffle.value }"
             @click="toggleShuffle"
           >
-            <i class="fas fa-random"></i>
+            <i class="fas fa-random" />
           </a>
         </div>
 
         <div class="main-commands">
-          <a class="command prev" title="Précédent" @click="previous">
-            <i class="fas fa-step-backward"></i>
+          <a
+            class="command prev"
+            title="Précédent"
+            @click="previous"
+          >
+            <i class="fas fa-step-backward" />
           </a>
           <a
             class="command play"
-            :title="[playing ? 'Mettre en pause' : 'Lecture']"
-            :class="{ active: playing }"
+            :title="[playing.value ? 'Mettre en pause' : 'Lecture']"
+            :class="{ active: playing.value }"
             @click="playPause"
           >
-            <i class="fas" :class="[playing ? 'fa-pause' : 'fa-play']"></i>
+            <i
+              class="fas"
+              :class="[playing.value ? 'fa-pause' : 'fa-play']"
+            />
           </a>
-          <a class="command next" title="Suivant" @click="next">
-            <i class="fas fa-step-forward"></i>
+          <a
+            class="command next"
+            title="Suivant"
+            @click="next"
+          >
+            <i class="fas fa-step-forward" />
           </a>
         </div>
 
         <div class="volume">
-          <i class="fas fa-volume-down"></i>
-          <input type="range" class="slider amplitude-volume-slider" @input="changeVolume" />
+          <i class="fas fa-volume-down" />
+          <input
+            type="range"
+            class="slider amplitude-volume-slider"
+            @input="changeVolume"
+          >
         </div>
       </div>
     </div>
 
     <template v-if="playOrPause">
       <div class="card">
-        <div class="card-header">{{ currentMusic.title }}</div>
+        <div class="card-header">
+          {{ currentMusic.value.title }}
+        </div>
         <div class="card-body">
           <p style="margin-bottom: 4px;">
             <strong>Commentaire</strong>
           </p>
-          <div style="margin-bottom: 15px;">{{ currentMusic.description }}</div>
+          <div style="margin-bottom: 15px;">
+            {{ currentMusic.value.description }}
+          </div>
           <p>
             <strong>Jeu :</strong>
-            <a :href="currentMusicGameLink" target="_blank">{{ currentMusic.game.title }}</a>
-            ({{ currentMusic.game.session }})
+            <a
+              :href="currentMusicGameLink.value"
+              target="_blank"
+            >{{ currentMusic.value.game.title }}</a>
+            ({{ currentMusic.value.game.session }})
           </p>
           <p>
             <strong>Lien :</strong>
-            <a :href="currentMusic.link" target="_blank">Cliquer ici</a>
+            <a
+              :href="currentMusic.value.link"
+              target="_blank"
+            >Cliquer ici</a>
           </p>
         </div>
       </div>
@@ -86,137 +132,140 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue'
 import Amplitude from 'amplitudejs'
+import axios from 'axios'
 
-// noinspection JSUnusedGlobalSymbols
-export default {
-  data() {
-    return {
-      musics: [],
-      currentMusic: {},
-      scriptLoaded: false,
-      repeat: false,
-      shuffle: true,
-      status: 'stop',
-      currentMusicDuration: 0,
-      selectorHeading: '-1',
-      musicChangedFromSelector: false
-    }
-  },
-  async mounted() {
-    await this.fetchMusics()
-    this.initializeAmplitude()
-    this.scriptLoaded = true
-  },
-  computed: {
-    playing() {
-      return this.status === 'playing'
+const musics = ref([])
+const currentMusic = ref({})
+const scriptLoaded = ref(false)
+const repeat = ref(false)
+const shuffle = ref(true)
+const status = ref('stop')
+const currentMusicDuration = ref(0)
+const selectorHeading = ref('-1')
+const musicChangedFromSelector = ref(false)
+const musicSelector = ref(null)
+
+const playing = computed(() => status.value === 'playing')
+const playOrPause = computed(() => status.value !== 'stop')
+const currentMusicGameLink = computed(() => {
+  if (!currentMusic.value.game) return ''
+
+  return `${import.meta.env.VITE_FORMER_APP_URL}?p=jeu&id=${currentMusic.value.game.id}`
+})
+
+onMounted(async () => {
+  await fetchMusics()
+  initializeAmplitude()
+  scriptLoaded.value = true
+})
+
+async function fetchMusics() {
+  const request = await axios({
+    url: '/api/v0/musics'
+  })
+  musics.value = request.data.data.map(formatMusicForJukebox)
+}
+
+function initializeAmplitude() {
+  Amplitude.init({
+    debug: import.meta.env.VITE_DEBUG,
+    shuffle_on: shuffle.value,
+    callbacks: {
+      play: playCallback,
+      song_change: songChangeCallback,
+      durationchange: durationChangeCallback
     },
-    playOrPause() {
-      return this.status !== 'stop'
+    songs: musics.value.map(formatMusicForAmplitude)
+  })
+}
+
+function playCallback() {
+  status.value = 'playing'
+  const metadata = Amplitude.getActiveSongMetadata()
+  currentMusic.value = musics.value.find(
+    music => music.title === metadata.name
+  )
+}
+
+function durationChangeCallback() {
+  const duration = Amplitude.getSongDuration()
+  let minutes = Math.floor(duration / 60)
+  if (minutes < 10) minutes = `0${minutes}`
+  let seconds = Math.floor(duration % 60)
+  if (seconds < 10) seconds = `0${seconds}`
+  currentMusicDuration.value = `${minutes}:${seconds}`
+}
+
+function songChangeCallback() {
+  if (!musicChangedFromSelector.value && musicSelector.value) {
+    musicSelector.value.value = selectorHeading.value
+  }
+}
+
+function toggleRepeat() {
+  repeat.value = !repeat.value
+  Amplitude.setRepeatSong(repeat.value)
+}
+
+function toggleShuffle() {
+  shuffle.value = !shuffle.value
+  Amplitude.setShuffle(shuffle.value)
+}
+
+function changeMusicFromSelector(event) {
+  musicChangedFromSelector.value = true
+  Amplitude.playSongAtIndex(event.target.value)
+  musicChangedFromSelector.value = false
+}
+
+function changeSongPlayedPercentage(event) {
+  let newPercentage = parseFloat(event.target.value)
+  if (newPercentage <= 0) newPercentage = 0.1
+  Amplitude.setSongPlayedPercentage(newPercentage)
+}
+
+function changeVolume(event) {
+  const newPercentage = parseFloat(event.target.value)
+  Amplitude.setVolume(newPercentage)
+}
+
+function previous() {
+  Amplitude.prev()
+}
+
+function playPause() {
+  if (!playing.value) {
+    Amplitude.play()
+  } else {
+    Amplitude.pause()
+    status.value = 'pause'
+  }
+}
+
+function next() {
+  Amplitude.next()
+}
+
+function formatMusicForJukebox(musicDto) {
+  return {
+    title: musicDto.title,
+    description: musicDto.description,
+    game: {
+      id: musicDto.game.id,
+      title: musicDto.game.title,
+      session: musicDto.game.session
     },
-    currentMusicGameLink() {
-      return process.env.MIX_FORMER_APP_URL + '?p=jeu&id=' + this.currentMusic.game.id
-    }
-  },
-  methods: {
-    // Init and callbacks
-    async fetchMusics() {
-      const request = await axios({
-        url: '/api/v0/musics'
-      })
-      this.musics = request.data.data.map(this.formatMusicForJukebox)
-    },
-    initializeAmplitude() {
-      Amplitude.init({
-        debug: process.env.MIX_DEBUG,
-        shuffle_on: this.shuffle,
-        callbacks: {
-          play: this.playCallback,
-          song_change: this.songChangeCallback,
-          durationchange: this.durationChangeCallback
-        },
-        songs: this.musics.map(this.formatMusicForAmplitude)
-      })
-    },
-    playCallback() {
-      this.status = 'playing'
-      const metadata = Amplitude.getActiveSongMetadata()
-      this.currentMusic = this.musics.find(
-        music => music.title === metadata.name
-      )
-    },
-    durationChangeCallback() {
-      const duration = Amplitude.getSongDuration()
-      let minutes = Math.floor(duration / 60)
-      if (minutes < 10) minutes = `0${minutes}`
-      let seconds = Math.floor(duration % 60)
-      if (seconds < 10) seconds = `0${seconds}`
-      this.currentMusicDuration = `${minutes}:${seconds}`
-    },
-    songChangeCallback() {
-      if (!this.musicChangedFromSelector) {
-        this.$refs.musicSelector.value = this.selectorHeading
-      }
-    },
-    // Advance commands
-    toggleRepeat() {
-      this.repeat = !this.repeat
-      Amplitude.setRepeatSong(this.repeat)
-    },
-    toggleShuffle() {
-      this.shuffle = !this.shuffle
-      Amplitude.setShuffle(this.shuffle)
-    },
-    changeMusicFromSelector(event) {
-      this.musicChangedFromSelector = true
-      Amplitude.playSongAtIndex(event.target.value)
-      this.musicChangedFromSelector = false
-    },
-    changeSongPlayedPercentage(event) {
-      let newPercentage = parseFloat(event.target.value)
-      if (newPercentage <= 0) newPercentage = 0.1
-      Amplitude.setSongPlayedPercentage(newPercentage)
-    },
-    changeVolume(event) {
-      const newPercentage = parseFloat(event.target.value)
-      Amplitude.setVolume(newPercentage)
-    },
-    // Commands
-    previous() {
-      Amplitude.prev()
-    },
-    playPause() {
-      if (!this.playing) {
-        Amplitude.play()
-      } else {
-        Amplitude.pause()
-        this.status = 'pause'
-      }
-    },
-    next() {
-      Amplitude.next()
-    },
-    // Formatting
-    formatMusicForJukebox(musicDto) {
-      return {
-        title: musicDto.title,
-        description: musicDto.description,
-        game: {
-          id: musicDto.game.id,
-          title: musicDto.game.title,
-          session: musicDto.game.session
-        },
-        link: musicDto.music_url
-      }
-    },
-    formatMusicForAmplitude(jukeboxMusic) {
-      return {
-        name: jukeboxMusic.title,
-        url: jukeboxMusic.link
-      }
-    }
+    link: musicDto.music_url
+  }
+}
+
+function formatMusicForAmplitude(jukeboxMusic) {
+  return {
+    name: jukeboxMusic.title,
+    url: jukeboxMusic.link
   }
 }
 </script>
