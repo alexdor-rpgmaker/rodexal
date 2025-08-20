@@ -15,13 +15,13 @@ class UsersTableSeeder extends Seeder
                 'name' => 'Alex RuTiPa',
                 'email' => 'equipe@alexdor.info',
                 'password' => bcrypt('1234abcd5678'),
-                'user_rank' => 6
+                'rank' => 6
             ],
             [
                 'name' => Str::random(10),
                 'email' => Str::random(10) . '@gmail.com',
                 'password' => bcrypt('secret'),
-                'user_rank' => 1
+                'rank' => 1
             ]
         ]);
     }
