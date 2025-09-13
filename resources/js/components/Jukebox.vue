@@ -45,7 +45,7 @@
           <a
             class="command repeat"
             title="Répéter"
-            :class="{ active: repeat.value }"
+            :class="{ active: repeat }"
             @click="toggleRepeat"
           >
             <i class="fas fa-redo-alt" />
@@ -53,7 +53,7 @@
           <a
             class="command shuffle"
             title="Aléatoire"
-            :class="{ active: shuffle.value }"
+            :class="{ active: shuffle }"
             @click="toggleShuffle"
           >
             <i class="fas fa-random" />
@@ -70,13 +70,13 @@
           </a>
           <a
             class="command play"
-            :title="[playing.value ? 'Mettre en pause' : 'Lecture']"
-            :class="{ active: playing.value }"
+            :title="[playing ? 'Mettre en pause' : 'Lecture']"
+            :class="{ active: playing }"
             @click="playPause"
           >
             <i
               class="fas"
-              :class="[playing.value ? 'fa-pause' : 'fa-play']"
+              :class="[playing ? 'fa-pause' : 'fa-play']"
             />
           </a>
           <a
@@ -101,31 +101,27 @@
 
     <template v-if="playOrPause">
       <div class="card">
-        <div class="card-header">
-          {{ currentMusic.value.title }}
+        <div class="card-header music-title">
+          {{ currentMusic.title }}
         </div>
         <div class="card-body">
-          <p style="margin-bottom: 4px;">
-            <strong>Commentaire</strong>
-          </p>
-          <div style="margin-bottom: 15px;">
-            {{ currentMusic.value.description }}
+          <div class="music-description">
+            {{ currentMusic.description }}
           </div>
-          <p>
-            <strong>Jeu :</strong>
+          <div class="music-links">
+            <div class="game-link">
+              <a
+                :href="currentMusicGameLink"
+                target="_blank"
+              >{{ currentMusic.game.title }}</a>
+              ({{ currentMusic.game.session }})
+            </div>
             <a
-              :href="currentMusicGameLink.value"
+              :href="currentMusic.link"
               target="_blank"
-            >{{ currentMusic.value.game.title }}</a>
-            ({{ currentMusic.value.game.session }})
-          </p>
-          <p>
-            <strong>Lien :</strong>
-            <a
-              :href="currentMusic.value.link"
-              target="_blank"
-            >Cliquer ici</a>
-          </p>
+              class="download-link"
+            >Télécharger le fichier</a>
+          </div>
         </div>
       </div>
     </template>
@@ -201,7 +197,7 @@ function durationChangeCallback() {
 
 function songChangeCallback() {
   if (!musicChangedFromSelector.value && musicSelector.value) {
-    musicSelector.value.value = selectorHeading.value
+    musicSelector.value = selectorHeading.value
   }
 }
 
@@ -275,6 +271,10 @@ $link-color: #d39501;
 
 #jukebox {
   text-align: center;
+  margin: 0 auto;
+  width: 66.66666667%;
+  padding-left: 12px;
+  padding-right: 12px;
 
   .music-selector {
     max-width: 100%;
@@ -421,47 +421,33 @@ $link-color: #d39501;
   .card {
     margin-bottom: 0;
 
+    .music-title {
+      font-weight: bold;
+    }
+
     .card-body {
       text-align: left;
+
+      .music-description {
+        margin: 10px 10px 30px;
+      }
+
+      .music-links {
+        display: flex;
+        justify-content: space-between;
+      }
 
       p:last-child {
         margin-bottom: 0;
       }
     }
   }
+}
 
-  @media (max-width: 460px) {
-    .current-music-player {
-      .slider {
-        &.amplitude-song-slider {
-          width: 150px;
-        }
-
-        &.amplitude-volume-slider {
-          height: 5px;
-          width: 80px;
-        }
-      }
-
-      .commands {
-        flex-direction: column;
-        align-items: center;
-
-        a.command {
-          &.repeat,
-          &.shuffle {
-            width: 20px;
-            height: 20px;
-            line-height: 20px;
-          }
-        }
-
-        .main-commands {
-          margin-top: 20px;
-          margin-bottom: 30px;
-        }
-      }
-    }
+@media (max-width: 800px) {
+  #jukebox {
+    width: 90%;
+    padding: 0;
   }
 }
 </style>

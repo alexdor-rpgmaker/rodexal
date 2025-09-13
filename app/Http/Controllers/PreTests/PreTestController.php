@@ -35,7 +35,7 @@ class PreTestController extends Controller
         $games = Game::where('id_session', $session->id_session);
 
         // If pre-tests are not finished, we only display pre-tests of disqualified games
-        if ($session === $currentSession && !$session->preTestsAreFinished()) {
+        if ($session->id == $currentSession->id && !$session->preTestsAreFinished()) {
             $games = $games->where('statut_jeu', 'disqualified');
         }
 

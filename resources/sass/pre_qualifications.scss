@@ -1,4 +1,31 @@
+#pre-tests-form {
+  margin: 0 auto;
+  width: 66.66666667%;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+@media (max-width: 800px) {
+  #pre-tests-form {
+    width: 90%;
+    padding: 0;
+  }
+}
+
+.pre-test-form-wrapper {
+  width: 100%;
+  flex: 0 0 auto;
+  line-height: 24px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
 #pre-qualification {
+  margin: 0 auto;
+  width: 66.66666667%;
+  padding-left: 12px;
+  padding-right: 12px;
+
   .questionnaire-group {
     margin-top: 20px;
     margin-bottom: 30px;
@@ -21,6 +48,13 @@
     .explanation {
       margin-top: 20px;
     }
+  }
+}
+
+@media (max-width: 800px) {
+  #pre-qualification {
+    width: 90%;
+    padding: 0;
   }
 }
 

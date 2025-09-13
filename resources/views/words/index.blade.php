@@ -9,7 +9,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div id="dictionary" class="col-md-8">
+            <div id="dictionary">
                 <div id="titre_corps">Dictionnaire</div>
 
                 @can('create', App\Word::class)

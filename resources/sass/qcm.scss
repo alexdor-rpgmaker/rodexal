@@ -1,4 +1,11 @@
+// Cf pre_qualifications.scss
+
 #qcm {
+  margin: 0 auto;
+  width: 66.66666667%;
+  padding-left: 12px;
+  padding-right: 12px;
+
   .questionnaire-group {
     margin-bottom: 20px;
 
@@ -20,6 +27,13 @@
     .explanation {
       margin-top: 10px;
     }
+  }
+}
+
+@media (max-width: 800px) {
+  #qcm {
+    width: 90%;
+    padding: 0;
   }
 }
 

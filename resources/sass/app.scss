@@ -1,22 +1,105 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import 'https://fonts.googleapis.com/css?family=Nunito';
 
-// Variables
-@import 'variables';
+a.bouton:hover {
+  text-decoration: none;
+}
 
-// Bootstrap
-@import 'bootstrap/scss/bootstrap';
+.bouton:focus {
+  color: #cd6701;
+}
+
+.bouton:active {
+  color: black;
+}
+
+.bordure_boutons {
+  .bouton + .bouton {
+    margin-left: 6px;
+  }
+}
+
+// Bootstrap-like utility classes
 
 main.py-4 {
   width: 100%;
   padding-top: 0 !important;
 }
 
-a.bouton:hover {
-  text-decoration: none;
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+.col-md-4 {
+  flex: 0 0 auto;
+  width: 33.33333333%;
+}
+
+.col-md-6 {
+  flex: 0 0 auto;
+  width: 50%;
+}
+
+.col-md-8 {
+  flex: 0 0 auto;
+  width: 66.66666667%;
+}
+
+.offset-md-4 {
+  margin-left: 33.33333333%;
+}
+
+.col-form-label {
+  font-size: inherit;
+  line-height: 1.6;
+  margin-bottom: 0;
+  padding: 7px 12px;
+}
+
+.form-control {
+  appearance: none;
+  background-clip: padding-box;
+  background-color: #f8fafc;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  color: #212529;
+  display: block;
+  font-size: .9rem;
+  font-weight: 400;
+  line-height: 1.6;
+  padding: .375rem .75rem;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  width: 100%;
+}
+
+.form-check {
+  display: block;
+  margin-bottom: .125rem;
+  min-height: 1.44rem;
+  padding-left: 1.5em;
+}
+
+.form-check-input[type=checkbox] {
+  border-radius: .25em;
+}
+
+.form-check .form-check-input {
+  float: left;
+  margin-left: -1.5em;
+}
+
+.float-end {
+  float: right !important;
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
   background-color: #fff6ef;
   border: 1px solid black;
   border-radius: 0;
@@ -25,7 +108,7 @@ a.bouton:hover {
   .card-header {
     border-bottom: 1px solid black;
     background-color: #fff1b7;
-    padding: 0.5rem 1rem;
+    padding: 0.8rem 1rem;
 
     .card-options button {
       margin: 0;
@@ -47,6 +130,7 @@ a.bouton:hover {
   }
 
   .card-body {
+    padding: 1rem;
     background-color: #f9e9d9;
   }
 }

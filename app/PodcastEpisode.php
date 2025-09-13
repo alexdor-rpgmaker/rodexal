@@ -12,7 +12,7 @@ class PodcastEpisode extends Model
     use HasFactory;
     use Sluggable, SluggableScopeHelpers;
 
-    const PODCAST_PAGE_URL = 'https://anchor.fm/alex-dor1';
+    const PODCAST_PAGE_URL = 'https://creators.spotify.com/pod/profile/alex-dor1';
     const PODCAST_FEED_URL = 'https://anchor.fm/s/4bfdd7fc/podcast/rss';
 
     /**

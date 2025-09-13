@@ -17,7 +17,14 @@
         </div>
     @endif
     <div class="games-section" id="games-form">
-        <div id="titre_corps">{{ $title }}</div>
+        <div id="titre_corps">
+          {{ $title }}
+          <br />
+          <em>
+            Cette page n'étant pas officiellement utilisée en production<br>
+            on accepte que le design soit à revoir.
+          </em>
+        </div>
         <div id="sous_titre_corps">{{ $subtitle }}</div>
 
         <div id="corps">

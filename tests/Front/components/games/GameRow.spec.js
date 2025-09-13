@@ -35,18 +35,18 @@ describe('GameRow', () => {
       awards: [
         {
           status: 'awarded',
-          award_level: 'gold',
-          category_name: 'Alex'
+          awardLevel: 'gold',
+          categoryName: 'Alex'
         },
         {
           status: 'awarded',
-          award_level: 'bronze',
-          category_name: 'Ambiance'
+          awardLevel: 'bronze',
+          categoryName: 'Ambiance'
         },
         {
           status: 'nominated',
-          award_level: null,
-          category_name: 'Meilleurs graphismes'
+          awardLevel: null,
+          categoryName: 'Meilleurs graphismes'
         }
       ]
     }
@@ -61,7 +61,7 @@ describe('GameRow', () => {
       })
     })
 
-    it('displays a game screnshot with a link', () => {
+    it('displays a game screenshot with a link', () => {
       const gameScreenshotLink = wrapper.find('.screenshot-link')
       expect(gameScreenshotLink.exists()).toEqual(true)
       expect(gameScreenshotLink.attributes('href')).toEqual(

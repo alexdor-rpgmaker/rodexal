@@ -9,7 +9,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div id="podcast" class="col-md-8">
+            <div id="podcast">
                 <div id="titre_corps">
                     Pod-Alex
                 </div>

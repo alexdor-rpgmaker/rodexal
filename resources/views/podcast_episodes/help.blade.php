@@ -22,19 +22,19 @@
         </p>
         <p>
             En outre, de nombreuses applications vous permettent d'écouter des podcasts, <a href="https://open.spotify.com/show/7zJ7ddmiAFjFJHgyJhJGiB">comme par exemple Spotify</a>.
-            Vous pouvez consulter la liste de ces applications sur <a href="{{ App\PodcastEpisode::PODCAST_PAGE_URL }}">la page Anchor de Pod-Alex</a>.
+            Vous pouvez consulter la liste de ces applications sur <a href="{{ App\PodcastEpisode::PODCAST_PAGE_URL }}">la page Spotify Creators</a>.
         </p>
         <p>
             Si vous avez déjà une application favorite
             (par exemple <a href="https://play.google.com/store/apps/details?id=com.bambuna.podcastaddict&hl=fr">Podcast Addict</a> sur Android),
             vous pouvez directement y copier-coller l'URL du flux RSS du podcast :
         </p>
-        <form class="row mx-1">
-            <div class="col-sm-5">
+        <form class="podcast-help-form">
+            <div class="podcast-help-form-input">
                 <input type="text" value="{{ App\PodcastEpisode::PODCAST_FEED_URL }}" id="podcast-url" class="form-control" readonly>
             </div>
-            <div class="col-auto">
-                <button class="btn btn-outline-secondary" type="button" onclick="copyPodcastUrlField()">Copier</button>
+            <div class="podcast-help-form-button">
+                <button class="bouton" type="button" onclick="copyPodcastUrlField()">Copier</button>
             </div>
         </form>
         <p>

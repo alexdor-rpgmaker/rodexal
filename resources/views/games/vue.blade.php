@@ -9,6 +9,11 @@
         @else
             Liste des jeux de toutes les sessions
         @endif
+        <br />
+        <em>
+          Cette page n'étant pas officiellement utilisée en production<br>
+          on accepte que le design soit à revoir.
+        </em>
     </div>
     <div id="sous_titre_corps">
         @if($selectedSession)

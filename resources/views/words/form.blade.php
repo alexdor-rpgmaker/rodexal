@@ -3,13 +3,13 @@
 @section('title', $title)
 
 @push('stylesheets')
-    <link href="{{ asset('css/dictionary.css') }}" rel="stylesheet">
+    <link href="{{ asset('sass/dictionary.scss') }}" rel="stylesheet">
 @endpush
 
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div id="dictionary" class="col-md-8">
+            <div id="dictionary">
                 <div class="card">
                     <div class="card-header">{{ $title }}</div>
 
@@ -21,7 +21,7 @@
                             @csrf
 
                             <div class="row mb-3">
-                                <label for="word-label" class="col-md-4 col-form-label text-md-right col-form-label">Mot</label>
+                                <label for="word-label" class="col-md-4 text-md-right col-form-label">Mot</label>
 
                                 <div class="col-md-6">
                                     <input id="word-label" class="form-control{{ $errors->has('label') ? ' is-invalid' : '' }}" name="label" value="{{ old('label', $word->label) }}" autofocus>
@@ -29,7 +29,7 @@
                             </div>
 
                             <div class="row mb-3">
-                                <label for="word-description" class="col-md-4 col-form-description text-md-right col-form-label">Description</label>
+                                <label for="word-description" class="col-md-4 text-md-right col-form-label">Description</label>
 
                                 <div class="col-md-6">
                                     <textarea class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" id="word-description" name="description" rows="9">{{ old('description', $word->description) }}</textarea>

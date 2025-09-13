@@ -1,7 +1,11 @@
-import './bootstrap';
-import '../sass/app.scss';
+import '../sass/app.scss'
+import '../sass/dictionary.scss'
+import '../sass/games.scss'
+import '../sass/podcasts.scss'
+import '../sass/pre_qualifications.scss'
+import '../sass/qcm.scss'
 
-import { createApp } from 'vue';
+import { createApp } from 'vue'
 
 const app = createApp({})
 

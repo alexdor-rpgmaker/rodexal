@@ -11,7 +11,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div id="pre-qualification" class="col-md-8">
+            <div id="pre-qualification">
                 <div id="titre_corps">Pré-Qualification : {{ $game->nom_jeu }}</div>
                 <div id="sous_titre_corps">
                     Par

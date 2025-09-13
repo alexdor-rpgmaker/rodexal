@@ -44,27 +44,8 @@ export default defineConfig([
         'error',
         { anonymous: 'always', named: 'never', asyncArrow: 'always' }
       ],
-
-      'vue/multi-word-component-names': 'off'
-      // semi: ['error', 'never'],
-      //
-      // 'no-unused-vars': [
-      //   'error',
-      //   {
-      //     argsIgnorePattern: '^_',
-      //     caughtErrorsIgnorePattern: '^_'
-      //   }
-      // ],
-      //
-      // 'vue/html-self-closing': 0,
-      //
-      // 'vue/max-attributes-per-line': [
-      //   'error',
-      //   {
-      //     singleline: 20,
-      //     multiline: 1
-      //   }
-      // ]
+      'vue/multi-word-component-names': 'off',
+      semi: ['error', 'never'],
     }
   },
   {

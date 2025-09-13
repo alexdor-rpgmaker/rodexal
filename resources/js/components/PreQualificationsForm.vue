@@ -19,7 +19,7 @@
         class="row question-block"
       >
         <template v-if="fields.questionnaire[question.id]">
-          <div class="col-sm-12">
+          <div class="pre-test-form-wrapper">
             <div class="form-check">
               <input
                 :id="question.id"
@@ -65,6 +65,7 @@
                 v-model="fields.questionnaire[question.id].explanation"
                 type="text"
                 :name="'explanation-' + question.id"
+                class="form-control"
                 style="width: 100%"
               >
               <div
@@ -89,7 +90,7 @@
         class="row question-block"
       >
         <template v-if="fields.questionnaire[question.id]">
-          <div class="col-sm-12">
+          <div class="pre-test-form-wrapper">
             <div class="form-check">
               <input
                 :id="question.id"
@@ -135,6 +136,7 @@
                 v-model="fields.questionnaire[question.id].explanation"
                 type="text"
                 :name="'explanation-' + question.id"
+                class="form-control"
                 style="width: 100%"
               >
               <div
@@ -150,7 +152,7 @@
 
       <h2>Verdict</h2>
       <div class="row">
-        <div class="col-sm-12">
+        <div class="pre-test-form-wrapper">
           <template v-if="editing">
             <input
               v-model="fields.finalThought"
@@ -244,15 +246,13 @@
         </div>
       </div>
 
-      <div class="row mt-3">
-        <div class="col-md-12 text-center">
-          <button
-            type="submit"
-            class="submit bouton mb-0"
-          >
-            Envoyer
-          </button>
-        </div>
+      <div class="submit-wrapper">
+        <button
+          type="submit"
+          class="submit bouton"
+        >
+          Envoyer
+        </button>
       </div>
     </template>
   </form>
@@ -364,5 +364,14 @@ h2 {
 
 .final-thought-explanation {
   margin-top: 10px;
+}
+
+.submit-wrapper {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.submit {
+  margin-bottom: 0;
 }
 </style>
