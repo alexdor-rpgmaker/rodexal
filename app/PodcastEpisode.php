@@ -59,7 +59,11 @@ class PodcastEpisode extends Model
 
     public function session(): int
     {
-        return 2020 + $this->season;
+        if ($this->season <= 2) {
+            return 2020 + $this->season;
+        }
+
+        return 0;
     }
 
     public function seasonAndSession(): string

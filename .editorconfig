@@ -8,6 +8,11 @@ indent_size = 2
 indent_style = space
 trim_trailing_whitespace = true
 
+[*.php]
+tab_width = 4
+indent_size = 4
+ij_continuation_indent_size = 4
+
 [*.html]
 ij_html_add_new_line_before_tags = body,div,p,form,h1,h2,h3
 ij_html_align_attributes = true

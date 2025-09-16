@@ -43,7 +43,7 @@ heroku logs -t -a new-alexdor
 Les rake tasks peuvent être déclenchées manuellement :
 
 ```bash
-heroku run rails ma_task_1 -a new-alexdor-staging
+heroku run php artisan podcast:update -a new-alexdor-staging
 ```
 
 ## Configurer ses environnements git distants
@@ -78,7 +78,7 @@ Il peut donc être intéressant de mettre l'application en mode maintenance, lan
 ```bash
 git push heroku-production master && 
 heroku maintenance:on -a new-alexdor && 
-heroku run rails db:migrate ma_task_1 ma_task2 -a new-alexdor && 
+heroku run php artisan migrate podcast:update -a new-alexdor &&
 heroku restart -a new-alexdor && 
 heroku maintenance:off -a new-alexdor
 ```

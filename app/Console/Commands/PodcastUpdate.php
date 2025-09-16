@@ -50,7 +50,9 @@ class PodcastUpdate extends Command
             // echo $item->get_link() . "\n";
             // echo $item->get_item_tags($SIMPLEPIE_NAMESPACE_ITUNES, 'image')[0]['attribs']['']['href'] . "\n";
 
-            $duration = (int)$item->get_item_tags($SIMPLEPIE_NAMESPACE_ITUNES, 'duration')[0]['data'];
+            $duration = $item->get_item_tags($SIMPLEPIE_NAMESPACE_ITUNES, 'duration')[0]['data'];
+            $parts = explode(':', $duration);
+            $duration = (int)$parts[0] * 3600 + (int)$parts[1] * 60 + (int)$parts[2];
             $seasonNumber = (int)$item->get_item_tags($SIMPLEPIE_NAMESPACE_ITUNES, 'season')[0]['data'];
             $episodeNumber = (int)$item->get_item_tags($SIMPLEPIE_NAMESPACE_ITUNES, 'episode')[0]['data'];
 

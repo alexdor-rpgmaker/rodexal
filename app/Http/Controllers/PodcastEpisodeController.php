@@ -14,7 +14,15 @@ class PodcastEpisodeController extends Controller
 
     public function index()
     {
-        $podcastEpisodes = PodcastEpisode::orderByDesc('created_at')->get();
+        // TODO: Reactivate podcast:update cron task if new podcast episodes are published
+
+        $podcastEpisodes = PodcastEpisode::orderByDesc('season')->orderByDesc('number')->get();
+
+        $authorIds = $podcastEpisodes->pluck('author_id')->unique()->filter();
+        $authors = Member::whereIn('id_membre', $authorIds)->get()->keyBy('id_membre');
+        $podcastEpisodes->each(function ($episode) use ($authors) {
+            $episode->author = $authors->get($episode->author_id);
+        });
 
         return view('podcast_episodes.index', [
             'podcastEpisodes' => $podcastEpisodes
