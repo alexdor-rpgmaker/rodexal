@@ -35,7 +35,7 @@ Route::resource('jeux', GameController::class)->only([
     'index', 'store'
 ]);
 Route::get('/jeux/vue', [GameController::class, 'vue'])->name('games-list-vue');
-Route::get('/jeux/inscrire', [GameController::class, 'create'])->name('register-game');
+//Route::get('/jeux/inscrire', [GameController::class, 'create'])->name('register-game');
 
 Route::resource('dictionnaire', WordController::class)->except([
     'show'

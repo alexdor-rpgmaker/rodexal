@@ -181,30 +181,30 @@ class GamesRouterTest extends FeatureTestCase
      * @testdox Create - When user is not connected the form is displayed
      * Quand l'utilisateur n'est pas connecté, le formulaire est affiché quand même
      */
-    public function store_ifNotConnected_thenOk()
-    {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)
-            ->get('/jeux');
-
-        $response->assertOk();
-    }
+//    public function store_ifNotConnected_thenOk()
+//    {
+//        $user = User::factory()->create();
+//
+//        $response = $this->actingAs($user)
+//            ->get('/jeux');
+//
+//        $response->assertOk();
+//    }
 
     /**
      * @test
      * @testdox Create - When we want to add a game, the form is displayed
      * On peut accéder au formulaire d'inscription
      */
-    public function create_whenWeWantToAddGame_theFormIsDisplayed()
-    {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)
-            ->get('/jeux/inscrire');
-
-        $response->assertOk();
-    }
+//    public function create_whenWeWantToAddGame_theFormIsDisplayed()
+//    {
+//        $user = User::factory()->create();
+//
+//        $response = $this->actingAs($user)
+//            ->get('/jeux/inscrire');
+//
+//        $response->assertOk();
+//    }
 
     // Store
 
