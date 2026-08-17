@@ -34,9 +34,9 @@ class Session extends FormerModel
     ];
 
     // TODO: Save and fetch from database
-    const IDS_SESSIONS_WITH_QCM = [19, 20, 21, 22, 25];
+    const IDS_SESSIONS_WITH_QCM = [19, 20, 21, 22, 25, 26];
     const IDS_SESSIONS_WITH_PRE_QUALIFICATIONS = [23];
-    const IDS_SESSIONS_WITH_PRE_TESTS = [19, 20, 21, 22, 23, 25]; // Not entirely true, but noone will notice :)
+    const IDS_SESSIONS_WITH_PRE_TESTS = [19, 20, 21, 22, 23, 25, 26]; // Not entirely true, but noone will notice :)
 
     public function allowsGamesRegistration(): bool
     {
@@ -78,17 +78,20 @@ class Session extends FormerModel
         if ($sessionId == 3) {
             $sessionName .= '-2004';
         }
-
         if ($sessionId == 16) {
             $sessionName .= '-2017';
         }
-
         if ($sessionId == 17) {
             $sessionName .= '-2018';
         }
-
         if ($sessionId == 23) {
             $sessionName .= '-2024';
+        }
+        if ($sessionId == 25) {
+            $sessionName .= '-2026';
+        }
+        if ($sessionId == 26) {
+            $sessionName .= '-2027';
         }
 
         return "20" . $sessionName;

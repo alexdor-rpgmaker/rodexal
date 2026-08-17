@@ -132,7 +132,9 @@ class SessionTest extends TestCase
      *                  [16, "2016-2017"]
      *                  [17, "2017-2018"]
      *                  [23, "2023-2024"]
-     *                  [25, "2025"]
+     *                  [23, "2023-2024"]
+     *                  [25, "2025-2026"]
+     *                  [26, "2026-2027"]
      */
     public function sessionName(int $sessionId, string $expected)
     {
@@ -157,7 +159,8 @@ class SessionTest extends TestCase
      *                  [16, "2016-2017"]
      *                  [17, "2017-2018"]
      *                  [23, "2023-2024"]
-     *                  [25, "2025"]
+     *                  [25, "2025-2026"]
+     *                  [26, "2026-2027"]
      */
     public function nameFromId(int $sessionId, string $expected)
     {

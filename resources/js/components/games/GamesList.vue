@@ -226,7 +226,7 @@ const selectedSort = ref('awards_count')
 const withDownloadLinks = ref(false)
 const sortDirection = ref('desc')
 const sessions = [
-  1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 25
+  1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 25, 26
 ]
 const softwares = [
   'adventure game studio', 'AINSI', 'Autre', 'Clickteam Fusion 2.5', 'Game Maker Studio 2',

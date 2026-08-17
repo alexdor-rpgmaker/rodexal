@@ -6,17 +6,20 @@ export default (givenSessionId) => {
   if (sessionId === 3) {
     sessionName += '-2004'
   }
-
   if (sessionId === 16) {
     sessionName += '-2017'
   }
-
   if (sessionId === 17) {
     sessionName += '-2018'
   }
-
   if (sessionId === 23) {
     sessionName += '-2024'
+  }
+  if (sessionId === 25) {
+    sessionName += '-2026'
+  }
+  if (sessionId === 26) {
+    sessionName += '-2027'
   }
 
   return sessionName

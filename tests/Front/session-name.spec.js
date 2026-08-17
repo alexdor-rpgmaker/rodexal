@@ -11,7 +11,8 @@ describe('Session Name', () => {
     [17, '2017-2018'],
     ['17', '2017-2018'],
     [23, '2023-2024'],
-    [25, '2025']
+    [25, '2025-2026'],
+    [26, '2026-2027']
   ])('when session ID is "%i" then returns "%s"', (input, expected) => {
     expect(sessionName(input)).toBe(expected)
   })

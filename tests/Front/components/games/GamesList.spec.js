@@ -428,7 +428,8 @@ describe('GamesList', () => {
       { input: '17', expected: 'Session 2017-2018' },
       { input: '19', expected: 'Session 2019' },
       { input: '23', expected: 'Session 2023-2024' },
-      { input: '25', expected: 'Session 2025' }
+      { input: '25', expected: 'Session 2025-2026' },
+      { input: '26', expected: 'Session 2026-2027' }
     ])('session $input is named $expected', ({ input, expected }) => {
       const wrapper = shallowMount(GamesList, {
         propsData
