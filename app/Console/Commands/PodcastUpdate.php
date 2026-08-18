@@ -4,8 +4,9 @@ namespace App\Console\Commands;
 
 use App\PodcastEpisode;
 
-use Feeds;
+use Vedmant\FeedReader\Facades\FeedReader;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 class PodcastUpdate extends Command
 {
@@ -36,11 +37,12 @@ class PodcastUpdate extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
+     * @throws BindingResolutionException
      */
-    public function handle()
+    public function handle(): int
     {
-        $items = Feeds::make(PodcastEpisode::PODCAST_FEED_URL)->get_items();
+        $items = FeedReader::read(PodcastEpisode::PODCAST_FEED_URL)->get_items();
 
         foreach ($items as $item) {
             // http://simplepie.org/api/class-SimplePie_Item.html
